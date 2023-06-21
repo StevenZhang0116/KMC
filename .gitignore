@@ -1,0 +1,9 @@
+*.o
+*.d
+*.X*
+.DS_Store
+MakefileInc.mk
+doc/
+*.swp
+tags
+build*

@@ -1,0 +1,6 @@
+/mnt/home/zzhang1/aLENS/KMC/KMC/CMakeFiles/install/strip.dir
+/mnt/home/zzhang1/aLENS/KMC/KMC/CMakeFiles/edit_cache.dir
+/mnt/home/zzhang1/aLENS/KMC/KMC/CMakeFiles/rebuild_cache.dir
+/mnt/home/zzhang1/aLENS/KMC/KMC/CMakeFiles/list_install_components.dir
+/mnt/home/zzhang1/aLENS/KMC/KMC/CMakeFiles/install/local.dir
+/mnt/home/zzhang1/aLENS/KMC/KMC/CMakeFiles/install.dir
