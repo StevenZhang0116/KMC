@@ -122,7 +122,6 @@ class Cheb {
                     };
 
                     double root = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
-
                     *y = root; 
                 }  
             }
