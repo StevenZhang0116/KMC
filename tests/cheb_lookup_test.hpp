@@ -35,20 +35,20 @@ TEST_CASE("REVERSE Lookup table test soft spring ", "[REVERSE lookup]") {
 
     double testbound = LUT.getNonDsbound(); 
 
-    // int dim = 2;
-    // int order = 10; 
-    // int odim = 1;
-    // double bbtol = 1e-10;
-    // double mlf = 0.0;
-    // int sme = 1;
-    // int mind = 0; 
-    // int maxd = 40;
-    // double hl[] = {0.1, testbound / 2 * D}; // half length
-    // double center[] = {distPerp / D, testbound / 2 * D};  // center
-    // const char* fn = "func_approx.baobzi"; 
+    int dim = 2;
+    int order = 10; 
+    int odim = 1;
+    double bbtol = 1e-10;
+    double mlf = 0.0;
+    int sme = 1;
+    int mind = 0; 
+    int maxd = 40;
+    double hl[] = {0.1, testbound / 2 * D}; // half length
+    double center[] = {distPerp / D, testbound / 2 * D};  // center
+    const char* fn = "func_approx.baobzi"; 
 
-    // Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
-    // theBaobzi.approxFunc(3);
+    Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
+    theBaobzi.approxFunc(3);
 
 
     // ("distPerp = 0.2 > D+ell0, single peaked")
@@ -76,6 +76,13 @@ TEST_CASE("REVERSE Lookup table test soft spring ", "[REVERSE lookup]") {
     //           Approx(sbound * D).epsilon(tol));
     // }
 }
+
+/** 
+ * Spring with different stiffness and various parameter settings tests passed!  
+ * Tests may not be inclusive and exhaustive enough -> subject to further examine
+ * Problem: D > certain threshold -> need more adaptive formulation on prefactor 
+ * Importance of wisely setting up domain -> Equation (47) in Lamson 2021 EPJ -> Currently easy when distPerp is fixed
+*/
 
 // TEST_CASE("Lookup table test SOFT spring ", "[lookup_soft]") {
 //     std::cout << "==== SOFT SPRING TEST ====" << std::endl; 

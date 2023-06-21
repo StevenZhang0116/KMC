@@ -64,6 +64,7 @@ class Cheb {
 
             oname = output_name; 
         }
+        
 
         /**
          *  @brief approximate functions (subject to choose at different scanerios)
@@ -97,36 +98,38 @@ class Cheb {
 
             // x[0] = r⊥/lm: perpendicular distance above rod
             // x[1] = integral value 
-            auto reverApproxCDF = [](const double *x, double *y, const void data){
-                if (x[1] <= 0) *y = 0; 
+            auto reverApproxCDF = [](const double* x, double* y, const void* data) {
+                if (x[1] <= 0)
+                    *y = 0;
                 else {
                     // unpack the external parameters
-                    const double M = ((double *) data)[0];
-                    const double ell0 = ((double *) data)[1];
-                    const double D = ((double *) data)[2]; 
-                    double error = 0; 
+                    const double M = ((double*)data)[0];
+                    const double ell0 = ((double*)data)[1];
+                    const double D = ((double*)data)[2];
+                    double error = 0;
+
+                    double lowerbound = 0.0 + 1e-20;
+                    double upperbound = 1.0;
+                    boost::uintmax_t max_iter = 100; // Maximum number of iterations
+                    boost::math::tools::eps_tolerance<double> tolerance(30); // Desired tolerance
 
                     auto integrand = [&](double s) {
                         const double exponent = sqrt(s * s + x[0] * x[0]) - ell0;
                         return exp(-M * exponent * exponent);
                     };
 
-                    double lowerbound = 0.0;
-                    double upperbound = 1.0;
-                    boost::uintmax_t max_iter = 100; // Maximum number of iteration
-                    boost::math::tools::eps_tolerance<double> tolerance(30); // Desired tolerance
-
-                    double solve_func(double caluplimit) {
+                    auto solve_func = [&](double caluplimit) { 
+                        speak("caluplimit", caluplimit); 
                         double residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
                             integrand, 0, caluplimit, 10, 1e-6, &error) - x[1] / D;
-                    };
+                        return residue;
+                    }; 
 
-                    double root = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
+                    std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
+                    *y = res.first;
+                }
+            };
 
-                    
-                    *y = root; 
-                }  
-            }
 
             // x[0] = s: upper limit of integral
             // x[1] = M (manipulated, not public parameter of class)
