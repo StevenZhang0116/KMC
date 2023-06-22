@@ -108,10 +108,10 @@ class Cheb {
                     const double D = ((double*)data)[2];
                     double error = 0;
 
-                    double lowerbound = 0.0 + 1e-20;
-                    double upperbound = 1.0;
-                    boost::uintmax_t max_iter = 100; // Maximum number of iterations
-                    boost::math::tools::eps_tolerance<double> tolerance(30); // Desired tolerance
+                    double lowerbound = 0.0 + 1e-10;
+                    double upperbound = 0.5;
+                    boost::uintmax_t max_iter = 1000; // Maximum number of iterations
+                    boost::math::tools::eps_tolerance<double> tolerance(20); // Desired tolerance
 
                     auto integrand = [&](double s) {
                         const double exponent = sqrt(s * s + x[0] * x[0]) - ell0;
@@ -119,13 +119,15 @@ class Cheb {
                     };
 
                     auto solve_func = [&](double caluplimit) { 
-                        speak("caluplimit", caluplimit); 
-                        double residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                            integrand, 0, caluplimit, 10, 1e-6, &error) - x[1] / D;
+                        // speak("caluplimit", caluplimit); 
+                        double residue = boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
+                            integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1] / D;
+                        // speak("residue", residue); 
                         return residue;
                     }; 
 
                     std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
+                    // speak("value=======", res.first); 
                     *y = res.first;
                 }
             };

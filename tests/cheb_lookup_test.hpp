@@ -18,13 +18,15 @@
 
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 
-TEST_CASE("REVERSE Lookup table test soft spring ", "[REVERSE lookup]") {
-    const double tol = 1e-2;
+TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
+    const double tol = 1e-5;
     const double D = 0.024;
     const double alpha = 0.1 / (2 * 0.00411);
     const double freelength = 0.05;
     const double M = alpha * D * D;
     const double ell0 = freelength / D;
+
+    static constexpr double small_ = 1e-4; 
 
     LUTFillerEdep lut_filler(256, 256);
     lut_filler.Init(alpha, freelength, D);
@@ -33,34 +35,50 @@ TEST_CASE("REVERSE Lookup table test soft spring ", "[REVERSE lookup]") {
     double distPerp = 0;
     distPerp = 0.2;
 
-    double testbound = LUT.getNonDsbound(); 
+    double testbound = LUT.getNonDsbound()/2; 
+    speak("testbound", testbound); 
+    double boundgrid = 0.2; 
+    size_t gridcnt = (testbound - 0) / boundgrid; 
+    double intval[gridcnt]; double uplimit[gridcnt]; 
+
+    // ("distPerp = 0.2 > D+ell0, single peaked")
+    int cnt = 0; 
+    for (double sbound = 0; sbound < testbound; sbound += boundgrid) {
+        double val = integral(distPerp / D, 0, sbound, M, ell0);
+        double a1 = LUT.ReverseLookup(distPerp, val * D); 
+        // speak("a1",a1); speak("val",val);
+        intval[cnt] = val; uplimit[cnt] = a1; cnt++; 
+        // CHECK(LUT.ReverseLookup(distPerp, val * D) == Approx(sbound * D).epsilon(tol));
+    }
+    // speakvec(intval, gridcnt); speakvec(uplimit, gridcnt); 
+    double intvaldiff = (intval[gridcnt] - intval[0])/2; 
+    double midint = intval[0] + intvaldiff; 
 
     int dim = 2;
     int order = 10; 
     int odim = 1;
-    double bbtol = 1e-10;
+    double bbtol = 2e-3;
     double mlf = 0.0;
     int sme = 1;
     int mind = 0; 
     int maxd = 40;
-    double hl[] = {0.1, testbound / 2 * D}; // half length
-    double center[] = {distPerp / D, testbound / 2 * D};  // center
+    double hl[] = {0.1, intvaldiff * D + small_}; // half length
+    double center[] = {distPerp / D, midint * D + small_};  // center
     const char* fn = "func_approx.baobzi"; 
 
     Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
     theBaobzi.approxFunc(3);
 
-
-    // ("distPerp = 0.2 > D+ell0, single peaked")
-    for (double sbound = 0; sbound < testbound/ 2; sbound += 0.2) {
-        double val = integral(distPerp / D, 0, sbound, M, ell0);
-        double a1 = LUT.ReverseLookup(distPerp, val * D); 
-        speak("a1",a1); 
-        speak("val",val * D);
-
-        CHECK(LUT.ReverseLookup(distPerp, val * D) ==
-              Approx(sbound * D).epsilon(tol));
+    for (double sbound = 0; sbound < testbound; sbound += boundgrid) {
+        double val = integral(distPerp / D, 0, sbound, M, ell0); 
+        double inval[] = {distPerp / D, val * D}; 
+        double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
+        double bberr = ABS(a1 - sbound * D); 
+        // speak("Baobzi Error", bberr); 
+        CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
     }
+
+
     // ("distPerp = 0.1 > D+ell0, single peaked")
     // distPerp = 0.1;
     // for (double sbound = 0; sbound < LUT.getNonDsbound() / 2; sbound += 0.2) {
@@ -84,7 +102,7 @@ TEST_CASE("REVERSE Lookup table test soft spring ", "[REVERSE lookup]") {
  * Importance of wisely setting up domain -> Equation (47) in Lamson 2021 EPJ -> Currently easy when distPerp is fixed
 */
 
-// TEST_CASE("Lookup table test SOFT spring ", "[lookup_soft]") {
+// TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
 //     std::cout << "==== SOFT SPRING TEST ====" << std::endl; 
 
 //     // Physical Parameters Setting
@@ -170,6 +188,7 @@ TEST_CASE("REVERSE Lookup table test soft spring ", "[REVERSE lookup]") {
 
 /**
  * binding volume test case passed! 
+ * The test 'Not using binding volume' has weird result (due to fixed standard), and not sure whether necessary to test on 
 */
 
 // TEST_CASE("Test the calculation of binding volume.", "[bind volume]") {

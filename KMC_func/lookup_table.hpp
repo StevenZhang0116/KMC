@@ -444,10 +444,9 @@ class LookupTable {
 #ifndef NDEBUG
         double UB_val1 = *(table_.begin() + index1UB);
         double UB_val2 = *(table_.begin() + index2UB);
-        printf("Reverse lookup input = %g, Upper limits = %g or %g \n", val,
-               UB_val1, UB_val2);
-        printf("Reverse lookup output = %g, expected range = (%g, %g) \n",
-               sbound, sboundm, sboundp);
+        // ignore output for test purpose
+        // printf("Reverse lookup input = %g, Upper limits = %g or %g \n", val, UB_val1, UB_val2);
+        // printf("Reverse lookup output = %g, expected range = (%g, %g) \n", sbound, sboundm, sboundp);
 #endif
         return D_ * sbound;
     }

@@ -25,7 +25,7 @@ double mean_error(const double xarray[], int gridcnt) {
 }
 
 void speak(const char name[], const double var) {
-    std::cout << name << ": " << var << std::endl;
+    std::cout << name << ", " << var << std::endl;
     return; 
 }
 
@@ -34,6 +34,7 @@ void speakvec(const double varvec[], size_t len) {
         std::cout << varvec[i] << ","; 
     }
     std::cout << std::endl; 
+    std::cout << "==============" << std::endl; 
 }
 
 #endif
