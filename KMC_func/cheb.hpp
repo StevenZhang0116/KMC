@@ -107,27 +107,32 @@ class Cheb {
                     const double ell0 = ((double*)data)[1];
                     const double D = ((double*)data)[2];
                     double error = 0;
+                    double shift = 1e-10; 
+                    double errortolerence = 0; 
 
-                    double lowerbound = 0.0 + 1e-10;
-                    double upperbound = 0.5;
+                    double lowerbound = 0.0 + shift; 
+                    double upperbound = 2.0; 
                     boost::uintmax_t max_iter = 1000; // Maximum number of iterations
-                    boost::math::tools::eps_tolerance<double> tolerance(20); // Desired tolerance
+                    boost::math::tools::eps_tolerance<double> tolerance(30); // Desired tolerance
 
                     auto integrand = [&](double s) {
                         const double exponent = sqrt(s * s + x[0] * x[0]) - ell0;
                         return exp(-M * exponent * exponent);
                     };
 
+                    speak("x[1]/D", x[1]/D);
                     auto solve_func = [&](double caluplimit) { 
-                        // speak("caluplimit", caluplimit); 
                         double residue = boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                            integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1] / D;
-                        // speak("residue", residue); 
+                            integrand, 0, caluplimit / D, 15, 1e-10, &error) - x[1] / D - errortolerence;
                         return residue;
                     }; 
 
+                    for (double i = lowerbound; i < upperbound; i+=0.01){
+                        speak("", solve_func(i)); 
+                    }
+
                     std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
-                    // speak("value=======", res.first); 
+                    // speak("value====", res.first/D); 
                     *y = res.first;
                 }
             };
