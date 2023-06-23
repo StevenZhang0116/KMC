@@ -59,6 +59,7 @@ class Cheb {
             // load external parameters
             // param[0] = M: exponential constant factor
             // param[1] = ell0: protein rest length
+            // param[2] = D; diameter of rod crosslink is binding to 
             param[0] = M; param[1] = ell0; param[2] = D; 
             input.data = &param; 
 
@@ -108,7 +109,7 @@ class Cheb {
                     const double D = ((double*)data)[2];
                     double error = 0;
                     double shift = 1e-10; 
-                    double errortolerence = 0; 
+                    double errortolerence = 1e-10; 
 
                     double lowerbound = 0.0 + shift; 
                     double upperbound = 2.0; 
@@ -120,20 +121,28 @@ class Cheb {
                         return exp(-M * exponent * exponent);
                     };
 
-                    speak("x[1]/D", x[1]/D);
                     auto solve_func = [&](double caluplimit) { 
                         double residue = boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                            integrand, 0, caluplimit / D, 15, 1e-10, &error) - x[1] / D - errortolerence;
+                            integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1] / D; 
+                        if (ABS(residue) < errortolerence) {
+                            residue = 0; 
+                        }
                         return residue;
                     }; 
+                    
+                    // speak("x[1]/D", x[1]/D);
+                    // for (double i = lowerbound; i < upperbound; i+=0.01){
+                    //     speak("", solve_func(i)); 
+                    // }
 
-                    for (double i = lowerbound; i < upperbound; i+=0.01){
-                        speak("", solve_func(i)); 
+                    try {
+                        std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
+                        *y = res.first;
+                    } 
+                    catch(...) {
+                        *y = 0; 
                     }
-
-                    std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
-                    // speak("value====", res.first/D); 
-                    *y = res.first;
+                    
                 }
             };
 
@@ -154,7 +163,7 @@ class Cheb {
                     };
 
                     double result = boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                                    integrand, 0, x[0] / D, 10, 1e-6, &error); 
+                                    integrand, 0, x[0] / D, 15, 1e-10, &error); 
 
                     *y = 4. * M_PI * result;
                 }

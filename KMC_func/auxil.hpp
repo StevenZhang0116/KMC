@@ -35,6 +35,15 @@ void speakvec(const double varvec[], size_t len) {
         std::cout << varvec[i] << ","; 
     }
     std::cout << std::endl; 
+    return; 
+}
+
+std::vector<double> createErr(const int a, const int b) {
+    std::vector<double> errVec; 
+    for (int i = b; i >= a; i--) {
+        errVec.push_back(10 ^ (-i)); 
+    }
+    return errVec; 
 }
 
 #endif

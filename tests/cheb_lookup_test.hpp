@@ -18,6 +18,12 @@
 
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 
+/** 
+ * Reverse look up search 
+ * Problem with large stiffness -> CDF similar to step function
+ * How to automatically set up search domain if no prior knowledge of it
+ */
+
 TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::cout << "==== REVERSE CHECK SPRING TEST ====" << std::endl; 
     const double tol = 1e-2;
@@ -27,7 +33,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     const double M = alpha * D * D;
     const double ell0 = freelength / D;
 
-    static constexpr double small_ = 1e-4; 
+    static constexpr double small_ = 1e-15; 
 
     LUTFillerEdep lut_filler(256, 256);
     lut_filler.Init(alpha, freelength, D);
@@ -39,7 +45,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     double testbound = LUT.getNonDsbound()/2; 
     double startbound = 0.1; 
     speak("testbound", testbound); 
-    double boundgrid = 0.2; 
+    double boundgrid = 0.0001; 
     size_t gridcnt = (testbound - startbound) / boundgrid; 
     std::vector<double> intval; 
     std::vector<double> rlerr; 
@@ -63,15 +69,15 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     int dim = 2;
     int order = 10; 
     int odim = 1;
-    double bbtol = 1e-7;
     double mlf = 0.0;
     int sme = 1;
     int mind = 0; 
     int maxd = 40;
-    double hl[] = {1e-2, intvaldiff * D + small_}; // half length
-    double center[] = {distPerp / D, midint * D + small_};  // center
+    double hl[] = {1e-2, (intvaldiff * D + small_) * 1}; // half length
+    double center[] = {distPerp / D, (midint * D + small_) * 1};  // center
     const char* fn = "func_approx.baobzi"; 
 
+    double bbtol = 1e-4; 
     Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
     theBaobzi.approxFunc(3);
 
@@ -90,21 +96,6 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     speak("Average Error for Reverse LookUP", mean_error(rlerr));
     speak("Average Error for Chebyshev", mean_error(baobzierr)); 
 
-
-    // ("distPerp = 0.1 > D+ell0, single peaked")
-    // distPerp = 0.1;
-    // for (double sbound = 0; sbound < LUT.getNonDsbound() / 2; sbound += 0.2) {
-    //     double val = integral(distPerp / D, 0, sbound, M, ell0);
-    //     CHECK(LUT.ReverseLookup(distPerp, val * D) ==
-    //           Approx(sbound * D).epsilon(tol));
-    // }
-    // // ("distPerp = 0.06 < D+ell0, double peaked")
-    // distPerp = 0.06;
-    // for (double sbound = 0; sbound < LUT.getNonDsbound() / 2; sbound += 0.2) {
-    //     double val = integral(distPerp / D, 0, sbound, M, ell0);
-    //     CHECK(LUT.ReverseLookup(distPerp, val * D) ==
-    //           Approx(sbound * D).epsilon(tol));
-    // }
 }
 
 /** 
@@ -455,45 +446,6 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 //     CHECK(LUT.ReverseLookup(distPerp, D * 4.1524200) / D ==
 //           Approx(6.0).epsilon(tol));
 //     // CHECK(relError(LUT.ReverseLookup(distPerp / D, 4.37561), 7.0) < tol);
-// }
-
-// TEST_CASE("REVERSE Lookup table test medium spring ", "[REVERSE lookup]") {
-//     const double tol = 1e-2;
-//     const double D = 0.024;
-//     const double alpha = 1.0 / (2 * 0.00411);
-//     const double freelength = 0.05;
-//     const double M = alpha * D * D;
-//     const double ell0 = freelength / D;
-
-//     LUTFillerEdep lut_filler(256, 256);
-//     lut_filler.Init(alpha, freelength, D);
-//     LookupTable LUT(&lut_filler);
-
-//     double distPerp = 0;
-//     distPerp = 0.2;
-//     // ("distPerp = 0.2 > D+ell0, single peaked")
-//     for (double sbound = 0; sbound < LUT.getNonDsbound() / 3; sbound += 0.2) {
-//         double val = integral(distPerp / D, 0, sbound, M, ell0);
-//         // CHECK(errorPass(LUT.ReverseLookup(distPerp, val * D), sbound * D));
-//         CHECK(LUT.ReverseLookup(distPerp, val * D) ==
-//               Approx(sbound * D).epsilon(tol));
-//     }
-//     // ("distPerp = 0.1 > D+ell0, single peaked")
-//     distPerp = 0.1;
-//     for (double sbound = 0; sbound < LUT.getNonDsbound() / 2; sbound += 0.2) {
-//         double val = integral(distPerp / D, 0, sbound, M, ell0);
-//         // CHECK(errorPass(LUT.ReverseLookup(distPerp, val * D), sbound * D));
-//         CHECK(LUT.ReverseLookup(distPerp, val * D) ==
-//               Approx(sbound * D).epsilon(tol));
-//     }
-//     // ("distPerp = 0.06 < D+ell0, double peaked")
-//     distPerp = 0.06;
-//     for (double sbound = 0; sbound < LUT.getNonDsbound() / 2; sbound += 0.2) {
-//         double val = integral(distPerp / D, 0, sbound, M, ell0);
-//         // CHECK(errorPass(LUT.ReverseLookup(distPerp, val * D), sbound * D));
-//         CHECK(LUT.ReverseLookup(distPerp, val * D) ==
-//               Approx(sbound * D).epsilon(tol));
-//     }
 // }
 
 // TEST_CASE("REVERSE Lookup table test stiff spring ", "[REVERSE lookup]") {
