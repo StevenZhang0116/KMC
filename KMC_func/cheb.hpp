@@ -108,7 +108,7 @@ class Cheb {
                     const double ell0 = ((double*)data)[1];
                     const double D = ((double*)data)[2];
                     double error = 0;
-                    double shift = 1e-10; 
+                    double shift = 1e-20; 
                     double errortolerence = 1e-10; 
 
                     double lowerbound = 0.0 + shift; 
@@ -124,9 +124,10 @@ class Cheb {
                     auto solve_func = [&](double caluplimit) { 
                         double residue = boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
                             integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1] / D; 
-                        if (ABS(residue) < errortolerence) {
-                            residue = 0; 
-                        }
+                        // if (ABS(residue) < errortolerence) {
+                        //     std::cout << residue << std::endl; 
+                        //     residue = 0; 
+                        // }
                         return residue;
                     }; 
                     
@@ -135,13 +136,13 @@ class Cheb {
                     //     speak("", solve_func(i)); 
                     // }
 
-                    try {
+                    // try {
                         std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
                         *y = res.first;
-                    } 
-                    catch(...) {
-                        *y = 0; 
-                    }
+                    // } 
+                    // catch(...) {
+                    //     *y = 0; 
+                    // }
                     
                 }
             };
