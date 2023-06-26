@@ -6,7 +6,7 @@ from matplotlib.pyplot import figure
 
 figure(figsize=(8, 6), dpi=80)
 
-parentroot = "../build/rvl-res/time/"
+parentroot = "../build/int-res"
 outputname = "test.png"
 try: 
     os.remove(parentroot+outputname)
@@ -55,12 +55,12 @@ for ival in unique_vertical:
         # print(jval)
         subdf = allpd[(allpd['ver-dist'] == ival) & (allpd['alpha'] == jval)]
         if len(subdf) > 0: 
-            plt.plot(subdf[param2],subdf[param1],marker="o", linestyle="-",linewidth=2,label=f"alpha={round(jval,3)},vdist={round(ival,3)}")
+            plt.plot(subdf[param2],subdf[param1],marker="o", linestyle="-",linewidth=2,label=f"dist={round(ival,3)}")
 
-plt.xscale('log')
+# plt.xscale('log')
 plt.legend()
-# plt.xlabel('sbound')
-# plt.ylabel('CDF')
-plt.xlabel('Integral')
-plt.ylabel('Upper Limit')
+plt.xlabel('Distance along filament s (nm)')
+plt.ylabel('CDF')
+# plt.xlabel('Integral')
+# plt.ylabel('Upper Limit')
 plt.savefig(outputname)
