@@ -59,6 +59,8 @@ for ival in unique_vertical:
 
 plt.xscale('log')
 plt.legend()
-plt.xlabel('sbound')
-plt.ylabel('CDF')
+# plt.xlabel('sbound')
+# plt.ylabel('CDF')
+plt.xlabel('Integral')
+plt.ylabel('Upper Limit')
 plt.savefig(outputname)
