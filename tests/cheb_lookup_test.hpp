@@ -26,105 +26,105 @@
  * How to automatically set up search domain if no prior knowledge of it
  */
 
-TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
-    // std::vector<double> hh {0.05,0.01,0.15,0.2};
-    // for (size_t i = 0; i < hh.size(); i++) {
-    std::cout << "==== REVERSE CHECK SPRING TEST ====" << std::endl; 
-    const double tol = 1e-2;
-    const double D = 0.024;
-    const double alpha = 0.1 / (2 * 0.00411);
-    const double freelength = 0.05;
-    const double M = alpha * D * D;
-    const double ell0 = freelength / D;
+// TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
+//     // std::vector<double> hh {0.05,0.01,0.15,0.2};
+//     // for (size_t i = 0; i < hh.size(); i++) {
+//     std::cout << "==== REVERSE CHECK SPRING TEST ====" << std::endl; 
+//     const double tol = 1e-2;
+//     const double D = 0.024;
+//     const double alpha = 0.1 / (2 * 0.00411);
+//     const double freelength = 0.05;
+//     const double M = alpha * D * D;
+//     const double ell0 = freelength / D;
 
-    static constexpr double small_ = 1e-30; 
+//     static constexpr double small_ = 1e-30; 
 
-    LUTFillerEdep lut_filler(256, 256);
-    lut_filler.Init(alpha, freelength, D);
-    LookupTable LUT(&lut_filler);
+//     LUTFillerEdep lut_filler(256, 256);
+//     lut_filler.Init(alpha, freelength, D);
+//     LookupTable LUT(&lut_filler);
 
-    double distPerp = 0;
-    distPerp = 0.2;
+//     double distPerp = 0;
+//     distPerp = 0.2;
 
-    double testbound = LUT.getNonDsbound()/2; 
-    double startbound = 0.1; 
-    speak("testbound", testbound); 
-    double boundgrid = 0.1; 
-    size_t gridcnt = (testbound - startbound) / boundgrid; 
-    std::vector<double> intval; 
-    std::vector<double> rlerr; 
-    std::vector<double> baobzierr; 
+//     double testbound = LUT.getNonDsbound()/2; 
+//     double startbound = 0.1; 
+//     speak("testbound", testbound); 
+//     double boundgrid = 0.1; 
+//     size_t gridcnt = (testbound - startbound) / boundgrid; 
+//     std::vector<double> intval; 
+//     std::vector<double> rlerr; 
+//     std::vector<double> baobzierr; 
 
-    // ("distPerp = 0.2 > D+ell0, single peaked")
-    for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
-        double val = integral(distPerp / D, 0, sbound, M, ell0);
-        double a1 = LUT.ReverseLookup(distPerp, val * D); 
-        // speak("val",val); 
-        double err = ABS(a1 - sbound * D); 
-        rlerr.push_back(err); 
-        intval.push_back(val); 
-        // CHECK(LUT.ReverseLookup(distPerp, val * D) == Approx(sbound * D).epsilon(tol));
-    }
-    speak("small", intval[0]); speak("large",intval[gridcnt]); 
-    // speakvec(intval, gridcnt); 
-    double intvaldiff = (intval[gridcnt] - intval[0]) / 2; 
-    double midint = intval[0] + intvaldiff; 
+//     // ("distPerp = 0.2 > D+ell0, single peaked")
+//     for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
+//         double val = integral(distPerp / D, 0, sbound, M, ell0);
+//         double a1 = LUT.ReverseLookup(distPerp, val * D); 
+//         // speak("val",val); 
+//         double err = ABS(a1 - sbound * D); 
+//         rlerr.push_back(err); 
+//         intval.push_back(val); 
+//         // CHECK(LUT.ReverseLookup(distPerp, val * D) == Approx(sbound * D).epsilon(tol));
+//     }
+//     speak("small", intval[0]); speak("large",intval[gridcnt]); 
+//     // speakvec(intval, gridcnt); 
+//     double intvaldiff = (intval[gridcnt] - intval[0]) / 2; 
+//     double midint = intval[0] + intvaldiff; 
 
-    int dim = 2;
-    int order = 10; 
-    int odim = 1;
-    double mlf = 0.0;
-    int sme = 1;
-    int mind = 0; 
-    int maxd = 40;
-    double hlfc = intvaldiff * D; 
-    double hl[] = {powf(10.0f, floorf(log10f(hlfc))), (hlfc+ small_) * 1}; // half length
-    double center[] = {distPerp / D, (midint * D + small_) * 1};  // center
-    const char* fn = "func_approx.baobzi"; 
+//     int dim = 2;
+//     int order = 10; 
+//     int odim = 1;
+//     double mlf = 0.0;
+//     int sme = 1;
+//     int mind = 0; 
+//     int maxd = 40;
+//     double hlfc = intvaldiff * D; 
+    // double hl[] = {find_order(lfc), (hlfc+ small_) * 1}; // half length
+//     double center[] = {distPerp / D, (midint * D + small_) * 1};  // center
+//     const char* fn = "func_approx.baobzi"; 
 
-    double bbtol = 1e-6; 
-    speak("tolerence",bbtol); 
+//     double bbtol = 1e-6; 
+//     speak("tolerence",bbtol); 
 
-    // std::string rootpath = "rvl-res/time/";
-    // std::ofstream myfile; 
-    // std::string strparam = std::to_string(distPerp);
-    // std::string strTol = std::to_string(-1 * log10(bbtol));
-    // std::string searchfilename = rootpath + strparam + "-" + strTol + ".txt"; 
-    // try {
-    //     std::filesystem::remove(searchfilename);
-    // }
-    // catch (...) {}
-    // myfile.open(searchfilename);
+//     // std::string rootpath = "rvl-res/time/";
+//     // std::ofstream myfile; 
+//     // std::string strparam = std::to_string(distPerp);
+//     // std::string strTol = std::to_string(-1 * log10(bbtol));
+//     // std::string searchfilename = rootpath + strparam + "-" + strTol + ".txt"; 
+//     // try {
+//     //     std::filesystem::remove(searchfilename);
+//     // }
+//     // catch (...) {}
+//     // myfile.open(searchfilename);
 
-    const auto st1 = get_wtime();
-    Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
-    theBaobzi.approxFunc(3);
+//     const auto st1 = get_wtime();
+//     Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
+//     theBaobzi.approxFunc(3);
 
-    const auto ft1 = get_wtime();
-    const double dt1 = get_wtime_diff(&st1, &ft1);
+//     const auto ft1 = get_wtime();
+//     const double dt1 = get_wtime_diff(&st1, &ft1);
 
-    for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
-        // speak("sbound", sbound); 
-        double val = integral(distPerp / D, 0, sbound, M, ell0); 
-        double inval[] = {distPerp / D, val * D}; 
-        // speakvec(inval,2);
-        double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
-        double bberr = ABS(a1 - sbound * D); 
-        // speak("Baobzi Error", bberr); 
-        baobzierr.push_back(bberr); 
-        CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
+//     for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
+//         // speak("sbound", sbound); 
+//         double val = integral(distPerp / D, 0, sbound, M, ell0); 
+//         double inval[] = {distPerp / D, val * D}; 
+//         // speakvec(inval,2);
+//         double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
+//         double bberr = ABS(a1 - sbound * D); 
+//         // speak("Baobzi Error", bberr); 
+//         baobzierr.push_back(bberr); 
+//         CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
 
-    }
+//     }
 
-    speak("Average Error for Reverse LookUP", mean_error(rlerr));
-    speak("Randomly Chosen Error for Chebyshev", baobzierr[10]); 
-    speak("Average Error for Chebyshev", mean_error(baobzierr)); 
-    speak("Elapsed Time(s) for Chebyshev", dt1);
+//     speak("Average Error for Reverse LookUP", mean_error(rlerr));
+//     speak("Randomly Chosen Error for Chebyshev", baobzierr[10]); 
+//     speak("Average Error for Chebyshev", mean_error(baobzierr)); 
+//     speak("Elapsed Time(s) for Chebyshev", dt1);
 
-    // myfile << alpha << "," << bbtol << "," << dt1 << "," << mean_error(baobzierr) << "," << mean_error(rlerr) << std::endl;
-    // myfile.close(); 
-    // }
-}
+//     // myfile << alpha << "," << bbtol << "," << dt1 << "," << mean_error(baobzierr) << "," << mean_error(rlerr) << std::endl;
+//     // myfile.close(); 
+//     // }
+// }
 
 /** 
  * Spring with different stiffness and various parameter settings tests passed!  
@@ -133,101 +133,102 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
  * Importance of wisely setting up domain -> Equation (47) in Lamson 2021 EPJ -> Currently easy when distPerp is fixed
 */
 
-// TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
-//     std::cout << "==== (ALL KIND) SPRING TEST ====" << std::endl; 
+TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
+    std::cout << "==== (ALL KIND) SPRING TEST ====" << std::endl; 
 
-//     // Physical Parameters Setting
-//     constexpr double errTol = 1e-3;
-//     const double D = 0.024;
-//     const double alpha = 10 / (2 * 0.00411);
-//     const double freelength = 0.05;
-//     const double M = alpha * D * D; speak("M",M); 
-//     const double ell0 = freelength / D;
+    // Physical Parameters Setting
+    constexpr double errTol = 1e-3;
+    const double D = 0.024;
+    const double alpha = 0.1 / (2 * 0.00411);
+    const double freelength = 0.05;
+    const double M = alpha * D * D; speak("M",M); 
+    const double ell0 = freelength / D;
 
-//     LUTFillerEdep lut_filler(256, 256);
-//     lut_filler.Init(alpha, freelength, D);
-//     LookupTable LUT(&lut_filler);
+    LUTFillerEdep lut_filler(256, 256);
+    lut_filler.Init(alpha, freelength, D);
+    LookupTable LUT(&lut_filler);
 
-//     double distPerp = 0;
-//     distPerp = 0.2; 
-//     std::string rootpath = "int-res/";
-//     std::string strPerp = std::to_string(distPerp);
-//     std::ofstream myfile; 
-//     std::string searchfilename = rootpath + strPerp + ".txt"; 
-//     try {
-//         std::filesystem::remove(searchfilename);
-//     }
-//     catch (...) {}
+    double distPerp = 0;
+    distPerp = 0.2; 
+    std::string rootpath = "int-res/";
+    std::string strPerp = std::to_string(distPerp);
+    std::string strAlpha = std::to_string(alpha);
+    std::ofstream myfile; 
+    std::string searchfilename = rootpath + strPerp + "-" + strAlpha + ".txt"; 
+    try {
+        std::filesystem::remove(searchfilename);
+    }
+    catch (...) {}
 
-//     myfile.open(searchfilename);
+    myfile.open(searchfilename);
 
-//     double startbound = 0.1;
-//     double testbound = 30; 
-//     double boundgrid = 0.01; 
-//     size_t gridcnt = floor((testbound - startbound) / boundgrid);
-//     speak("total cases: ", gridcnt); 
+    double startbound = 0.1;
+    double testbound = 40; 
+    double boundgrid = 0.001; 
+    size_t gridcnt = floor((testbound - startbound) / boundgrid);
+    speak("total cases: ", gridcnt); 
 
-//     std::vector<double> ludiff; std::vector<double> bbdiff; // error storer
-//     std::vector<double> bbresl; // Baobzi calculation storer
-//     std::vector<double> bbparm; // parameter storer
+    std::vector<double> ludiff; std::vector<double> bbdiff; // error storer
+    std::vector<double> bbresl; // Baobzi calculation storer
+    std::vector<double> bbparm; // parameter storer
 
-//     // Baobzi Parameter Setting
-//     int dim = 2;
-//     int order = 10; 
-//     int odim = 1;
-//     double bbtol = 1e-5;
-//     double mlf = 0.0;
-//     int sme = 1;
-//     int mind = 0; 
-//     int maxd = 40;
-//     double hl[] = {1e-4, testbound / 2 * D}; // half length
-//     double center[] = {distPerp / D, testbound / 2 * D};  // center
-//     const char* fn = "func_approx.baobzi"; 
+    // Baobzi Parameter Setting
+    int dim = 2;
+    int order = 10; 
+    int odim = 1;
+    double bbtol = 1e-5;
+    double mlf = 0.0;
+    int sme = 1;
+    int mind = 0; 
+    int maxd = 40;
+    double hl[] = {find_order(testbound / 2 * D), testbound / 2 * D}; // half length
+    double center[] = {distPerp / D, testbound / 2 * D};  // center
+    const char* fn = "func_approx.baobzi"; 
 
-//     // Baobzi function approximator
-//     Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
-//     theBaobzi.approxFunc(1);
+    // Baobzi function approximator
+    Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
+    theBaobzi.approxFunc(1);
 
-//     // LOOKUP TABLE TEST
-//     const auto st1 = get_wtime();
-//     // ("distPerp = 0.2 > D+ell0, single peaked")
-//     for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
-//         double a1 = LUT.Lookup(distPerp, sbound * D);
-//         double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);
-//         // CHECK(a1 == Approx(a2).epsilon(errTol));
-//         ludiff.push_back(ABS(a1 - a2)); 
-//     }
-//     const auto ft1 = get_wtime();
-//     const double dt1 = get_wtime_diff(&st1, &ft1);
+    // LOOKUP TABLE TEST
+    const auto st1 = get_wtime();
+    // ("distPerp = 0.2 > D+ell0, single peaked")
+    for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
+        double a1 = LUT.Lookup(distPerp, sbound * D);
+        double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);
+        // CHECK(a1 == Approx(a2).epsilon(errTol));
+        ludiff.push_back(ABS(a1 - a2)); 
+    }
+    const auto ft1 = get_wtime();
+    const double dt1 = get_wtime_diff(&st1, &ft1);
 
-//     // BAOBZI TEST
-//     int cnt2 = 0; 
-//     const auto st2 = get_wtime();
-//     for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
-//         // Baobzi test
-//         double inval[] = {distPerp / D, sbound * D};
-//         double a1 = theBaobzi.evalFunc(inval);  // baobzi result
-//         double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);  // integral for comparison
-//         myfile << a1 << "," << sbound << std::endl;
-//         CHECK(a1 == Approx(a2).epsilon(errTol));
-//         // speak("Baobzi Error", ABS(a1 - a2)); 
-//         bbdiff.push_back(ABS(a1 - a2)); 
-//         bbresl.push_back(a1); 
-//         bbparm.push_back(sbound); 
-//     }
-//     const auto ft2 = get_wtime();
-//     const double dt2 = get_wtime_diff(&st2, &ft2);
+    // BAOBZI TEST
+    int cnt2 = 0; 
+    const auto st2 = get_wtime();
+    for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
+        // Baobzi test
+        double inval[] = {distPerp / D, sbound * D};
+        double a1 = theBaobzi.evalFunc(inval);  // baobzi result
+        double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);  // integral for comparison
+        myfile << a1 << "," << sbound << "," << strPerp << "," << strAlpha << std::endl;
+        CHECK(a1 == Approx(a2).epsilon(errTol));
+        // speak("Baobzi Error", ABS(a1 - a2)); 
+        bbdiff.push_back(ABS(a1 - a2)); 
+        bbresl.push_back(a1); 
+        bbparm.push_back(sbound); 
+    }
+    const auto ft2 = get_wtime();
+    const double dt2 = get_wtime_diff(&st2, &ft2);
 
-//     speak("Average Error for Lookup", mean_error(ludiff));
-//     speak("Average Error for Chebyshev", mean_error(bbdiff)); 
-//     speak("Elapsed Time(s) for Lookup", dt1);
-//     speak("Elapsed Time(s) for Chebyshev", dt2);
+    speak("Average Error for Lookup", mean_error(ludiff));
+    speak("Average Error for Chebyshev", mean_error(bbdiff)); 
+    speak("Elapsed Time(s) for Lookup", dt1);
+    speak("Elapsed Time(s) for Chebyshev", dt2);
 
-//     myfile.close(); 
+    myfile.close(); 
 
-//     // speakvec(bbresl, gridcnt); 
-//     // speakvec(bbparm, gridcnt); 
-// }
+    // speakvec(bbresl, gridcnt); 
+    // speakvec(bbparm, gridcnt); 
+}
 
 // /**
 //  * binding volume test case passed! 

@@ -38,6 +38,10 @@ void speakvec(const double varvec[], size_t len) {
     return; 
 }
 
+double find_order(const double input) {
+    return powf(10.0f, floorf(log10f(input)));
+}
+
 std::vector<double> createErr(const int a, const int b) {
     std::vector<double> errVec; 
     for (int i = b; i >= a; i--) {
