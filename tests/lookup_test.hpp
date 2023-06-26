@@ -26,7 +26,7 @@ TEST_CASE("Lookup table test SOFT spring ", "[lookup_soft]") {
     LookupTable LUT(&lut_filler);
 
     double distPerp = 0;
-    distPerp = 0.2;
+    distPerp = 0.01;
     // ("distPerp = 0.2 > D+ell0, single peaked")
     for (double sbound = 0; sbound < 20; sbound += 0.5) {
         CHECK(LUT.Lookup(distPerp, sbound * D) ==
