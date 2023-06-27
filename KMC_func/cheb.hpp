@@ -24,6 +24,7 @@ class Cheb {
         double param[3];
         baobzi_input_t input;
         const char* oname; 
+        int indicator; 
     private:
         baobzi::Function<2,10,0,double> savefunc;
         
@@ -34,8 +35,8 @@ class Cheb {
         /**
          * @brief constructor of Baobzi object
          */
-        Cheb(double (&hl)[2], double (&cen)[2], double tol, 
-        double alpha, double freelength, double D, const char* output_name) {
+        Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
+        double D, const char* output_name, const int runind) {
             // std::cout << "Construct Baobzi Object" << std::endl;
             memcpy(&half_length, &hl, sizeof(hl)); 
             assert(half_length[0] <= 1); assert(half_length[1] <= 1); // half length, <= 1
@@ -56,13 +57,15 @@ class Cheb {
             input.min_depth = 0;
             input.max_depth = 40; 
             // load external parameters
-            // param[0] = M: exponential constant factor
-            // param[1] = ell0: protein rest length
-            // param[2] = D; diameter of rod crosslink is binding to 
+            // param[0] = M: exponential constant factor -> exp_fact_
+            // param[1] = ell0: protein rest length -> rest_length_
+            // param[2] = D; diameter of rod crosslink is binding to  -> length_scale_
             double M = alpha * D * D; 
             double ell0 = freelength / D; 
             param[0] = M; param[1] = ell0; param[2] = D; 
             input.data = &param; 
+            // determines which function approximation is implemented (e.g. lookup, reverse lookup)
+            indicator = runind; 
             oname = output_name; 
         }
         
@@ -74,7 +77,7 @@ class Cheb {
          *          
          *  @return integral value
          */
-        inline std::function<void(const double*, double*, const void*)> conApproxFunc(const int choice) {
+        inline std::function<void(const double*, double*, const void*)> conApproxFunc() {
             // x[0] = r⊥/lm: perpendicular distance above rod
             // x[1] = s: upper limit of integral
             auto approxCDF = [](const double *x, double *y, const void *data) {
@@ -170,17 +173,17 @@ class Cheb {
                 }
             };
 
-            if (choice == 1) {
+            if (indicator == 1) {
                 return approxCDF;
             }
-            else if (choice == 2) {
+            else if (indicator == 2) {
                 return approxBindV; 
             }
-            else if (choice == 3){
+            else if (indicator == 3){
                 return reverApproxCDF; 
             }
             else {
-                throw std::invalid_argument("Invalid choice");
+                throw std::invalid_argument("Invalid choice -> Parameter Setting Error");
             }
         }
         
@@ -189,9 +192,9 @@ class Cheb {
          * 
          * @return null
         */
-        inline void approxFunc(const int choice) {
+        inline void approxFunc() {
             std::cout << "Generate Function Approximator" << std::endl; 
-            baobzi::Function<2,10,0,double> func_approx(&input, center, half_length, conApproxFunc(choice), {});
+            baobzi::Function<2,10,0,double> func_approx(&input, center, half_length, conApproxFunc(), {});
             func_approx.print_stats();
             savefunc = func_approx; 
             return;

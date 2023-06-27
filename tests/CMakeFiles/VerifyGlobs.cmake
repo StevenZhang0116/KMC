@@ -7,7 +7,9 @@ file(GLOB NEW_GLOB LIST_DIRECTORIES true "/mnt/home/zzhang1/aLENS/KMC/KMC_func/*
 set(OLD_GLOB
   "/mnt/home/zzhang1/aLENS/KMC/KMC_func/ExampleRod.hpp"
   "/mnt/home/zzhang1/aLENS/KMC/KMC_func/ExampleSphere.hpp"
+  "/mnt/home/zzhang1/aLENS/KMC/KMC_func/auxil.hpp"
   "/mnt/home/zzhang1/aLENS/KMC/KMC_func/cheb.hpp"
+  "/mnt/home/zzhang1/aLENS/KMC/KMC_func/chebcoll.hpp"
   "/mnt/home/zzhang1/aLENS/KMC/KMC_func/helpers.hpp"
   "/mnt/home/zzhang1/aLENS/KMC/KMC_func/integrals.hpp"
   "/mnt/home/zzhang1/aLENS/KMC/KMC_func/kmc.hpp"

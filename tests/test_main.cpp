@@ -6,7 +6,7 @@
 // #include "edep_second_order_lookup_test.hpp"
 // #include "kmc_testing.hpp"
 // #include "lookup_test.hpp"
-#include "demo_cheb_lookup_test.hpp"
+#include "test_cheb_test.hpp"
 // #include "two_step_prob_test.hpp"
 
 #ifndef NDEBUG
