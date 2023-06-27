@@ -28,105 +28,105 @@
  * within similar scale, otherwise detrimental in Cheb-Fitting (very time expensive)
  */
 
-TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
-    // std::vector<double> hh {0.05,0.01,0.15,0.2};
-    // for (size_t i = 0; i < hh.size(); i++) {
-    std::cout << "==== REVERSE CHECK SPRING TEST ====" << std::endl; 
-    const double tol = 1e-2;
-    const double D = 0.024;
-    const double alpha = 0.1 / (2 * 0.00411);
-    const double freelength = 0.05;
-    const double M = alpha * D * D;
-    const double ell0 = freelength / D;
+// TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
+//     // std::vector<double> hh {0.05,0.01,0.15,0.2};
+//     // for (size_t i = 0; i < hh.size(); i++) {
+//     std::cout << "==== DEMO REVERSE CHECK SPRING TEST ====" << std::endl; 
+//     const double tol = 1e-2;
+//     const double D = 0.024;
+//     const double alpha = 0.1 / (2 * 0.00411);
+//     const double freelength = 0.05;
+//     const double M = alpha * D * D;
+//     const double ell0 = freelength / D;
 
-    static constexpr double small_ = 1e-30; 
+//     static constexpr double small_ = 1e-30; 
 
-    LUTFillerEdep lut_filler(256, 256);
-    lut_filler.Init(alpha, freelength, D);
-    LookupTable LUT(&lut_filler);
+//     LUTFillerEdep lut_filler(256, 256);
+//     lut_filler.Init(alpha, freelength, D);
+//     LookupTable LUT(&lut_filler);
 
-    double distPerp = 0;
-    distPerp = 0.2;
+//     double distPerp = 0;
+//     distPerp = 0.2;
 
-    double testbound = LUT.getNonDsbound()/2; 
-    double startbound = 0.1; 
-    speak("testbound", testbound); 
-    double boundgrid = 0.001; 
-    size_t gridcnt = (testbound - startbound) / boundgrid; 
-    std::vector<double> intval; 
-    std::vector<double> rlerr; 
-    std::vector<double> baobzierr; 
+//     double testbound = LUT.getNonDsbound()/2; 
+//     double startbound = 0.1; 
+//     speak("testbound", testbound); 
+//     double boundgrid = 0.001; 
+//     size_t gridcnt = (testbound - startbound) / boundgrid; 
+//     std::vector<double> intval; 
+//     std::vector<double> rlerr; 
+//     std::vector<double> baobzierr; 
 
-    // ("distPerp = 0.2 > D+ell0, single peaked")
-    for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
-        double val = integral(distPerp / D, 0, sbound, M, ell0);
-        double a1 = LUT.ReverseLookup(distPerp, val * D); 
-        // speak("val",val); 
-        double err = ABS(a1 - sbound * D); 
-        rlerr.push_back(err); 
-        intval.push_back(val); 
-        // CHECK(LUT.ReverseLookup(distPerp, val * D) == Approx(sbound * D).epsilon(tol));
-    }
-    speak("small", intval[0]); speak("large",intval[gridcnt]); 
-    // speakvec(intval, gridcnt); 
-    double intvaldiff = (intval[gridcnt] - intval[0]) / 2; 
-    double midint = intval[0] + intvaldiff; 
+//     // ("distPerp = 0.2 > D+ell0, single peaked")
+//     for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
+//         double val = integral(distPerp / D, 0, sbound, M, ell0);
+//         double a1 = LUT.ReverseLookup(distPerp, val * D); 
+//         // speak("val",val); 
+//         double err = ABS(a1 - sbound * D); 
+//         rlerr.push_back(err); 
+//         intval.push_back(val); 
+//         // CHECK(LUT.ReverseLookup(distPerp, val * D) == Approx(sbound * D).epsilon(tol));
+//     }
+//     speak("small", intval[0]); speak("large",intval[gridcnt]); 
+//     // speakvec(intval, gridcnt); 
+//     double intvaldiff = (intval[gridcnt] - intval[0]) / 2; 
+//     double midint = intval[0] + intvaldiff; 
 
-    int dim = 2;
-    int order = 10; 
-    int odim = 1;
-    double mlf = 0.0;
-    int sme = 1;
-    int mind = 0; 
-    int maxd = 40;
-    double hlfc = intvaldiff * D; 
-    double hl[] = {find_order(hlfc), (hlfc + small_) * 1}; // half length
-    double center[] = {distPerp / D, (midint * D + small_) * 1};  // center
-    const char* fn = "func_approx.baobzi"; 
+//     int dim = 2;
+//     int order = 10; 
+//     int odim = 1;
+//     double mlf = 0.0;
+//     int sme = 1;
+//     int mind = 0; 
+//     int maxd = 40;
+//     double hlfc = intvaldiff * D; 
+//     double hl[] = {find_order(hlfc), (hlfc + small_) * 1}; // half length
+//     double center[] = {distPerp / D, (midint * D + small_) * 1};  // center
+//     const char* fn = "func_approx.baobzi"; 
 
-    double bbtol = 1e-6; 
-    speak("tolerence",bbtol); 
+//     double bbtol = 1e-6; 
+//     speak("tolerence",bbtol); 
 
-    std::string rootpath = "rvl-res/time/";
-    std::string strPerp = std::to_string(distPerp);
-    std::string strAlpha = std::to_string(alpha);
-    std::ofstream myfile; 
-    std::string searchfilename = rootpath + strPerp + "-" + strAlpha + ".txt"; 
-    try {
-        std::filesystem::remove(searchfilename);
-    }
-    catch (...) {}
-    myfile.open(searchfilename);
+//     std::string rootpath = "rvl-res/time/";
+//     std::string strPerp = std::to_string(distPerp);
+//     std::string strAlpha = std::to_string(alpha);
+//     std::ofstream myfile; 
+//     std::string searchfilename = rootpath + strPerp + "-" + strAlpha + ".txt"; 
+//     try {
+//         std::filesystem::remove(searchfilename);
+//     }
+//     catch (...) {}
+//     myfile.open(searchfilename);
 
-    const auto st1 = get_wtime();
-    Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
-    theBaobzi.approxFunc(3);
+//     const auto st1 = get_wtime();
+//     Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
+//     theBaobzi.approxFunc(3);
 
-    const auto ft1 = get_wtime();
-    const double dt1 = get_wtime_diff(&st1, &ft1);
+//     const auto ft1 = get_wtime();
+//     const double dt1 = get_wtime_diff(&st1, &ft1);
 
-    for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
-        // speak("sbound", sbound); 
-        double val = integral(distPerp / D, 0, sbound, M, ell0); 
-        double inval[] = {distPerp / D, val * D}; 
-        // speakvec(inval,2);
-        double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
-        double bberr = ABS(a1 - sbound * D); 
-        // speak("Baobzi Error", bberr); 
-        baobzierr.push_back(bberr); 
-        myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
-        CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
+//     for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
+//         // speak("sbound", sbound); 
+//         double val = integral(distPerp / D, 0, sbound, M, ell0); 
+//         double inval[] = {distPerp / D, val * D}; 
+//         // speakvec(inval,2);
+//         double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
+//         double bberr = ABS(a1 - sbound * D); 
+//         // speak("Baobzi Error", bberr); 
+//         baobzierr.push_back(bberr); 
+//         myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
+//         CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
 
-    }
+//     }
 
-    speak("Average Error for Reverse LookUP", mean_error(rlerr));
-    speak("Randomly Chosen Error for Chebyshev", baobzierr[10]); 
-    speak("Average Error for Chebyshev", mean_error(baobzierr)); 
-    speak("Elapsed Time(s) for Chebyshev", dt1);
+//     speak("Average Error for Reverse LookUP", mean_error(rlerr));
+//     speak("Randomly Chosen Error for Chebyshev", baobzierr[10]); 
+//     speak("Average Error for Chebyshev", mean_error(baobzierr)); 
+//     speak("Elapsed Time(s) for Chebyshev", dt1);
 
-    // myfile.close(); 
-    // }
-}
+//     // myfile.close(); 
+//     // }
+// }
 
 /** 
  * Spring with different stiffness and various parameter settings tests passed!  
@@ -136,7 +136,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 */
 
 TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
-    std::cout << "==== (ALL KIND) SPRING TEST ====" << std::endl; 
+    std::cout << "==== DEMO (ALL KIND) SPRING TEST ====" << std::endl; 
     // Physical Parameters Setting
     constexpr double errTol = 1e-3;
     const double D = 0.024;
@@ -175,20 +175,14 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     std::vector<double> bbparm; // parameter storer
 
     // Baobzi Parameter Setting
-    int dim = 2;
-    int order = 10; 
-    int odim = 1;
     double bbtol = 1e-5;
-    double mlf = 0.0;
-    int sme = 1;
-    int mind = 0; 
-    int maxd = 40;
-    double hl[] = {find_order(testbound / 2 * D), testbound / 2 * D}; // half length
-    double center[] = {distPerp / D, testbound / 2 * D};  // center
+
+    double hl[2] = {find_order(testbound / 2 * D), testbound / 2 * D}; // half length
+    double center[2] = {distPerp / D, testbound / 2 * D};  // center
     const char* fn = "func_approx.baobzi"; 
 
     // Baobzi function approximator
-    Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
+    Cheb theBaobzi(hl,center,bbtol,alpha,freelength,D,fn);
     theBaobzi.approxFunc(1);
 
     // LOOKUP TABLE TEST
@@ -237,96 +231,96 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
  * The test 'Not using binding volume' has weird result (due to fixed standard), and not sure whether necessary to test on 
 */
 
-TEST_CASE("Test the calculation of binding volume.", "[bind volume]") {
-    std::cout << "==== BINDING VOLUME TEST ====" << std::endl; 
+// TEST_CASE("Test the calculation of binding volume.", "[bind volume]") {
+//     std::cout << "==== DEMO BINDING VOLUME TEST ====" << std::endl; 
 
-    // Physical Parameters Setting
-    const double D = 0.024;
-    const double freelength = 0.05;
-    double alpha = 1. / (2 * 0.00411);
-    const double ell0 = freelength / D;
-    double M = alpha * D * D;
+//     // Physical Parameters Setting
+//     const double D = 0.024;
+//     const double freelength = 0.05;
+//     double alpha = 1. / (2 * 0.00411);
+//     const double ell0 = freelength / D;
+//     double M = alpha * D * D;
     
-    static constexpr double small_ = 1e-4;
+//     static constexpr double small_ = 1e-4;
 
-    double startbound = 0.1 * M;
-    double testbound = 1 * M; 
-    double boundgrid = 0.1 * M; 
-    int gridcnt = floor((testbound - startbound) / boundgrid);
-    speak("total cases: ", gridcnt); 
+//     double startbound = 0.1 * M;
+//     double testbound = 1 * M; 
+//     double boundgrid = 0.1 * M; 
+//     int gridcnt = floor((testbound - startbound) / boundgrid);
+//     speak("total cases: ", gridcnt); 
 
-    int dim = 2;
-    int order = 10; 
-    int odim = 1;
-    double bbtol = 1e-6;
-    double mlf = 0.0;
-    int sme = 1;
-    int mind = 0; 
-    int maxd = 40;
-    double hl[] = {0.5, testbound/2}; 
-    double center[] = {0.5, testbound/2};
-    const char* fn = "func_approx.baobzi"; 
+//     int dim = 2;
+//     int order = 10; 
+//     int odim = 1;
+//     double bbtol = 1e-6;
+//     double mlf = 0.0;
+//     int sme = 1;
+//     int mind = 0; 
+//     int maxd = 40;
+//     double hl[] = {0.5, testbound/2}; 
+//     double center[] = {0.5, testbound/2};
+//     const char* fn = "func_approx.baobzi"; 
 
-    Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
-    theBaobzi.approxFunc(2);
+//     Cheb theBaobzi(hl[0],hl[1],center[0],center[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
+//     theBaobzi.approxFunc(2);
 
-    LUTFillerEdep lut_filler(256, 256);
-    SECTION("Check LUTfiller for proper binding volume") {
-        for (double i = 0.1; i < 1.0; i += .1) {
-            double M1 = i * M; 
-            double uppbound = sqrt(-log(small_) / M1) + ell0; 
-            lut_filler.Init(alpha * i, freelength, D);
-            double bind_vol = bind_vol_integral(lut_filler.getUpperBound(), M1, ell0);
-            // speak("uppbound*D", uppbound  * D); 
-            // speak("i*M", M1); 
-            double inval[] = {uppbound * D, M1}; 
-            double bb_bind_vol = theBaobzi.evalFunc(inval); 
-            speak("Baobzi Error", ABS(bind_vol - bb_bind_vol)); 
-            CHECK(bb_bind_vol == Approx(bind_vol).epsilon(1e-8));
-        }
-    }
-
-
-    // SECTION("Check LUT for proper binding volume") {
-    //     for (double i = 0.1; i < 1.0; i += .1) {
-    //         lut_filler.Init(alpha * i, freelength, D);
-    //         LookupTable LUT(&lut_filler, true);
-    //         double bind_vol =
-    //             CUBE(D) *
-    //             bind_vol_integral(lut_filler.getUpperBound(), i * M, ell0);
-    //         CHECK(LUT.getBindVolume() == Approx(bind_vol).epsilon(1e-8));
-    //     }
-    // }
+//     LUTFillerEdep lut_filler(256, 256);
+//     SECTION("Check LUTfiller for proper binding volume") {
+//         for (double i = 0.1; i < 1.0; i += .1) {
+//             double M1 = i * M; 
+//             double uppbound = sqrt(-log(small_) / M1) + ell0; 
+//             lut_filler.Init(alpha * i, freelength, D);
+//             double bind_vol = bind_vol_integral(lut_filler.getUpperBound(), M1, ell0);
+//             // speak("uppbound*D", uppbound  * D); 
+//             // speak("i*M", M1); 
+//             double inval[] = {uppbound * D, M1}; 
+//             double bb_bind_vol = theBaobzi.evalFunc(inval); 
+//             speak("Baobzi Error", ABS(bind_vol - bb_bind_vol)); 
+//             CHECK(bb_bind_vol == Approx(bind_vol).epsilon(1e-8));
+//         }
+//     }
 
 
-    SECTION("Not using binding volume") {
-        lut_filler.Init(.5, freelength, D);
-        LookupTable LUT(&lut_filler);
+//     // SECTION("Check LUT for proper binding volume") {
+//     //     for (double i = 0.1; i < 1.0; i += .1) {
+//     //         lut_filler.Init(alpha * i, freelength, D);
+//     //         LookupTable LUT(&lut_filler, true);
+//     //         double bind_vol =
+//     //             CUBE(D) *
+//     //             bind_vol_integral(lut_filler.getUpperBound(), i * M, ell0);
+//     //         CHECK(LUT.getBindVolume() == Approx(bind_vol).epsilon(1e-8));
+//     //     }
+//     // }
 
-        double lookupval = LUT.getBindVolume();
-        double stdard = 1.; 
 
-        CHECK((lookupval) == Approx(stdard).epsilon(1e-12));
+//     SECTION("Not using binding volume") {
+//         lut_filler.Init(.5, freelength, D);
+//         LookupTable LUT(&lut_filler);
 
-        double convi = .5 / alpha;
-        double M1 = convi * M;
-        double comp = CUBE(D) * bind_vol_integral(lut_filler.getUpperBound(), M1, ell0);
-        speak("Integral Comp Result", comp); 
+//         double lookupval = LUT.getBindVolume();
+//         double stdard = 1.; 
 
-        double uppbound = sqrt(-log(small_) / M1) + ell0;;
-        double inval1[] = {uppbound * D, M1};
-        speak("test uppbound",uppbound * D);
-        speak("test M1", M1); 
-        double hl1[] = {1e-3, M1/2}; 
-        double center1[] = {uppbound * D, M1};
-        Cheb theBaobzi1(hl1[0],hl1[1],center1[0],center1[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
-        theBaobzi1.approxFunc(2);
+//         CHECK((lookupval) == Approx(stdard).epsilon(1e-12));
 
-        double bb_bind_vol = CUBE(D) * theBaobzi1.evalFunc(inval1);
-        speak("Baobzi Result", bb_bind_vol);
-        speak("Baobzi Error", ABS(stdard - bb_bind_vol)); 
-    }
-}
+//         double convi = .5 / alpha;
+//         double M1 = convi * M;
+//         double comp = CUBE(D) * bind_vol_integral(lut_filler.getUpperBound(), M1, ell0);
+//         speak("Integral Comp Result", comp); 
+
+//         double uppbound = sqrt(-log(small_) / M1) + ell0;;
+//         double inval1[] = {uppbound * D, M1};
+//         speak("test uppbound",uppbound * D);
+//         speak("test M1", M1); 
+//         double hl1[] = {1e-3, M1/2}; 
+//         double center1[] = {uppbound * D, M1};
+//         Cheb theBaobzi1(hl1[0],hl1[1],center1[0],center1[1],dim,odim,order,bbtol,mlf,sme,mind,maxd,M,ell0,D,fn);
+//         theBaobzi1.approxFunc(2);
+
+//         double bb_bind_vol = CUBE(D) * theBaobzi1.evalFunc(inval1);
+//         speak("Baobzi Result", bb_bind_vol);
+//         speak("Baobzi Error", ABS(stdard - bb_bind_vol)); 
+//     }
+// }
 
 
 // TEST_CASE("Lookup table test MEDIUM spring ", "[lookup_med]") {

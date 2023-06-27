@@ -88,6 +88,7 @@ class LookupTable {
         rest_length_ = lut_filler->getRestLength();
 
         UB_ = lut_filler->getUpperBound();
+        std::cout << "Upper Bound:" << UB_ << std::endl; 
         D_ = lut_filler->getLengthScale();
 
         para_grid_num_ = lut_filler->getDistParaGridNum();

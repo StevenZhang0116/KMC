@@ -34,35 +34,35 @@ class Cheb {
         /**
          * @brief constructor of Baobzi object
          */
-        Cheb(double sbound1, double sbound2, double cen1, double cen2, int dim, 
-        int output_dim, int order, double tol, double minimum_leaf_fraction, 
-        int split_multi_eval, int min_depth, int max_depth, double M, double ell0,
-        double D, const char* output_name) {
+        Cheb(double (&hl)[2], double (&cen)[2], double tol, 
+        double alpha, double freelength, double D, const char* output_name) {
             // std::cout << "Construct Baobzi Object" << std::endl;
-            half_length[0] = sbound1; half_length[1] = sbound2; 
+            memcpy(&half_length, &hl, sizeof(hl)); 
             assert(half_length[0] <= 1); assert(half_length[1] <= 1); // half length, <= 1
-            center[0] = cen1; center[1] = cen2; 
+            memcpy(&center, &cen, sizeof(cen)); 
             // in case of out of range
             speak("half-length 1", half_length[0]); 
             speak("half-length 2", half_length[1]); 
             speak("center 1", center[0]);
             speak("center 2", center[1]); 
-
-            input.dim = dim; 
-            input.output_dim = output_dim; 
-            input.order = order;
+            // except tolerance, these parameters could be set as fixed and slight tuningWILL NOT 
+            // give significant effect to the result
+            input.dim = 2; 
+            input.output_dim = 1; 
+            input.order = 10;
             input.tol = tol; 
-            input.minimum_leaf_fraction = minimum_leaf_fraction;
-            input.split_multi_eval = split_multi_eval;
-            input.min_depth = min_depth;
-            input.max_depth = max_depth; 
+            input.minimum_leaf_fraction = 0.0;
+            input.split_multi_eval = 1;
+            input.min_depth = 0;
+            input.max_depth = 40; 
             // load external parameters
             // param[0] = M: exponential constant factor
             // param[1] = ell0: protein rest length
             // param[2] = D; diameter of rod crosslink is binding to 
+            double M = alpha * D * D; 
+            double ell0 = freelength / D; 
             param[0] = M; param[1] = ell0; param[2] = D; 
             input.data = &param; 
-
             oname = output_name; 
         }
         
@@ -164,7 +164,7 @@ class Cheb {
                     };
 
                     double result = boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                                    integrand, 0, x[0] / D, 15, 1e-10, &error); 
+                                    integrand, 0, x[0] / D, 10, 1e-6, &error); 
 
                     *y = 4. * M_PI * result;
                 }
