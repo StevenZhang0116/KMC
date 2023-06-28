@@ -540,7 +540,7 @@ class Function {
     }
 
     /// @brief Calculate and print various information about object instance to stdout
-    void print_stats() const {
+    void print_stats(const int printOrNot) const {
         std::size_t n_nodes = 0;
         std::size_t n_leaves = 0;
         std::size_t n_subtrees = subtrees_.size();
@@ -553,14 +553,16 @@ class Function {
                 n_leaves += node.is_leaf();
         }
 
-        std::cout << "Baobzi function mapping " << DIM << " to " << output_dim_ << std::endl;
-        std::cout << "Tree represented by " << n_nodes << " nodes, of which " << n_leaves << " are leaves\n";
-        std::cout << "Nodes are distributed across " << n_subtrees << " subtrees at an initial depth of "
-                  << stats_.base_depth << " with a maximum subtree depth of " << max_depth << "\n";
-        std::cout << "Total function evaluations required for fit: "
-                  << n_nodes * (int)std::pow(ORDER, DIM) + stats_.n_evals_root << std::endl;
-        std::cout << "Total time to create tree: " << stats_.t_elapsed << " milliseconds\n";
-        std::cout << "Approximate memory usage of tree: " << (T)mem / (1024 * 1024) << " MiB" << std::endl;
+        if (printOrNot == 1){
+            std::cout << "Baobzi function mapping " << DIM << " to " << output_dim_ << std::endl;
+            std::cout << "Tree represented by " << n_nodes << " nodes, of which " << n_leaves << " are leaves\n";
+            std::cout << "Nodes are distributed across " << n_subtrees << " subtrees at an initial depth of "
+                    << stats_.base_depth << " with a maximum subtree depth of " << max_depth << "\n";
+            std::cout << "Total function evaluations required for fit: "
+                    << n_nodes * (int)std::pow(ORDER, DIM) + stats_.n_evals_root << std::endl;
+            std::cout << "Total time to create tree: " << stats_.t_elapsed << " milliseconds\n";
+            std::cout << "Approximate memory usage of tree: " << (T)mem / (1024 * 1024) << " MiB" << std::endl;
+        }
     }
 
     /// @brief calculate vandermonde matrix

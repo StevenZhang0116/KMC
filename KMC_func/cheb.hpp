@@ -68,7 +68,6 @@ class Cheb {
             indicator = runind; 
             oname = output_name; 
         }
-        
 
         /**
          *  @brief approximate functions (subject to choose at different scanerios)
@@ -150,7 +149,6 @@ class Cheb {
                 }
             };
 
-
             // x[0] = s: upper limit of integral
             // x[1] = M (manipulated, not public parameter of class)
             auto approxBindV = [](const double *x, double *y, const void *data) {
@@ -172,6 +170,8 @@ class Cheb {
                     *y = 4. * M_PI * result;
                 }
             };
+            
+            speak("indicator",indicator);
 
             if (indicator == 1) {
                 return approxCDF;
@@ -193,9 +193,10 @@ class Cheb {
          * @return null
         */
         inline void approxFunc() {
-            std::cout << "Generate Function Approximator" << std::endl; 
+            int printOrNot = 1; 
+            if (printOrNot == 1) std::cout << "Generate Function Approximator" << std::endl; 
             baobzi::Function<2,10,0,double> func_approx(&input, center, half_length, conApproxFunc(), {});
-            func_approx.print_stats();
+            func_approx.print_stats(printOrNot);
             savefunc = func_approx; 
             return;
         }
@@ -208,10 +209,28 @@ class Cheb {
          * @return apprxoximated value
         */
         inline double evalFunc(double inval[]) {
-            // std::cout << "Evaluate Point at (" << inval[0] << "," << inval[1] << ")" << std::endl; 
+            std::cout << "Evaluate Point at (" << inval[0] << "," << inval[1] << ")" << std::endl; 
             double res; 
             savefunc(inval, &res); 
             return res; 
+        }
+
+        /** 
+         * @brief check whether the given 2D coordinate is included in the domain
+         * 
+         * @return binary value
+         */
+        inline int checkInclude(double (&pt)[2]) {
+            try {
+                assert(pt[0] >= center[0] - half_length[0]);
+                assert(pt[0] <= center[0] + half_length[0]);
+                assert(pt[1] >= center[1] - half_length[1]);
+                assert(pt[1] <= center[1] + half_length[1]);
+                return 1;  
+            }
+            catch(...) {
+                return 0; 
+            }
         }
 };
 

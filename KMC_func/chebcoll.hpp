@@ -24,9 +24,11 @@ class Chebcoll {
         double rest_length_;
         double length_scale_; 
     public: 
-        double alpha; double freelength; double D; 
-        double bbtol; int runind; const char* fn; 
+        double talpha; double tfreelength; double tD; 
+        double tbbtol; int ri; const char* on; 
         std::vector<Cheb> allCheb; 
+        std::vector<double> breakPtsCollChange; 
+        std::vector<double> breakPtsCollUnchange; 
     
     private:
         static constexpr double small_ = 1e-4;
@@ -35,14 +37,14 @@ class Chebcoll {
          Chebcoll() = default;
         ~Chebcoll() = default;
 
-        Chebcoll(double alpha, double freelength, double D, double bbtol, const char* output_name, int runind) {
+        Chebcoll(double alpha, double freelength, double D, double bbtol, const char* output_name, const int runind) {
             // initialize dimensionless 
             length_scale_ = D; 
             exp_fact_ = alpha * length_scale_ * length_scale_;
             rest_length_ = freelength / length_scale_;
-            // registeration
-            alpha = alpha; freelength = freelength; D = D; 
-            bbtol = bbtol; runind = runind; fn = output_name; 
+            // (dummy) registeration
+            talpha = alpha; tfreelength = freelength; tD = D; 
+            tbbtol = bbtol; on = output_name; ri = runind; 
         }
 
         inline double calcBoltzmann(double dist_cent) const {
@@ -61,16 +63,41 @@ class Chebcoll {
             double oneFixCenter = oneFixLength; 
             double otherGrid = find_order(oneFixLength); // half-length
             // iteratively create Baobzi object
-            for (double iter = 10; iter < upBound; iter += 2 * otherGrid) {
-                speak("create one",iter); 
-                double hl[2] = {iter, oneFixCenter};
-                double center[2] = {otherGrid, oneFixLength}; 
-                Cheb theBaobzi(hl,center,bbtol,alpha,freelength,D,fn,runind);
+            for (double iter = otherGrid; iter < upBound - otherGrid; iter += 1 * otherGrid) {
+                double hl[2] = {otherGrid, oneFixLength};
+                double center[2] = {iter, oneFixCenter}; 
+                /* stupid parameter loading error */
+                // speak("alpha",talpha);
+                // speak("freelength",tfreelength);
+                // speak("D", tD); 
+                Cheb theBaobzi(hl,center,tbbtol,talpha,tfreelength,tD,on,ri);
                 theBaobzi.approxFunc();
                 allCheb.push_back(theBaobzi); 
-
-
+                breakPtsCollChange.push_back(iter - otherGrid); 
+                breakPtsCollUnchange.push_back(oneFixCenter - oneFixLength); 
             }
+        }
+
+        inline double evalSinglePt(double (&ptCenter)[2]) {
+            // std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
+            int gridNum = breakPtsCollChange.size();
+            int pickPt = 0; 
+            for (int i = 0; i < gridNum - 1; i++) {
+                if ((breakPtsCollChange[i] <= ptCenter[0]) && (breakPtsCollChange[i+1] >= ptCenter[0]) &&
+                    (breakPtsCollUnchange[i] <= ptCenter[1])
+                ) {
+                    pickPt = i; 
+                    break;
+                }
+                pickPt = gridNum - 1; 
+            }
+            // speak("pickpt", pickPt); 
+            Cheb pickBaobzi = allCheb[pickPt];
+            int checkContain = pickBaobzi.checkInclude(ptCenter); 
+            assert(checkContain); 
+            double approxVal = pickBaobzi.evalFunc(ptCenter);
+            return approxVal; 
+
         }
 };
 

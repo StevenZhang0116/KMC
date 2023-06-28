@@ -141,7 +141,7 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     // Physical Parameters Setting
     constexpr double errTol = 1e-3;
     const double D = 0.024;
-    const double alpha = 0.1 / (2 * 0.00411);
+    const double alpha = 10 / (2 * 0.00411);
     // check to larger value (default = 0.05) to observe convexity/concavity of CDF in normal lookup
     const double freelength = 0.5; 
     const double M = alpha * D * D; speak("M",M); 
@@ -165,34 +165,33 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
 
     // myfile.open(searchfilename);
 
-    // double startbound = 0.1;
-    // double testbound = 40; 
-    // double boundgrid = 0.1; 
-    // size_t gridcnt = floor((testbound - startbound) / boundgrid);
-    // speak("total cases: ", gridcnt); 
+    double startbound = 0.1;
+    double testbound = 20; 
+    double boundgrid = 1; 
+    size_t gridcnt = floor((testbound - startbound) / boundgrid);
+    speak("total cases: ", gridcnt); 
 
-    // std::vector<double> ludiff; std::vector<double> bbdiff; // error storer
-    // std::vector<double> bbresl; // Baobzi calculation storer
-    // std::vector<double> bbparm; // parameter storer
+    std::vector<double> ludiff; std::vector<double> bbdiff; // error storer
+    std::vector<double> bbresl; // Baobzi calculation storer
+    std::vector<double> bbparm; // parameter storer
 
     // Baobzi Parameter Setting
-
     double bbtol = 1e-5;
     int runind = 1; 
 
-    // double hl[2] = {find_order(testbound / 2 * D), 1}; // half length
-    // double center[2] = {distPerp / D, 1};  // center
+    double hl[2] = {find_order(testbound / 2 * D), 1}; // half length
+    double center[2] = {distPerp / D, 1};  // center
 
     const char* fn = "func_approx.baobzi"; 
 
     Chebcoll bbcoll(alpha,freelength,D,bbtol,fn,runind);
     bbcoll.createBaobziFamily(); 
 
-    // // // Baobzi function approximator
+    // // Baobzi function approximator
     // Cheb theBaobzi(hl,center,bbtol,alpha,freelength,D,fn,runind);
     // theBaobzi.approxFunc();
 
-    // // // LOOKUP TABLE TEST
+    // // LOOKUP TABLE TEST
     // const auto st1 = get_wtime();
     // // ("distPerp = 0.2 > D+ell0, single peaked")
     // for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
@@ -207,18 +206,21 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     // // BAOBZI TEST
     // int cnt2 = 0; 
     // const auto st2 = get_wtime();
-    // for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
-    //     // Baobzi test
-    //     double inval[] = {distPerp / D, sbound * D};
-    //     double a1 = theBaobzi.evalFunc(inval);  // baobzi result
-    //     double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);  // integral for comparison
-    //     myfile << a1 << "," << sbound << "," << strPerp << "," << strAlpha << std::endl;
-    //     CHECK(a1 == Approx(a2).epsilon(errTol));
-    //     // speak("Baobzi Error", ABS(a1 - a2)); 
-    //     bbdiff.push_back(ABS(a1 - a2)); 
-    //     bbresl.push_back(a1); 
-    //     bbparm.push_back(sbound); 
-    // }
+    for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
+        // Baobzi test
+        double inval[] = {distPerp / D, sbound * D};
+        double a1 = bbcoll.evalSinglePt(inval); 
+        // double a1 = theBaobzi.evalFunc(inval);  // baobzi result
+        speak("a1",a1); 
+        double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);  // integral for comparison
+        speak("a2",a2); 
+        // myfile << a1 << "," << sbound << "," << strPerp << "," << strAlpha << std::endl;
+        // CHECK(a1 == Approx(a2).epsilon(errTol));
+        // // speak("Baobzi Error", ABS(a1 - a2)); 
+        // bbdiff.push_back(ABS(a1 - a2)); 
+        // bbresl.push_back(a1); 
+        // bbparm.push_back(sbound); 
+    }
     // const auto ft2 = get_wtime();
     // const double dt2 = get_wtime_diff(&st2, &ft2);
 
