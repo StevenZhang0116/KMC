@@ -62,23 +62,33 @@ class Chebcoll {
             return sqrt(-log(small_) / exp_fact_) + rest_length_;
         }
 
-        inline void createBaobziFamily() {
-            double upBound = getUpperBound();
-            the_upper_bound_ = upBound; 
-            speak("UpBound (for both dimensions)", upBound);  
-            double oneFixLength = upBound / 2 * length_scale_; 
-            assert(oneFixLength <= 1); 
-            double oneFixCenter = oneFixLength; 
-            double otherGrid = find_order(oneFixLength); // half-length
-            while (the_upper_bound_ / otherGrid <= 1e2) {
-                otherGrid /= 10; 
-                std::cout << "=== MAKE GRID SMALLER === " << std::endl; 
+        inline void createBaobziFamily(double ll = 0; double ) {
+            double upBound; double oneFixLength; double oneFixCenter; double otherGrid; 
+            if (ri == 1){
+                std::cout << "==== Create Family of Positive Checking ====" << std::endl; 
+                upBound = getUpperBound();
+                the_upper_bound_ = upBound; 
+                speak("UpBound (for both dimensions)", upBound);  
+                oneFixLength = upBound / 2 * length_scale_; 
+                assert(oneFixLength <= 1); 
+                oneFixCenter = oneFixLength; 
+                otherGrid = find_order(oneFixLength); // half-length
+                while (the_upper_bound_ / otherGrid <= 1e2) {
+                    otherGrid /= 10; 
+                    std::cout << "=== MAKE GRID SMALLER === " << std::endl; 
+                }
             }
-            // declare bound 
+            else if (ri == 3) {
+                std::cout << "==== Create Family of Reverse Checking ====" << std::endl; 
+
+            }
+            
+            // declare bound for the fixed parameter, usually distPerp (vertical distance)
             double lbound = otherGrid; 
             double ubound = upBound - otherGrid; 
             double gg = 1; // range [1,2], inversely proportional to running time
             double gridSize = gg * otherGrid; 
+
             // iteratively create Baobzi object
             speak("Baobzi Objects need to be created", (int)(ubound - lbound)/gridSize + 1); 
             speak("Grid Size Magnitude", otherGrid); // magnitude of grid size along both dimension
@@ -99,9 +109,9 @@ class Chebcoll {
             speak("Total Baobzi Family Space (MiB)", total_sum(chebSpaceTaken)); 
         }
 
-        inline double evalSinglePt(double (&ptCenter)[2]) {
+        inline double evalSinglePt(double (&ptCenter)[2], int bs = 1) {
             // std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
-            int bs = 1; 
+            // int bs = 0; 
             if (ptCenter[0] > the_upper_bound_) {
                 printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
                 ptCenter[0] = the_upper_bound_ - grid_size_magnitude_; 
@@ -117,7 +127,8 @@ class Chebcoll {
             // brute force search O(n)
             else {
                 for (int i = 0; i < gridNum - 1; i++) {
-                    if ((breakPtsCollChange[i] <= ptCenter[0]) && (breakPtsCollChange[i+1] >= ptCenter[0]) &&
+                    if ((breakPtsCollChange[i] <= ptCenter[0]) && 
+                        (breakPtsCollChange[i+1] >= ptCenter[0]) &&
                         (breakPtsCollUnchange[i] <= ptCenter[1])
                     ) {
                         pickPt = i; 
@@ -134,6 +145,20 @@ class Chebcoll {
             double approxVal = pickBaobzi.evalFunc(ptCenter);
             return approxVal; 
 
+        }
+
+        inline std::vector<double> findExtremeVal() {
+            std::vector<double> integral_saver; 
+            for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
+                for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_){
+                    double iter[2] = {i,j}; 
+                    integral_saver.push_back(evalSinglePt(iter,0)); 
+                }
+            }
+            double maxval = *std::max_element(std::begin(integral_saver), std::end(integral_saver));
+            double minval = *std::min_element(std::begin(integral_saver), std::end(integral_saver));
+            std::vector<double> res = {maxval, minval}; 
+            return res; 
         }
 };
 
