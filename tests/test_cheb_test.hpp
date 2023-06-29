@@ -141,7 +141,7 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     // Physical Parameters Setting
     constexpr double errTol = 1e-3;
     const double D = 0.024;
-    const double alpha = 1 / (2 * 0.00411);
+    const double alpha = 0.1 / (2 * 0.00411);
     // check to larger value (default = 0.05) to observe convexity/concavity of CDF in normal lookup
     const double freelength = 0.5; 
     const double M = alpha * D * D; 
@@ -155,7 +155,7 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     const double dt3 = get_wtime_diff(&st3, &ft3);
 
     double distPerp = 0;
-    distPerp = 10 * D; 
+    distPerp = 5 * D; 
     // std::string rootpath = "int-res/";
     // std::string strPerp = std::to_string(distPerp / D);
     // std::string strAlpha = std::to_string(alpha);
@@ -171,7 +171,7 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     double startbound = 0.1;
     double testbound = LUT.getLUCutoff() / D; 
     // speak("",testbound);
-    double boundgrid = 0.1; 
+    double boundgrid = 0.001; 
     size_t gridcnt = floor((testbound - startbound) / boundgrid);
     speak("Total cases", gridcnt); 
 
@@ -189,7 +189,7 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     const char* fn = "func_approx.baobzi"; 
 
     const auto st4 = get_wtime();
-    Chebcoll bbcoll(alpha, freelength, D);
+    Chebcoll bbcoll(alpha, freelength, D, 1);
     bbcoll.createBaobziFamily(); 
     const auto ft4 = get_wtime();
     const double dt4 = get_wtime_diff(&st4, &ft4);
@@ -200,24 +200,29 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
 
     // // LOOKUP TABLE TEST
     std::cout << "------ Comparison Test ------" << std::endl; 
-    const auto st1 = get_wtime();
+    double colldt1 = 0; 
     // ("distPerp = 0.2 > D+ell0, single peaked")
     for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
+        const auto st1 = get_wtime();
         double a1 = LUT.Lookup(distPerp, sbound * D);
+        const auto ft1 = get_wtime();
+        const double dt1 = get_wtime_diff(&st1, &ft1); colldt1 += dt1; 
         double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);
         // CHECK(a1 == Approx(a2).epsilon(errTol));
         ludiff.push_back(ABS(a1 - a2)); 
     }
-    const auto ft1 = get_wtime();
-    const double dt1 = get_wtime_diff(&st1, &ft1);
+    
 
     // // BAOBZI TEST
     std::cout << "------ Baobzi Family Test ------" << std::endl; 
-    const auto st2 = get_wtime();
+    double colldt2 = 0; 
     for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
         // Baobzi test
         double inval[] = {distPerp / D, sbound * D};
+        const auto st2 = get_wtime();
         double a1 = bbcoll.evalSinglePt(inval); 
+        const auto ft2 = get_wtime();
+        const double dt2 = get_wtime_diff(&st2, &ft2); colldt2 += dt2; 
         // double a1 = theBaobzi.evalFunc(inval);  // baobzi result
         double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);  // integral for comparison
         // myfile << a1 << "," << sbound << "," << strPerp << "," << strAlpha << std::endl;
@@ -227,16 +232,15 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
         // bbresl.push_back(a1); 
         // bbparm.push_back(sbound); 
     }
-    const auto ft2 = get_wtime();
-    const double dt2 = get_wtime_diff(&st2, &ft2);
-
+    
     speak("Average Error for Lookup", mean_error(ludiff));
     speak("Average Error for Chebyshev", mean_error(bbdiff)); 
-    speak("Time to Create LookUP Table", dt3);
-    speak("TIme to Create Baobzi Family", dt4); 
-    speak("Creation Time Ratio",dt4/dt3); 
-    speak("Elapsed Time(s) for Lookup", dt1);
-    speak("Elapsed Time(s) for Chebyshev", dt2);
+    speak("Time (s) to Create LookUP Table", dt3);
+    speak("TIme (s) to Create Baobzi Family", dt4); 
+    speak("Creation Time Ratio", dt4/dt3); 
+    speak("Elapsed Time(s) for Lookup", colldt1);
+    speak("Elapsed Time(s) for Chebyshev", colldt2);
+    speak("Evaluation Time Ratio", colldt2/colldt1);
 
     // myfile.close(); 
 

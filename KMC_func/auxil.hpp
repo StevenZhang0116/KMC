@@ -35,26 +35,14 @@ void speak(const char name[], const double var) {
     return; 
 }
 
-void speakvec(const double varvec[], size_t len) {
-    for (size_t i = 0; i <= len; i++){
-        std::cout << varvec[i] << ","; 
-    }
+void speakvec(std::vector<double> thevec) {
+    size_t n = thevec.size();
+    for (size_t i = 0; i < n; i++) std::cout << thevec[i] << ","; 
     std::cout << std::endl; 
-    return; 
 }
 
 double find_order(const double input) {
     return powf(10.0f, floorf(log10f(input)));
-}
-
-int binarySearch(std::vector<double> arr, int l, int r, double x){
-    while(l <= r) {
-        int m = l + (r - 1) / 2;
-        if (arr[m] == x) return m; 
-        if (arr[m] < x) l = m + 1;
-        else r = m - 1;
-    }
-    return -1; 
 }
 
 std::vector<double> createErr(const int a, const int b) {
@@ -64,5 +52,45 @@ std::vector<double> createErr(const int a, const int b) {
     }
     return errVec; 
 }
+int binarySearch(const std::vector<double>& numbers, int target, int start, int end) {
+    if (start > end) {
+        return -1;
+    }
+
+    int mid = start + (end - start) / 2;
+
+    if (numbers[mid] <= target && target <= numbers[mid + 1]) {
+        return mid;
+    } 
+    else if (numbers[mid] < target) {
+        return binarySearch(numbers, target, mid + 1, end);
+    } 
+    else {
+        return binarySearch(numbers, target, start, mid - 1);
+    }
+}
+
+int findIntervalIndex(const std::vector<double>& numbers, int target) {
+    if (target < numbers[0] || target > numbers[numbers.size() - 1]) {
+        return -1;
+    }
+
+    return binarySearch(numbers, target, 0, numbers.size() - 1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #endif

@@ -40,8 +40,8 @@ class Chebcoll {
         Chebcoll() = default;
         ~Chebcoll() = default;
 
-        Chebcoll(double alpha, double freelength, double D, double bbtol = 1e-5, const char* output_name = "func_approx.baobzi", 
-            const int runind = 1, const int printOrNot = 0) {
+        Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, const char* output_name = "func_approx.baobzi", 
+             const int printOrNot = 0) {
             // initialize dimensionless 
             length_scale_ = D; 
             exp_fact_ = alpha * length_scale_ * length_scale_;
@@ -101,21 +101,32 @@ class Chebcoll {
 
         inline double evalSinglePt(double (&ptCenter)[2]) {
             // std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
+            int bs = 1; 
             if (ptCenter[0] > the_upper_bound_) {
-                printf("Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
+                printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
                 ptCenter[0] = the_upper_bound_ - grid_size_magnitude_; 
+                bs = 0;  
             }
             int gridNum = breakPtsCollChange.size();
             int pickPt = 0; 
-            for (int i = 0; i < gridNum - 1; i++) {
-                if ((breakPtsCollChange[i] <= ptCenter[0]) && (breakPtsCollChange[i+1] >= ptCenter[0]) &&
-                    (breakPtsCollUnchange[i] <= ptCenter[1])
-                ) {
-                    pickPt = i; 
-                    break;
-                }
-                pickPt = gridNum - 1; 
+            // binary search O(log n)
+            if (bs == 1) {
+                int kk = findIntervalIndex(breakPtsCollChange, ptCenter[0]); 
+                if (breakPtsCollUnchange[kk] <= ptCenter[1]) pickPt = kk; 
             }
+            // brute force search O(n)
+            else {
+                for (int i = 0; i < gridNum - 1; i++) {
+                    if ((breakPtsCollChange[i] <= ptCenter[0]) && (breakPtsCollChange[i+1] >= ptCenter[0]) &&
+                        (breakPtsCollUnchange[i] <= ptCenter[1])
+                    ) {
+                        pickPt = i; 
+                        break;
+                    }
+                    pickPt = gridNum - 1; 
+                }
+            }            
+
             // speak("pickpt", pickPt); 
             Cheb pickBaobzi = allCheb[pickPt];
             int checkContain = pickBaobzi.checkInclude(ptCenter); 
