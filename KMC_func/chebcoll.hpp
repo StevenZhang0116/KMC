@@ -62,7 +62,7 @@ class Chebcoll {
             return sqrt(-log(small_) / exp_fact_) + rest_length_;
         }
 
-        inline void createBaobziFamily(double ll = 0; double ) {
+        inline void createBaobziFamily(double ll = 0, double rr = 0) {
             double upBound; double oneFixLength; double oneFixCenter; double otherGrid; 
             if (ri == 1){
                 std::cout << "==== Create Family of Positive Checking ====" << std::endl; 
@@ -80,9 +80,16 @@ class Chebcoll {
             }
             else if (ri == 3) {
                 std::cout << "==== Create Family of Reverse Checking ====" << std::endl; 
-
+                upBound = getUpperBound();
+                the_upper_bound_ = upBound; 
+                speak("UpBound (for one dimensions)", upBound);  
+                oneFixLength = (rr - ll) / 2;
+                assert(oneFixLength <= 1); 
+                oneFixCenter = ll + oneFixLength; 
+                otherGrid = find_order(oneFixLength);
+                std::cout << otherGrid << std::endl; 
             }
-            
+
             // declare bound for the fixed parameter, usually distPerp (vertical distance)
             double lbound = otherGrid; 
             double ubound = upBound - otherGrid; 
@@ -93,7 +100,10 @@ class Chebcoll {
             speak("Baobzi Objects need to be created", (int)(ubound - lbound)/gridSize + 1); 
             speak("Grid Size Magnitude", otherGrid); // magnitude of grid size along both dimension
             grid_size_magnitude_ = otherGrid; 
+            int cnt = 0; 
             for (double iter = lbound; iter < ubound; iter += gridSize) {
+                cnt++; 
+                if (cnt % 10 == 1) const auto st1 = get_wtime();
                 double hl[2] = {otherGrid, oneFixLength};
                 double center[2] = {iter, oneFixCenter}; 
                 // speak("alpha",talpha);
@@ -105,6 +115,13 @@ class Chebcoll {
                 breakPtsCollChange.push_back(iter - otherGrid); 
                 breakPtsCollUnchange.push_back(oneFixCenter - oneFixLength); 
                 chebSpaceTaken.push_back(ssTaken);
+                
+                if (cnt % 10 == 0) {
+                    const auto ft1 = get_wtime();
+                    const double dt1 = get_wtime_diff(&st1, &ft1);
+                    speak("Baobzi Craeted", cnt); 
+                    speak("Needed Time (s)", dt1); 
+                }
             }
             speak("Total Baobzi Family Space (MiB)", total_sum(chebSpaceTaken)); 
         }
@@ -157,7 +174,7 @@ class Chebcoll {
             }
             double maxval = *std::max_element(std::begin(integral_saver), std::end(integral_saver));
             double minval = *std::min_element(std::begin(integral_saver), std::end(integral_saver));
-            std::vector<double> res = {maxval, minval}; 
+            std::vector<double> res = {minval, maxval}; 
             return res; 
         }
 };

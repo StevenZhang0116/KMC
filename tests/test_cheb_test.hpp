@@ -49,7 +49,9 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     Chebcoll bbcoll(alpha, freelength, D, 1);
     bbcoll.createBaobziFamily(); 
     std::vector<double> tempkk = bbcoll.findExtremeVal(); 
-    Chebcoll bbcoll(alpha, freelength, D, 3);
+    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e0);
+    bbcoll2.createBaobziFamily(tempkk[0], tempkk[1]); 
+
 
     double distPerp = 0;
     distPerp = 0.2;
@@ -111,19 +113,20 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     // const auto ft1 = get_wtime();
     // const double dt1 = get_wtime_diff(&st1, &ft1);
 
-    // for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
-    //     // speak("sbound", sbound); 
-    //     double val = integral(distPerp / D, 0, sbound, M, ell0); 
-    //     double inval[] = {distPerp / D, val * D}; 
-    //     // speakvec(inval,2);
-    //     double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
-    //     double bberr = ABS(a1 - sbound * D); 
-    //     // speak("Baobzi Error", bberr); 
-    //     baobzierr.push_back(bberr); 
-    //     myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
-    //     CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
+    for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
+        // speak("sbound", sbound); 
+        double val = integral(distPerp / D, 0, sbound, M, ell0); 
+        double inval[] = {distPerp / D, val}; 
+        // speakvec(inval,2);
+        // double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
+        double a1 = bbcoll2.evalSinglePt(inval); 
+        double bberr = ABS(a1 - sbound * D); 
+        // speak("Baobzi Error", bberr); 
+        baobzierr.push_back(bberr); 
+        // myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
+        // CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
 
-    // }
+    }
 
     // speak("Average Error for Reverse LookUP", mean_error(rlerr));
     // speak("Randomly Chosen Error for Chebyshev", baobzierr[10]); 
