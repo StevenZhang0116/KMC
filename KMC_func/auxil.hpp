@@ -25,8 +25,13 @@ double mean_error(std::vector<double> const& xarray) {
     return std::reduce(xarray.begin(), xarray.end()) / count; 
 }
 
+double total_sum(std::vector<double> const& xarray) {
+    auto const count = static_cast<double>(xarray.size());
+    return std::reduce(xarray.begin(), xarray.end()); 
+}
+
 void speak(const char name[], const double var) {
-    std::cout << name << ", " << var << std::endl;
+    std::cout << name << ": " << var << std::endl;
     return; 
 }
 
@@ -40,6 +45,16 @@ void speakvec(const double varvec[], size_t len) {
 
 double find_order(const double input) {
     return powf(10.0f, floorf(log10f(input)));
+}
+
+int binarySearch(std::vector<double> arr, int l, int r, double x){
+    while(l <= r) {
+        int m = l + (r - 1) / 2;
+        if (arr[m] == x) return m; 
+        if (arr[m] < x) l = m + 1;
+        else r = m - 1;
+    }
+    return -1; 
 }
 
 std::vector<double> createErr(const int a, const int b) {

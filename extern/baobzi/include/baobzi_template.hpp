@@ -540,7 +540,7 @@ class Function {
     }
 
     /// @brief Calculate and print various information about object instance to stdout
-    void print_stats(const int printOrNot) const {
+    double print_stats(const int printOrNot) const {
         std::size_t n_nodes = 0;
         std::size_t n_leaves = 0;
         std::size_t n_subtrees = subtrees_.size();
@@ -552,6 +552,7 @@ class Function {
             for (const auto &node : subtree.nodes_)
                 n_leaves += node.is_leaf();
         }
+        double reqSpace = (T)mem / (1024 * 1024); 
 
         if (printOrNot == 1){
             std::cout << "Baobzi function mapping " << DIM << " to " << output_dim_ << std::endl;
@@ -561,8 +562,10 @@ class Function {
             std::cout << "Total function evaluations required for fit: "
                     << n_nodes * (int)std::pow(ORDER, DIM) + stats_.n_evals_root << std::endl;
             std::cout << "Total time to create tree: " << stats_.t_elapsed << " milliseconds\n";
-            std::cout << "Approximate memory usage of tree: " << (T)mem / (1024 * 1024) << " MiB" << std::endl;
+            std::cout << "Approximate memory usage of tree: " << reqSpace << " MiB" << std::endl;
         }
+        return reqSpace; 
+
     }
 
     /// @brief calculate vandermonde matrix

@@ -25,6 +25,7 @@ class Cheb {
         baobzi_input_t input;
         const char* oname; 
         int indicator; 
+        int printOrNot; 
     private:
         baobzi::Function<2,10,0,double> savefunc;
         
@@ -36,16 +37,20 @@ class Cheb {
          * @brief constructor of Baobzi object
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
-        double D, const char* output_name, const int runind) {
+        double D, const char* output_name, const int runind, const int porn) {
             // std::cout << "Construct Baobzi Object" << std::endl;
             memcpy(&half_length, &hl, sizeof(hl)); 
             assert(half_length[0] <= 1); assert(half_length[1] <= 1); // half length, <= 1
             memcpy(&center, &cen, sizeof(cen)); 
+            // whether to log output
+            printOrNot = porn; 
             // in case of out of range
-            speak("half-length 1", half_length[0]); 
-            speak("half-length 2", half_length[1]); 
-            speak("center 1", center[0]);
-            speak("center 2", center[1]); 
+            if (printOrNot == 1) {
+                speak("half-length 1", half_length[0]); 
+                speak("half-length 2", half_length[1]); 
+                speak("center 1", center[0]);
+                speak("center 2", center[1]);
+            } 
             // except tolerance, these parameters could be set as fixed and slight tuningWILL NOT 
             // give significant effect to the result
             input.dim = 2; 
@@ -171,8 +176,6 @@ class Cheb {
                 }
             };
             
-            speak("indicator",indicator);
-
             if (indicator == 1) {
                 return approxCDF;
             }
@@ -192,13 +195,12 @@ class Cheb {
          * 
          * @return null
         */
-        inline void approxFunc() {
-            int printOrNot = 1; 
+        inline double approxFunc() {
             if (printOrNot == 1) std::cout << "Generate Function Approximator" << std::endl; 
             baobzi::Function<2,10,0,double> func_approx(&input, center, half_length, conApproxFunc(), {});
-            func_approx.print_stats(printOrNot);
+            double spaceTaken = func_approx.print_stats(printOrNot);
             savefunc = func_approx; 
-            return;
+            return spaceTaken;
         }
 
         /**
@@ -209,7 +211,7 @@ class Cheb {
          * @return apprxoximated value
         */
         inline double evalFunc(double inval[]) {
-            std::cout << "Evaluate Point at (" << inval[0] << "," << inval[1] << ")" << std::endl; 
+            if (printOrNot == 1) std::cout << "Evaluate Point at (" << inval[0] << "," << inval[1] << ")" << std::endl; 
             double res; 
             savefunc(inval, &res); 
             return res; 
@@ -222,11 +224,15 @@ class Cheb {
          */
         inline int checkInclude(double (&pt)[2]) {
             try {
-                assert(pt[0] >= center[0] - half_length[0]);
-                assert(pt[0] <= center[0] + half_length[0]);
-                assert(pt[1] >= center[1] - half_length[1]);
-                assert(pt[1] <= center[1] + half_length[1]);
-                return 1;  
+                // std::cout << center[0] << "," << half_length[0] << "," << pt[0] << std::endl; 
+                // std::cout << center[1] << "," << half_length[1] << "," << pt[1] << std::endl; 
+                if ((pt[0] >= center[0] - half_length[0]) && (pt[0] <= center[0] + half_length[0]) 
+                && (pt[1] >= center[1] - half_length[1]) && (pt[1] <= center[1] + half_length[1])) {
+                    return 1; 
+                }
+                else {
+                    throw std::invalid_argument("NOT IN THE DOMAIN");
+                }
             }
             catch(...) {
                 return 0; 
