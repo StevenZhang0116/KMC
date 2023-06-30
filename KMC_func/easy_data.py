@@ -30,5 +30,8 @@ for file in glob.glob("*.txt"):
     ax.set_title(f"{oname}", fontsize = 16)
 
     fig.savefig(f"{oname}-3D-result.jpeg", dpi=100)
+    print(oname)
+    plt.clf()
+
 
     

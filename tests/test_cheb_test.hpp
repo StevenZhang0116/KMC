@@ -96,7 +96,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     Chebcoll bbcoll(alpha, freelength, D, 1);
     bbcoll.createBaobziFamily(); 
     std::vector<double> tempkk = bbcoll.findExtremeVal(1); 
-    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1);
+    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-2);
     bbcoll2.createBaobziFamily(tempkk[0], tempkk[1]); 
 
     // double bbtol = 1e-6; 
