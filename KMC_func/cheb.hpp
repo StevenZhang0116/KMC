@@ -116,7 +116,7 @@ class Cheb {
                     const double D = ((double*)data)[2];
                     double error = 0;
                     double shift = 1e-20; 
-                    double errortolerence = 1e-10; 
+                    double errortolerence = 1e-2; 
 
                     double lowerbound = 0.0 + shift; 
                     double upperbound = 2.0; 
@@ -130,17 +130,16 @@ class Cheb {
 
                     auto solve_func = [&](double caluplimit) { 
                         double residue = boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                            integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1]; 
+                            integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1] / D; 
                         // if (ABS(residue) < errortolerence) {
-                        //     std::cout << residue << std::endl; 
-                        //     residue = 0; 
+                        //     residue = -residue; 
                         // }
                         return residue;
                     }; 
                     
-                    // speak("x[1]/D", x[1]/D);
+                    // speak("x[1]", x[1]);
                     // for (double i = lowerbound; i < upperbound; i+=0.01){
-                    //     speak("", solve_func(i)); 
+                    //     std::cout << solve_func(i) << "," << std::endl; 
                     // }
 
                     try {
@@ -148,6 +147,7 @@ class Cheb {
                         *y = res.first;
                     } 
                     catch(...) {
+                        std::cout << "ERRPRERRPRERERERERE" << std::endl; 
                         *y = 0; 
                     }
                     
@@ -176,18 +176,10 @@ class Cheb {
                 }
             };
             
-            if (indicator == 1) {
-                return approxCDF;
-            }
-            else if (indicator == 2) {
-                return approxBindV; 
-            }
-            else if (indicator == 3){
-                return reverApproxCDF; 
-            }
-            else {
-                throw std::invalid_argument("Invalid choice -> Parameter Setting Error");
-            }
+            if (indicator == 1) return approxCDF;
+            else if (indicator == 2) return approxBindV; 
+            else if (indicator == 3) return reverApproxCDF; 
+            else throw std::invalid_argument("Invalid choice -> Parameter Setting Error");
         }
         
         /** 
@@ -230,9 +222,7 @@ class Cheb {
                 && (pt[1] >= center[1] - half_length[1]) && (pt[1] <= center[1] + half_length[1])) {
                     return 1; 
                 }
-                else {
-                    throw std::invalid_argument("NOT IN THE DOMAIN");
-                }
+                else throw std::invalid_argument("NOT IN THE DOMAIN");
             }
             catch(...) {
                 return 0; 

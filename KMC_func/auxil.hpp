@@ -35,9 +35,10 @@ void speak(const char name[], const double var) {
     return; 
 }
 
-void speakvec(std::vector<double> thevec) {
+void speakvec(const char name[], std::vector<double> thevec) {
     size_t n = thevec.size();
-    for (size_t i = 0; i < n; i++) std::cout << thevec[i] << ","; 
+    std::cout << name << ";"; 
+    for (size_t i = 0; i < n; i++) std::cout << thevec[i] << "; "; 
     std::cout << std::endl; 
 }
 
