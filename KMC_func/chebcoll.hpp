@@ -100,7 +100,8 @@ class Chebcoll {
                 for (int i = 0; i < tempkk.size(); i++) {
                     double rr = tempkk[i][1];
                     double ll = tempkk[i][0];
-                    oneFixLength = (rr - ll) / 2 + small_; speak("oneFixLength",oneFixLength);
+                    oneFixLength = (rr - ll) / 2 + small_; 
+                    // speak("oneFixLength",oneFixLength); 
                     lengthVec.push_back(oneFixLength);
                     assert(oneFixLength <= 1); 
                     oneFixCenter = ll + oneFixLength + small_; 
@@ -108,7 +109,7 @@ class Chebcoll {
                     otherGrid = find_order(oneFixLength);
                     gridVec.push_back(otherGrid);
                 }
-                otherGrid = gridVec[0];
+                otherGrid = 0.1;
                 speak("Size of lengthVec", lengthVec.size());
 
                 // while (rr / otherGrid <= 1e2) {
