@@ -26,6 +26,8 @@ class Chebcoll {
         double length_scale_; 
         double the_upper_bound_; 
         double grid_size_magnitude_; 
+        double integral_min_; 
+        double integral_max_; 
     public: 
         double talpha; double tfreelength; double tD; 
         double tbbtol; int ri; const char* on; int tpon; 
@@ -86,15 +88,16 @@ class Chebcoll {
                 the_upper_bound_ = upBound; 
                 speak("UpBound (for one dimensions)", upBound);  
                 speak("UpBound (for another dimension)", rr); 
+                // rr = rr - 1e-2;
                 double the_small_ = 1e-5; 
                 oneFixLength = (rr - ll) / 2;
                 assert(oneFixLength <= 1); 
                 oneFixCenter = ll + oneFixLength; 
                 otherGrid = find_order(oneFixLength);
-                // while (rr / otherGrid <= 1e2) {
-                //     otherGrid /= 10;
-                //     std::cout << "=== MAKE GRID SMALLER ===" << std::endl; 
-                // }
+                while (rr / otherGrid <= 1e2) {
+                    otherGrid /= 10;
+                    std::cout << "=== MAKE GRID SMALLER ===" << std::endl; 
+                }
             }
             speak("OtherGrid", otherGrid); 
             speak("oneFixCenter", oneFixCenter); 
@@ -118,14 +121,14 @@ class Chebcoll {
                 // speak("alpha",talpha);
                 // speak("freelength",tfreelength);
                 // speak("D", tD); 
-                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, tD, on, ri, tpon);
+                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, tD, on, ri, tpon, the_upper_bound_);
                 double ssTaken = theBaobzi.approxFunc(); // taken space in Mb
                 allCheb.push_back(theBaobzi); 
                 breakPtsCollChange.push_back(iter - otherGrid); 
                 breakPtsCollUnchange.push_back(oneFixCenter - oneFixLength); 
                 chebSpaceTaken.push_back(ssTaken);
                 cnt++; 
-                if (cnt % 10 == 0) {
+                if (cnt % 100 == 0) {
                     const auto ft1 = get_wtime();
                     const double dt1 = get_wtime_diff(&st1, &ft1);
                     speak("Baobzi Created", cnt); 
@@ -137,11 +140,19 @@ class Chebcoll {
 
         inline double evalSinglePt(double (&ptCenter)[2], int bs = 1) {
             // std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
+            // edge case detectino
             if (ptCenter[0] > the_upper_bound_) {
                 printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
                 ptCenter[0] = the_upper_bound_ - grid_size_magnitude_; 
                 bs = 0;  
             }
+
+            if ((ptCenter[1] > integral_max_) && (ri == 3)) {
+                printf("Baobzi Family Warning: integral %g very large, clamp to integral UB %g \n", ptCenter[1], integral_max_);
+                ptCenter[1] = integral_max_ - integral_min_; 
+                bs = 0;  
+            }
+
             int gridNum = breakPtsCollChange.size();
             int pickPt = 0; 
             // binary search O(log n)
@@ -170,6 +181,7 @@ class Chebcoll {
             int checkContain = pickBaobzi.checkInclude(ptCenter); 
             assert(checkContain == 1); 
             double approxVal = pickBaobzi.evalFunc(ptCenter);
+            /* To DO: For test purpose, add comparison with true value */
             return approxVal; 
         }
 
@@ -203,13 +215,32 @@ class Chebcoll {
                     std::cout << "==FINISH RECORD DATA==" << std::endl;
                     myfile.close(); 
                 }
+                /** TODO 
+                  * what if change to min/max specific to every given interval (corresponding to normal lookup)
+                  */ 
                 double maxval = *std::max_element(std::begin(integral_saver), std::end(integral_saver));
                 double minval = *std::min_element(std::begin(integral_saver), std::end(integral_saver));
+                assert(maxval > 0); assert(minval > 0); // integral value must be positive
+                integral_min_ = minval; integral_max_ = maxval; 
                 std::vector<double> res = {minval, maxval}; 
                 speakvec("Max/Min Integral", res); 
                 return res; 
             }
             return integral_saver; 
+        }
+
+        inline void compareTrue() {
+            std::vector<double> errorTrueSaver;
+            for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
+                for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_){
+                    double iter[2] = {i,j};
+                    double intres = evalSinglePt(iter,0);
+                    double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
+                    errorTrueSaver.push_back(ABS(intres - realres)); 
+                }
+            }
+            speak("Mean Error of Cheb Family to Real Value", mean_error(errorTrueSaver));
+            return; 
         }
 };
 

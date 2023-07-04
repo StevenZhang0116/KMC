@@ -21,14 +21,13 @@ class Cheb {
     public:
         double half_length[2];
         double center[2]; 
-        double param[3];
+        double param[4];
         baobzi_input_t input;
         const char* oname; 
         int indicator; 
         int printOrNot; 
     private:
         baobzi::Function<2,10,0,double> savefunc;
-        
     public:
         Cheb() = default;
         ~Cheb() = default;
@@ -37,7 +36,7 @@ class Cheb {
          * @brief constructor of Baobzi object
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
-        double D, const char* output_name, const int runind, const int porn) {
+        double D, const char* output_name, const int runind, const int porn, const double upperbound = 0) {
             // std::cout << "Construct Baobzi Object" << std::endl;
             memcpy(&half_length, &hl, sizeof(hl)); 
             assert(half_length[0] <= 1); assert(half_length[1] <= 1); // half length, <= 1
@@ -65,9 +64,10 @@ class Cheb {
             // param[0] = M: exponential constant factor -> exp_fact_
             // param[1] = ell0: protein rest length -> rest_length_
             // param[2] = D; diameter of rod crosslink is binding to  -> length_scale_
+            // param[3] = upperbound; the cutoff radius for r⊥ and s
             double M = alpha * D * D; 
             double ell0 = freelength / D; 
-            param[0] = M; param[1] = ell0; param[2] = D; 
+            param[0] = M; param[1] = ell0; param[2] = D; param[3] = upperbound; 
             input.data = &param; 
             // determines which function approximation is implemented (e.g. lookup, reverse lookup)
             indicator = runind; 
@@ -114,12 +114,14 @@ class Cheb {
                     const double M = ((double*)data)[0];
                     const double ell0 = ((double*)data)[1];
                     const double D = ((double*)data)[2];
+                    const double ub = ((double*)data)[3];
+
                     double error = 0;
                     double shift = 1e-20; 
-                    double errortolerence = 1e-2; 
+                    double errortolerence = 1e-6; 
 
                     double lowerbound = 0.0 + shift; 
-                    double upperbound = 2.0; 
+                    double upperbound = 20; 
                     boost::uintmax_t max_iter = 1000; // Maximum number of iterations
                     boost::math::tools::eps_tolerance<double> tolerance(30); // Desired tolerance
 
@@ -129,16 +131,17 @@ class Cheb {
                     };
 
                     auto solve_func = [&](double caluplimit) { 
-                        double residue = boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                            integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1] / D; 
-                        // if (ABS(residue) < errortolerence) {
-                        //     residue = -residue; 
-                        // }
+                        double residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
+                            integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1]; 
+                        if (ABS(residue) < errortolerence) {
+                            if (residue < 0)residue = -residue; 
+                            residue = 0;
+                        }
                         return residue;
                     }; 
                     
                     // speak("x[1]", x[1]);
-                    // for (double i = lowerbound; i < upperbound; i+=0.01){
+                    // for (double i = lowerbound; i < upperbound; i+=0.1){
                     //     std::cout << solve_func(i) << "," << std::endl; 
                     // }
 
@@ -147,7 +150,6 @@ class Cheb {
                         *y = res.first;
                     } 
                     catch(...) {
-                        std::cout << "ERRPRERRPRERERERERE" << std::endl; 
                         *y = 0; 
                     }
                     

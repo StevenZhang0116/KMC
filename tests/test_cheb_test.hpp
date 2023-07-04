@@ -63,7 +63,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
         double val = integral(distPerp / D, 0, sbound, M, ell0);
         double a1 = LUT.ReverseLookup(distPerp, val * D); 
-        speak("a1",a1); 
+        std::cout << a1 << "," << std::endl; 
         // speak("val",val); 
         double err = ABS(a1 - sbound * D); 
         rlerr.push_back(err); 
@@ -95,8 +95,9 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 
     Chebcoll bbcoll(alpha, freelength, D, 1);
     bbcoll.createBaobziFamily(); 
+    bbcoll.compareTrue(); 
     std::vector<double> tempkk = bbcoll.findExtremeVal(1); 
-    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-2);
+    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1);
     bbcoll2.createBaobziFamily(tempkk[0], tempkk[1]); 
 
     // double bbtol = 1e-6; 
@@ -112,13 +113,13 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
         // speak("sbound", sbound); 
         double val = integral(distPerp / D, 0, sbound, M, ell0); 
-        speak("val*D",val * D); 
+        // speak("val*D",val * D); 
         double inval[] = {distPerp / D, val * D}; 
         // speakvec(inval,2);
         // double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
         double a2 = bbcoll2.evalSinglePt(inval, 0); 
         // speak("Single Baobzi", a1); 
-        speak("Single Baobzi 2", a2); 
+        std::cout << a2 << "," << std::endl; 
         // double bberr = ABS(a1 - sbound * D);
         double bberr2 = ABS(a2 - sbound * D); 
         // speak("Single Baobzi Error", bberr); 
@@ -166,17 +167,17 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 
 //     double distPerp;
 //     distPerp = 30 * D; 
-    // std::string rootpath = "int-res/";
-    // std::string strPerp = std::to_string(distPerp / D);
-    // std::string strAlpha = std::to_string(alpha);
-    // std::ofstream myfile; 
-    // std::string searchfilename = rootpath + strPerp + "-" + strAlpha + ".txt"; 
-    // try {
-    //     std::filesystem::remove(searchfilename);
-    // }
-    // catch (...) {}
+//     std::string rootpath = "int-res/";
+//     std::string strPerp = std::to_string(distPerp / D);
+//     std::string strAlpha = std::to_string(alpha);
+//     std::ofstream myfile; 
+//     std::string searchfilename = rootpath + strPerp + "-" + strAlpha + ".txt"; 
+//     try {
+//         std::filesystem::remove(searchfilename);
+//     }
+//     catch (...) {}
 
-    // myfile.open(searchfilename);
+//     myfile.open(searchfilename);
 
 //     double startbound = 0.1;
 //     double testbound = LUT.getLUCutoff() / D; 
@@ -201,6 +202,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 //     const auto st4 = get_wtime();
 //     Chebcoll bbcoll(alpha, freelength, D, 1);
 //     bbcoll.createBaobziFamily(); 
+//     bbcoll.compareTrue(); 
 //     const auto ft4 = get_wtime();
 //     const double dt4 = get_wtime_diff(&st4, &ft4);
 
