@@ -96,46 +96,46 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     Chebcoll bbcoll(alpha, freelength, D, 1);
     bbcoll.createBaobziFamily(); 
     bbcoll.compareTrue(); 
-    std::vector<double> tempkk = bbcoll.findExtremeVal(1); 
+    std::vector<std::vector<double>> tempkk = bbcoll.findExtremeVal(1); 
     Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1);
-    bbcoll2.createBaobziFamily(tempkk[0], tempkk[1]); 
+    bbcoll2.createBaobziFamily(tempkk); 
 
-    // double bbtol = 1e-6; 
-    // speak("tolerence",bbtol); 
+    // // double bbtol = 1e-6; 
+    // // speak("tolerence",bbtol); 
 
-    // const auto st1 = get_wtime();
-    Cheb theBaobzi(hl,center,1e-2,alpha,freelength,D,fn,3,0);
-    theBaobzi.approxFunc();
+    // // const auto st1 = get_wtime();
+    // Cheb theBaobzi(hl,center,1e-2,alpha,freelength,D,fn,3,0);
+    // theBaobzi.approxFunc();
 
-    // const auto ft1 = get_wtime();
-    // const double dt1 = get_wtime_diff(&st1, &ft1);
+    // // const auto ft1 = get_wtime();
+    // // const double dt1 = get_wtime_diff(&st1, &ft1);
 
-    for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
-        // speak("sbound", sbound); 
-        double val = integral(distPerp / D, 0, sbound, M, ell0); 
-        // speak("val*D",val * D); 
-        double inval[] = {distPerp / D, val * D}; 
-        // speakvec(inval,2);
-        // double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
-        double a2 = bbcoll2.evalSinglePt(inval, 0); 
-        // speak("Single Baobzi", a1); 
-        std::cout << a2 << "," << std::endl; 
-        // double bberr = ABS(a1 - sbound * D);
-        double bberr2 = ABS(a2 - sbound * D); 
-        // speak("Single Baobzi Error", bberr); 
-        // speak("Baobzi Error", bberr); 
-        // baobzierr.push_back(bberr); 
-        baobzierr2.push_back(bberr2); 
-        // myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
-        // CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
-    }
+    // for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
+    //     // speak("sbound", sbound); 
+    //     double val = integral(distPerp / D, 0, sbound, M, ell0); 
+    //     // speak("val*D",val * D); 
+    //     double inval[] = {distPerp / D, val * D}; 
+    //     // speakvec(inval,2);
+    //     // double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
+    //     double a2 = bbcoll2.evalSinglePt(inval, 0); 
+    //     // speak("Single Baobzi", a1); 
+    //     std::cout << a2 << "," << std::endl; 
+    //     // double bberr = ABS(a1 - sbound * D);
+    //     double bberr2 = ABS(a2 - sbound * D); 
+    //     // speak("Single Baobzi Error", bberr); 
+    //     // speak("Baobzi Error", bberr); 
+    //     // baobzierr.push_back(bberr); 
+    //     baobzierr2.push_back(bberr2); 
+    //     // myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
+    //     // CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
+    // }
 
-    speak("Average Error for Reverse LookUP", mean_error(rlerr));
-    // speak("Average Error for Chebyshev", mean_error(baobzierr)); 
-    speak("Average Error for Chebyshev 2", mean_error(baobzierr2)); 
-    // speak("Elapsed Time(s) for Chebyshev", dt1);
+    // speak("Average Error for Reverse LookUP", mean_error(rlerr));
+    // // speak("Average Error for Chebyshev", mean_error(baobzierr)); 
+    // speak("Average Error for Chebyshev 2", mean_error(baobzierr2)); 
+    // // speak("Elapsed Time(s) for Chebyshev", dt1);
 
-    // myfile.close(); 
+    // // myfile.close(); 
     // }
 }
 
