@@ -133,10 +133,10 @@ class Cheb {
                     auto solve_func = [&](double caluplimit) { 
                         double residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
                             integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1]; 
-                        if (ABS(residue) < errortolerence) {
-                            if (residue < 0)residue = -residue; 
-                            residue = 0;
-                        }
+                        // if (ABS(residue) < errortolerence) {
+                        //     if (residue < 0)residue = -residue; 
+                        //     residue = 0;
+                        // }
                         return residue;
                     }; 
                     
@@ -145,13 +145,13 @@ class Cheb {
                     //     std::cout << solve_func(i) << "," << std::endl; 
                     // }
 
-                    try {
+                    // try {
                         std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
                         *y = res.first;
-                    } 
-                    catch(...) {
-                        *y = 0; 
-                    }
+                    // } 
+                    // catch(...) {
+                    //     *y = 0; 
+                    // }
                     
                 }
             };

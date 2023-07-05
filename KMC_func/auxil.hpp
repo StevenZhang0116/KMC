@@ -79,6 +79,30 @@ int findIntervalIndex(const std::vector<double>& numbers, int target) {
     return binarySearch(numbers, target, 0, numbers.size() - 1);
 }
 
+std::vector<double> findMinMaxVec(const std::vector<std::vector<double>> matrix) {
+    double largestValue = 0;
+    double smallestValue = 0; 
+
+    for (const auto& row : matrix) {
+        for (const auto& element : row) {
+            if (element > largestValue) {
+                largestValue = element;
+            }
+        }
+    }
+
+    for (const auto& row : matrix) {
+        for (const auto& element : row) {
+            if (element > largestValue) {
+                smallestValue = element;
+            }
+        }
+    }
+
+    std::vector<double> res = {smallestValue, largestValue}; 
+    return res; 
+}
+
 
 
 

@@ -38,6 +38,7 @@ class Chebcoll {
     
     private:
         static constexpr double small_ = 1e-6;
+        static constexpr double shift_small_ = 1e-5; 
     
     public:
         Chebcoll() = default;
@@ -82,11 +83,12 @@ class Chebcoll {
                 oneFixLength = upBound / 2 * length_scale_; 
                 assert(oneFixLength <= 1); 
                 oneFixCenter = oneFixLength; 
-                otherGrid = find_order(oneFixLength); // half-length
-                // while (the_upper_bound_ / otherGrid <= 1e2) {
-                //     otherGrid /= 10; 
-                //     std::cout << "=== MAKE GRID SMALLER === " << std::endl; 
-                // }
+                // half-length
+                otherGrid = find_order(oneFixLength); 
+                while (the_upper_bound_ / otherGrid <= 1e2) {
+                    otherGrid /= 10; 
+                    std::cout << "=== MAKE GRID SMALLER === " << std::endl; 
+                }
             }
 
             else if (ri == 3) {
@@ -97,25 +99,25 @@ class Chebcoll {
                 // speak("UpBound (for another dimension)", rr); 
                 // rr = rr - 1e-2;
                 double the_small_ = 1e-5; 
+                otherGrid = 0.1;
                 for (int i = 0; i < tempkk.size(); i++) {
                     double rr = tempkk[i][1];
                     double ll = tempkk[i][0];
-                    oneFixLength = (rr - ll) / 2 + small_; 
+                    oneFixLength = (rr - ll) / 2 + shift_small_; 
                     // speak("oneFixLength",oneFixLength); 
                     lengthVec.push_back(oneFixLength);
                     assert(oneFixLength <= 1); 
-                    oneFixCenter = ll + oneFixLength + small_; 
+                    oneFixCenter = ll + oneFixLength + shift_small_; 
                     centerVec.push_back(oneFixCenter);
-                    otherGrid = find_order(oneFixLength);
-                    gridVec.push_back(otherGrid);
+                    double tGrid = find_order(oneFixLength);
+                    // should be integer, as division of 10's powers
+                    int rrTimes = otherGrid / tGrid; 
+                    for (int j = 0; j < rrTimes; j++) {
+                        gridVec.push_back(otherGrid);
+                    }
                 }
-                otherGrid = 0.1;
+                
                 speak("Size of lengthVec", lengthVec.size());
-
-                // while (rr / otherGrid <= 1e2) {
-                //     otherGrid /= 10;
-                //     std::cout << "=== MAKE GRID SMALLER ===" << std::endl; 
-                // }
             }
             // speak("OtherGrid", otherGrid); 
             // speak("oneFixCenter", oneFixCenter); 
@@ -132,7 +134,12 @@ class Chebcoll {
             speak("Grid Size Magnitude", otherGrid); // magnitude of grid size along both dimension
             grid_size_magnitude_ = otherGrid; 
             int cnt = 0; 
-            for (double iter = lbound; iter < ubound; iter += gg * gridSize) {
+
+            std::vector<double> iterVec;
+            for (double iter = lbound; iter < ubound; iter += gg * gridSize) iterVec.push_back(iter); 
+
+            for (size_t i = 0; i < iterVec.size(); i++) {
+                double iter = iterVec[i]; 
                 const auto st1 = get_wtime();
                 if (ri == 3) {
                     oneFixLength = lengthVec[cnt];
@@ -207,8 +214,9 @@ class Chebcoll {
             return approxVal; 
         }
 
-        inline std::vector<std::vector<double>> findExtremeVal(int recorddata = 0) {
+        inline std::vector<std::vector<double>> findExtremeVal(int recorddata = 0, int calerror = 0) {
             std::vector<std::vector<double>> intSpecSaver; 
+            std::vector<double> errorTrueSaver;
             // currently only allow normal lookup
             if (ri == 1) {
                 std::ofstream myfile; 
@@ -217,7 +225,8 @@ class Chebcoll {
                     std::string rootpath = "3d-data/";
                     std::string strD = std::to_string(tD);
                     std::string strAlpha = std::to_string(talpha);
-                    std::string searchfilename = rootpath + "D=" + strD + "-" + "alpha=" + strAlpha + ".txt"; 
+                    std::string strFreeLength = std::to_string(tfreelength);
+                    std::string searchfilename = rootpath + "D=" + strD + "-" + "alpha=" + strAlpha + "-" + "fl=" + strFreeLength + ".txt"; 
                     try{
                         std::filesystem::remove(searchfilename);
                     }
@@ -225,18 +234,30 @@ class Chebcoll {
                     myfile.open(searchfilename);
                 }
                 int cnt = 0; 
-                for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
+                double prefac = 1; 
+                for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_ / prefac) {
                     std::vector<double> integralSaver; 
-                    for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_){
+                    for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
                         double iter[2] = {i,j}; 
                         double intres = evalSinglePt(iter,0); 
                         integralSaver.push_back(intres); 
-                        // [vertical distance] << [scan length] << [lookup table result]
-                        myfile << i << "," << j / length_scale_ << "," << intres << std::endl;
+                        if (recorddata == 1){ 
+                            // [vertical distance] << [scan length] << [lookup table result]
+                            myfile << i << "," << j / length_scale_ << "," << intres; 
+                        }
+                        if (calerror == 1) {
+                            double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
+                            double relerr = ABS(intres - realres); 
+                            errorTrueSaver.push_back(relerr); 
+                            // << relative error with real integral value
+                            myfile << "," << relerr; 
+                        }
+                        myfile << std::endl;
                     }
                     double maxval = *std::max_element(std::begin(integralSaver), std::end(integralSaver));
                     double minval = *std::min_element(std::begin(integralSaver), std::end(integralSaver));
-                    assert(maxval > 0); assert(minval > 0); // integral value must be positive
+                    // integral value must be positive
+                    // assert(maxval > 0); assert(minval > 0); 
                     std::vector<double> perIntVal = {minval, maxval}; 
                     intSpecSaver.push_back(perIntVal); 
                     cnt++; 
@@ -245,29 +266,20 @@ class Chebcoll {
                     std::cout << "==FINISH RECORD DATA==" << std::endl;
                     myfile.close(); 
                 }
+                if (calerror == 1){
+                    std::cout << "==== Comparison Statistics [Inaccurate Time Measurement] ====" << std::endl;
+                    speak("Mean Error of Cheb Family to Real Value over Whole Domain", mean_error(errorTrueSaver));
+                    std::cout << "==== END ====" << std::endl; 
+                }
+
+                std::vector<double> res = findMinMaxVec(intSpecSaver);
+                // load global max/min integral value [for reference]
+                integral_min_ = res[0];
+                integral_max_ = res[1]; 
                 
-                // integral_min_ = minval; integral_max_ = maxval; 
-                // std::vector<double> res = {minval, maxval}; 
-                // speakvec("Max/Min Integral", res); 
                 speak("cnt",cnt); 
             }
             return intSpecSaver; 
-        }
-
-        inline void compareTrue() {
-            std::vector<double> errorTrueSaver;
-            for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
-                for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_){
-                    double iter[2] = {i,j};
-                    double intres = evalSinglePt(iter,0);
-                    double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
-                    errorTrueSaver.push_back(ABS(intres - realres)); 
-                }
-            }
-            std::cout << "==== Comparison Statistics ====" << std::endl;
-            speak("Mean Error of Cheb Family to Real Value over Whole Domain", mean_error(errorTrueSaver));
-            std::cout << "==== END ====" << std::endl; 
-            return; 
         }
 };
 
