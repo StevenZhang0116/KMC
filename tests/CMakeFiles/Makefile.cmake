@@ -9,6 +9,9 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "../CMakeLists.txt"
   "../KMC_func/CMakeLists.txt"
+  "../docs/CMakeLists.txt"
+  "CMakeDoxyfile.in"
+  "CMakeDoxygenDefaults.cmake"
   "CMakeFiles/3.20.2/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.20.2/CMakeSystem.cmake"
   "CMakeFiles/VerifyGlobs.cmake"
@@ -43,8 +46,11 @@ set(CMAKE_MAKEFILE_OUTPUTS
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "KMC_func/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "docs/Doxyfile.docs"
+  "docs/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
+  "docs/CMakeFiles/docs.dir/DependInfo.cmake"
   )

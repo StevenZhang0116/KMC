@@ -71,7 +71,8 @@ class Chebcoll {
         }
 
         inline void createBaobziFamily(std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>()) {
-            double upBound; double oneFixLength; double oneFixCenter; double otherGrid; 
+            double upBound; double oneFixLength; 
+            double oneFixCenter; double otherGrid; 
             std::vector<double> lengthVec; 
             std::vector<double> centerVec; 
             std::vector<double> gridVec;
@@ -98,26 +99,30 @@ class Chebcoll {
                 speak("UpBound (for one dimensions)", upBound);  
                 // speak("UpBound (for another dimension)", rr); 
                 // rr = rr - 1e-2;
-                double the_small_ = 1e-5; 
                 otherGrid = 0.1;
                 for (int i = 0; i < tempkk.size(); i++) {
                     double rr = tempkk[i][1];
                     double ll = tempkk[i][0];
                     oneFixLength = (rr - ll) / 2 + shift_small_; 
                     // speak("oneFixLength",oneFixLength); 
-                    lengthVec.push_back(oneFixLength);
                     assert(oneFixLength <= 1); 
                     oneFixCenter = ll + oneFixLength + shift_small_; 
                     centerVec.push_back(oneFixCenter);
                     double tGrid = find_order(oneFixLength);
                     // should be integer, as division of 10's powers
-                    int rrTimes = otherGrid / tGrid; 
-                    for (int j = 0; j < rrTimes; j++) {
-                        gridVec.push_back(otherGrid);
+                    double rrTimes = otherGrid / tGrid; 
+                    // speak("rrTimes", rrTimes);
+                    int kk = ceil(rrTimes);
+                    if (kk > 1) kk = round10(kk); 
+                    // speak("kk", kk);
+                    for (int j = 0; j < kk; j++) {
+                        gridVec.push_back(tGrid);
+                        lengthVec.push_back(oneFixLength);
                     }
                 }
                 
-                speak("Size of lengthVec", lengthVec.size());
+                speak("Size of lengthVec", gridVec.size());
+                speak("Sum of lengthVec", total_sum(gridVec)); 
             }
             // speak("OtherGrid", otherGrid); 
             // speak("oneFixCenter", oneFixCenter); 
@@ -129,14 +134,14 @@ class Chebcoll {
             double gg = 1; // range [1,2], inversely proportional to running time
             double gridSize = gg * otherGrid; 
 
+            std::vector<double> iterVec;
+            for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
+
             // iteratively create Baobzi object
             speak("Baobzi Objects need to be created", floor((ubound - lbound)/gridSize + 1)); 
             speak("Grid Size Magnitude", otherGrid); // magnitude of grid size along both dimension
             grid_size_magnitude_ = otherGrid; 
             int cnt = 0; 
-
-            std::vector<double> iterVec;
-            for (double iter = lbound; iter < ubound; iter += gg * gridSize) iterVec.push_back(iter); 
 
             for (size_t i = 0; i < iterVec.size(); i++) {
                 double iter = iterVec[i]; 

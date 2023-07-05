@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/home/zzhang1/aLENS/KMC/tests
+# Install script for directory: /mnt/home/zzhang1/aLENS/KMC/docs
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
