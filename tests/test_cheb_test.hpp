@@ -87,7 +87,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     int sme = 1;
     int mind = 0; 
     int maxd = 40;
-    double hl[] = {find_order(intvaldiff * D), (intvaldiff * D + small_) * 1}; // half length
+    double hl[] = {find_order(intvaldiff * D) * 10, (intvaldiff * D + small_) * 1}; // half length
     double center[] = {distPerp / D, (midint * D + small_) * 1};  // center
     const char* fn = "func_approx.baobzi"; 
     speak("hlfc", intvaldiff * D);
@@ -100,7 +100,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     bbcoll2.createBaobziFamily(tempkk); 
 
     // const auto st1 = get_wtime();
-    Cheb theBaobzi(hl,center,1e-2,alpha,freelength,D,fn,3,0);
+    Cheb theBaobzi(hl,center,1e-2,alpha,freelength,D,fn,3,1);
     theBaobzi.approxFunc();
 
     for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {

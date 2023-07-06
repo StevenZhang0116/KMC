@@ -145,13 +145,21 @@ class Cheb {
                     //     std::cout << solve_func(i) << "," << std::endl; 
                     // }
 
-                    // try {
+                    try {
                         std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
                         *y = res.first;
-                    // } 
-                    // catch(...) {
-                    //     *y = 0; 
-                    // }
+                    } 
+                    catch(...) {
+                        // *y = 0; 
+                        for (double i = lowerbound; i < upperbound; i+=0.0001) {
+                            double res = solve_func(i); 
+                            if (ABS(res) < errortolerence) {
+                                *y = i; 
+                                break; 
+                            }
+                        }
+                        std::cout << "a" << std::endl; 
+                    }
                     
                 }
             };

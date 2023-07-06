@@ -104,13 +104,23 @@ std::vector<double> findMinMaxVec(const std::vector<std::vector<double>> matrix)
     return res; 
 }
 
-
-
 int round10(int n)
 {
     int a = (n / 10) * 10;
     int b = a + 10;  
     return (n - a > b - n)? b : a;
+}
+
+std::vector<double> cumulativeSum(const std::vector<double>& input) {
+    std::vector<double> cumulative;
+    double sum = 0;
+
+    for (const auto& element : input) {
+        sum += element;
+        cumulative.push_back(sum);
+    }
+
+    return cumulative;
 }
 
 

@@ -107,8 +107,8 @@ class Chebcoll {
                     // speak("oneFixLength",oneFixLength); 
                     assert(oneFixLength <= 1); 
                     oneFixCenter = ll + oneFixLength + shift_small_; 
-                    centerVec.push_back(oneFixCenter);
                     double tGrid = find_order(oneFixLength);
+                    // tGrid = std::max(tGrid, 0.1); 
                     // should be integer, as division of 10's powers
                     double rrTimes = otherGrid / tGrid; 
                     // speak("rrTimes", rrTimes);
@@ -118,6 +118,7 @@ class Chebcoll {
                     for (int j = 0; j < kk; j++) {
                         gridVec.push_back(tGrid);
                         lengthVec.push_back(oneFixLength);
+                        centerVec.push_back(oneFixCenter);
                     }
                 }
                 
@@ -128,31 +129,37 @@ class Chebcoll {
             // speak("oneFixCenter", oneFixCenter); 
             // speak("oneFixLength", oneFixLength); 
 
-            // declare bound for the fixed parameter, usually distPerp (vertical distance)
-            double lbound = otherGrid; 
-            double ubound = upBound - otherGrid; 
-            double gg = 1; // range [1,2], inversely proportional to running time
-            double gridSize = gg * otherGrid; 
-
             std::vector<double> iterVec;
-            for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
+            if (ri == 1) {
+                // declare bound for the fixed parameter, usually distPerp (vertical distance)
+                double lbound = otherGrid; 
+                double ubound = upBound - otherGrid; 
+                double gg = 1; // range [1,2], inversely proportional to running time
+                double gridSize = gg * otherGrid; 
 
-            // iteratively create Baobzi object
-            speak("Baobzi Objects need to be created", floor((ubound - lbound)/gridSize + 1)); 
-            speak("Grid Size Magnitude", otherGrid); // magnitude of grid size along both dimension
-            grid_size_magnitude_ = otherGrid; 
-            int cnt = 0; 
+                for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
 
-            for (size_t i = 0; i < iterVec.size(); i++) {
-                double iter = iterVec[i]; 
+                // iteratively create Baobzi object
+                speak("Baobzi Objects need to be created", floor((ubound - lbound)/gridSize + 1)); 
+                speak("Grid Size Magnitude", otherGrid); // magnitude of grid size along both dimension
+                grid_size_magnitude_ = otherGrid; 
+            }
+            else if (ri == 3){
+                iterVec = cumulativeSum(gridVec); 
+            }
+
+            for (size_t iii = 0; iii < iterVec.size(); iii++) {
+                double iter = iterVec[iii]; 
+                if (ri == 3) speak("iter",iter); 
                 const auto st1 = get_wtime();
                 if (ri == 3) {
-                    oneFixLength = lengthVec[cnt];
-                    oneFixCenter = centerVec[cnt]; 
+                    oneFixLength = lengthVec[iii];
+                    oneFixCenter = centerVec[iii]; 
+                    otherGrid = gridVec[iii]; 
                 }
                 double hl[2] = {otherGrid, oneFixLength};
                 double center[2] = {iter, oneFixCenter}; 
-                if (tpon == 1) {
+                if (ri == 3) {
                     std::cout << "hl: " << hl[0] << ";" << hl[1] << std::endl;
                     std::cout << "center: " << center[0] << ";" << center[1] << std::endl;
                 }
@@ -162,11 +169,10 @@ class Chebcoll {
                 breakPtsCollChange.push_back(iter - otherGrid); 
                 breakPtsCollUnchange.push_back(oneFixCenter - oneFixLength); 
                 chebSpaceTaken.push_back(ssTaken);
-                cnt++; 
-                if ((cnt % 10 == 0) && (ri == 3)) { // onlu print log in reverse lookup
+                if ((iii % 10 == 0) && (ri == 3)) { // onlu print log in reverse lookup
                     const auto ft1 = get_wtime();
                     const double dt1 = get_wtime_diff(&st1, &ft1);
-                    speak("Baobzi Created", cnt); 
+                    speak("Baobzi Created", iii); 
                     speak("Needed Time per object (s)", dt1); 
                 }
             }
@@ -261,8 +267,13 @@ class Chebcoll {
                     }
                     double maxval = *std::max_element(std::begin(integralSaver), std::end(integralSaver));
                     double minval = *std::min_element(std::begin(integralSaver), std::end(integralSaver));
+                    std::cout << maxval << ";" << minval << std::endl; 
                     // integral value must be positive
-                    // assert(maxval > 0); assert(minval > 0); 
+                    assert(maxval > 0); assert(minval > 0); 
+                    if ((ABS(maxval) <= 1e-3) || (ABS(maxval) <= 1e-3)) {
+                        maxval = 0;
+                        minval = 0; 
+                    }
                     std::vector<double> perIntVal = {minval, maxval}; 
                     intSpecSaver.push_back(perIntVal); 
                     cnt++; 
