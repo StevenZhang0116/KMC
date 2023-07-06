@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <variant>
 #include <filesystem>
+#include <omp.h>
 
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 // add baobzi dependence
@@ -38,7 +39,7 @@ class Chebcoll {
     
     private:
         static constexpr double small_ = 1e-6;
-        static constexpr double shift_small_ = 1e-5; 
+        static constexpr double shift_small_ = 1e-10; 
     
     public:
         Chebcoll() = default;
@@ -103,12 +104,12 @@ class Chebcoll {
                 for (int i = 0; i < tempkk.size(); i++) {
                     double rr = tempkk[i][1];
                     double ll = tempkk[i][0];
-                    oneFixLength = (rr - ll) / 2 + shift_small_; 
+                    oneFixLength = (rr - ll) / 2; 
                     // speak("oneFixLength",oneFixLength); 
                     assert(oneFixLength <= 1); 
-                    oneFixCenter = ll + oneFixLength + shift_small_; 
+                    oneFixCenter = ll + oneFixLength; 
                     double tGrid = find_order(oneFixLength);
-                    // tGrid = std::max(tGrid, 0.1); 
+                    tGrid = std::max(tGrid, 0.01); 
                     // should be integer, as division of 10's powers
                     double rrTimes = otherGrid / tGrid; 
                     // speak("rrTimes", rrTimes);
@@ -125,9 +126,6 @@ class Chebcoll {
                 speak("Size of lengthVec", gridVec.size());
                 speak("Sum of lengthVec", total_sum(gridVec)); 
             }
-            // speak("OtherGrid", otherGrid); 
-            // speak("oneFixCenter", oneFixCenter); 
-            // speak("oneFixLength", oneFixLength); 
 
             std::vector<double> iterVec;
             if (ri == 1) {
@@ -148,6 +146,7 @@ class Chebcoll {
                 iterVec = cumulativeSum(gridVec); 
             }
 
+            #pragma omp parallel for
             for (size_t iii = 0; iii < iterVec.size(); iii++) {
                 double iter = iterVec[iii]; 
                 if (ri == 3) speak("iter",iter); 
@@ -162,6 +161,12 @@ class Chebcoll {
                 if (ri == 3) {
                     std::cout << "hl: " << hl[0] << ";" << hl[1] << std::endl;
                     std::cout << "center: " << center[0] << ";" << center[1] << std::endl;
+                }
+                if ((static_cast<int>(hl[1]) == 0) && (static_cast<int>(center[1]) == 0)) {
+                    std::cout << "Constant Function Approximation Attempt" << std::endl; 
+                    ri = 4; 
+                    hl[1] = 1; 
+                    center[1] = 1; 
                 }
                 Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, tD, on, ri, tpon, the_upper_bound_);
                 double ssTaken = theBaobzi.approxFunc(); // taken space in Mb
@@ -267,13 +272,13 @@ class Chebcoll {
                     }
                     double maxval = *std::max_element(std::begin(integralSaver), std::end(integralSaver));
                     double minval = *std::min_element(std::begin(integralSaver), std::end(integralSaver));
-                    std::cout << maxval << ";" << minval << std::endl; 
                     // integral value must be positive
                     assert(maxval > 0); assert(minval > 0); 
                     if ((ABS(maxval) <= 1e-3) || (ABS(maxval) <= 1e-3)) {
                         maxval = 0;
                         minval = 0; 
                     }
+                    std::cout << maxval << ";" << minval << std::endl; 
                     std::vector<double> perIntVal = {minval, maxval}; 
                     intSpecSaver.push_back(perIntVal); 
                     cnt++; 

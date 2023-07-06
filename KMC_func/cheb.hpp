@@ -36,7 +36,7 @@ class Cheb {
          * @brief constructor of Baobzi object
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
-        double D, const char* output_name, const int runind, const int porn, const double upperbound = 0) {
+        double D, const char* output_name, const int runind, const int porn, const double upperbound = 0, const double aconst = 0) {
             // std::cout << "Construct Baobzi Object" << std::endl;
             memcpy(&half_length, &hl, sizeof(hl)); 
             assert(half_length[0] <= 1); assert(half_length[1] <= 1); // half length, <= 1
@@ -65,9 +65,10 @@ class Cheb {
             // param[1] = ell0: protein rest length -> rest_length_
             // param[2] = D; diameter of rod crosslink is binding to  -> length_scale_
             // param[3] = upperbound; the cutoff radius for r⊥ and s
+            // param[4] = constant; some arbitrarily defined constant
             double M = alpha * D * D; 
             double ell0 = freelength / D; 
-            param[0] = M; param[1] = ell0; param[2] = D; param[3] = upperbound; 
+            param[0] = M; param[1] = ell0; param[2] = D; param[3] = upperbound; param[4] = aconst; 
             input.data = &param; 
             // determines which function approximation is implemented (e.g. lookup, reverse lookup)
             indicator = runind; 
@@ -104,6 +105,14 @@ class Cheb {
                 }
             };
 
+            auto approxConstantFunction = [](const double *x, double *y, const void *data) {
+                if (x[1] <= 0) *y = 0; 
+                else {
+                    const double cst = ((double*)data)[4]; 
+                    *y = cst; 
+                }
+            }; 
+
             // x[0] = r⊥/lm: perpendicular distance above rod
             // x[1] = integral value 
             auto reverApproxCDF = [](const double* x, double* y, const void* data) {
@@ -121,7 +130,7 @@ class Cheb {
                     double errortolerence = 1e-6; 
 
                     double lowerbound = 0.0 + shift; 
-                    double upperbound = 20; 
+                    double upperbound = 2; 
                     boost::uintmax_t max_iter = 1000; // Maximum number of iterations
                     boost::math::tools::eps_tolerance<double> tolerance(30); // Desired tolerance
 
@@ -133,32 +142,23 @@ class Cheb {
                     auto solve_func = [&](double caluplimit) { 
                         double residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
                             integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1]; 
-                        // if (ABS(residue) < errortolerence) {
-                        //     if (residue < 0)residue = -residue; 
-                        //     residue = 0;
-                        // }
                         return residue;
                     }; 
-                    
-                    // speak("x[1]", x[1]);
-                    // for (double i = lowerbound; i < upperbound; i+=0.1){
-                    //     std::cout << solve_func(i) << "," << std::endl; 
-                    // }
 
                     try {
                         std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upperbound, tolerance, max_iter);
                         *y = res.first;
                     } 
                     catch(...) {
-                        // *y = 0; 
-                        for (double i = lowerbound; i < upperbound; i+=0.0001) {
-                            double res = solve_func(i); 
-                            if (ABS(res) < errortolerence) {
-                                *y = i; 
-                                break; 
-                            }
-                        }
-                        std::cout << "a" << std::endl; 
+                        *y = 0; 
+                        // for (double i = lowerbound; i < upperbound; i+=0.0001) {
+                        //     double res = solve_func(i); 
+                        //     if (ABS(res) < errortolerence) {
+                        //         *y = i; 
+                        //         break; 
+                        //     }
+                        // }
+                        // std::cout << "a" << std::endl; 
                     }
                     
                 }
@@ -189,6 +189,7 @@ class Cheb {
             if (indicator == 1) return approxCDF;
             else if (indicator == 2) return approxBindV; 
             else if (indicator == 3) return reverApproxCDF; 
+            else if (indicator == 4) return approxConstantFunction; 
             else throw std::invalid_argument("Invalid choice -> Parameter Setting Error");
         }
         
