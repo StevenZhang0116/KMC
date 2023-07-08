@@ -99,7 +99,6 @@ class Chebcoll {
                 the_upper_bound_ = upBound; 
                 speak("UpBound (for one dimensions)", upBound);  
                 // speak("UpBound (for another dimension)", rr); 
-                // rr = rr - 1e-2;
                 otherGrid = 0.1;
                 for (int i = 0; i < tempkk.size(); i++) {
                     double rr = tempkk[i][1];
@@ -147,6 +146,7 @@ class Chebcoll {
             }
 
             #pragma omp parallel for
+            int tri; 
             for (size_t iii = 0; iii < iterVec.size(); iii++) {
                 double iter = iterVec[iii]; 
                 if (ri == 3) speak("iter",iter); 
@@ -158,17 +158,20 @@ class Chebcoll {
                 }
                 double hl[2] = {otherGrid, oneFixLength};
                 double center[2] = {iter, oneFixCenter}; 
+                if ((hl[1] == 0.0) && (center[1] == 0.0)) {
+                    // std::cout << "Constant Function Approximation Attempt" << std::endl; 
+                    tri = 4; 
+                    hl[1] = 1; 
+                    center[1] = 1; 
+                }
+                else {
+                    tri = ri; 
+                }
                 if (ri == 3) {
                     std::cout << "hl: " << hl[0] << ";" << hl[1] << std::endl;
                     std::cout << "center: " << center[0] << ";" << center[1] << std::endl;
                 }
-                if ((static_cast<int>(hl[1]) == 0) && (static_cast<int>(center[1]) == 0)) {
-                    std::cout << "Constant Function Approximation Attempt" << std::endl; 
-                    ri = 4; 
-                    hl[1] = 1; 
-                    center[1] = 1; 
-                }
-                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, tD, on, ri, tpon, the_upper_bound_);
+                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, tD, on, tri, tpon, the_upper_bound_);
                 double ssTaken = theBaobzi.approxFunc(); // taken space in Mb
                 allCheb.push_back(theBaobzi); 
                 breakPtsCollChange.push_back(iter - otherGrid); 
@@ -188,7 +191,7 @@ class Chebcoll {
             // std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
             // edge case detectino
             if (ptCenter[0] > the_upper_bound_) {
-                printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
+                // printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
                 ptCenter[0] = the_upper_bound_ - grid_size_magnitude_; 
                 bs = 0;  
             }
