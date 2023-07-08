@@ -191,7 +191,7 @@ class Chebcoll {
             // std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
             // edge case detectino
             if (ptCenter[0] > the_upper_bound_) {
-                // printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
+                printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
                 ptCenter[0] = the_upper_bound_ - grid_size_magnitude_; 
                 bs = 0;  
             }
