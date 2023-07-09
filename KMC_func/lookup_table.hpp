@@ -239,8 +239,8 @@ class LookupTable {
         }
         if (rowIndex > perp_grid_num_ - 2) {
 #ifndef NDEBUG
-            printf("Warning: dist_perp %g very large, clamp to grid UB\n",
-                   dist_perp);
+            // printf("Warning: dist_perp %g very large, clamp to grid UB\n",
+                //    dist_perp);
 #endif
             rowIndex = perp_grid_num_ - 2;
             rowFrac = 1;

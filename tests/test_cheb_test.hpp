@@ -144,7 +144,7 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     // Physical Parameters Setting
     constexpr double errTol = 1e-3;
     const double D = 0.024;
-    const double alpha = 10 / (2 * 0.00411);
+    const double alpha = 0.1 / (2 * 0.00411);
     // check to larger value (default = 0.05) to observe convexity/concavity of CDF in normal lookup
     const double freelength = 0.5; 
     const double M = alpha * D * D; 
@@ -221,6 +221,7 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     double colldt2 = 0; 
     for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
         // Baobzi test
+        /* if want to normalize r⊥, *D on the first coordinate */ 
         double inval[] = {distPerp / D, sbound * D};
         const auto st2 = get_wtime();
         double a1 = bbcoll.evalSinglePt(inval); 

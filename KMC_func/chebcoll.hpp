@@ -147,6 +147,7 @@ class Chebcoll {
 
             #pragma omp parallel for
             int tri; 
+            /* if want to normalize r⊥, change upper bound of iii to 1 (instead of iterVec.size()) */
             for (size_t iii = 0; iii < iterVec.size(); iii++) {
                 double iter = iterVec[iii]; 
                 if (ri == 3) speak("iter",iter); 
@@ -156,6 +157,8 @@ class Chebcoll {
                     oneFixCenter = centerVec[iii]; 
                     otherGrid = gridVec[iii]; 
                 }
+                /* if want to normalize r⊥, change the first coordinates of hl[] and center[] 
+                 * to the second coordinate */ 
                 double hl[2] = {otherGrid, oneFixLength};
                 double center[2] = {iter, oneFixCenter}; 
                 if ((hl[1] == 0.0) && (center[1] == 0.0)) {
