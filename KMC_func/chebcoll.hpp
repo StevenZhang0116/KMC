@@ -139,10 +139,8 @@ class Chebcoll {
                     tGrid = std::max(tGrid, 0.01); 
                     // should be integer, as division of 10's powers
                     double rrTimes = otherGrid / tGrid; 
-                    // speak("rrTimes", rrTimes);
                     int kk = ceil(rrTimes);
                     if (kk > 1) kk = round10(kk); 
-                    // speak("kk", kk);
                     for (int j = 0; j < kk; j++) {
                         gridVec.push_back(tGrid);
                         lengthVec.push_back(oneFixLength);
@@ -197,8 +195,8 @@ class Chebcoll {
                     tri = ri; 
                 }
                 if (ri == 3) {
-                    // std::cout << "hl: " << hl[0] << ";" << hl[1] << std::endl;
-                    // std::cout << "center: " << center[0] << ";" << center[1] << std::endl;
+                    std::cout << "hl: " << hl[0] << ";" << hl[1] << std::endl;
+                    std::cout << "center: " << center[0] << ";" << center[1] << std::endl;
                 }
                 Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, on, tri, tpon, the_upper_bound_);
                 double ssTaken = theBaobzi.approxFunc(); // taken space in Mb
@@ -250,7 +248,7 @@ class Chebcoll {
                 for (int i = 0; i < gridNum - 1; i++) {
                     if ((breakPtsCollChange[i] <= ptCenter[0]) 
                         && (breakPtsCollChange[i+1] >= ptCenter[0]) 
-                        && (breakPtsCollUnchange[i] <= ptCenter[1])
+                        // && (breakPtsCollUnchange[i] <= ptCenter[1])
                     ) {
                         pickPt = i; 
                         break;
@@ -316,7 +314,7 @@ class Chebcoll {
                     double minval = *std::min_element(std::begin(integralSaver), std::end(integralSaver));
                     // integral value must be positive
                     assert(maxval > 0); assert(minval > 0); 
-                    if ((ABS(maxval) <= 1e-2) || (ABS(minval) <= 1e-2)) {
+                    if ((ABS(maxval) <= 1e-2) && (ABS(minval) <= 1e-2)) {
                         maxval = 0;
                         minval = 0; 
                     }

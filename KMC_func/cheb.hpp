@@ -133,7 +133,7 @@ class Cheb {
                     double shift = 1e-20; 
                     double errortolerence = 1e-6; 
 
-                    double lowerbound = 0.0 + shift; 
+                    double lower_bound = 0.0 + shift; 
                     double upper_bound = 2; 
                     boost::uintmax_t max_iter = 1000; // Maximum number of iterations
                     boost::math::tools::eps_tolerance<double> tolerance(30); // Desired tolerance
@@ -150,18 +150,18 @@ class Cheb {
                     }; 
 
                     try {
-                        std::pair<double,double> res = boost::math::tools::bisect(solve_func, lowerbound, upper_bound, tolerance, max_iter);
+                        std::pair<double,double> res = boost::math::tools::bisect(solve_func, lower_bound, upper_bound, tolerance, max_iter);
                         *y = res.first;
                     } 
                     catch(...) {
-                        *y = 0; 
-                        // for (double i = lowerbound; i < upperbound; i+=0.0001) {
-                        //     double res = solve_func(i); 
-                        //     if (ABS(res) < errortolerence) {
-                        //         *y = i; 
-                        //         break; 
-                        //     }
-                        // }
+                        // *y = 0; 
+                        for (double i = lower_bound; i < upper_bound; i+=0.0001) {
+                            double res = solve_func(i); 
+                            if (ABS(res) < errortolerence) {
+                                *y = i; 
+                                break; 
+                            }
+                        }
                         // std::cout << "a" << std::endl; 
                     }
                     
