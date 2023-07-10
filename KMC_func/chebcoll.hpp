@@ -30,7 +30,7 @@ class Chebcoll {
         double integral_min_; 
         double integral_max_; 
     public: 
-        double talpha; double tfreelength; double tD; 
+        double talpha; double tfreelength; 
         double tbbtol; int ri; const char* on; int tpon; 
         std::vector<Cheb> allCheb; 
         std::vector<double> breakPtsCollChange; 
@@ -45,8 +45,9 @@ class Chebcoll {
         Chebcoll() = default;
         ~Chebcoll() = default;
 
-        Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, const char* output_name = "func_approx.baobzi", 
-             const int printOrNot = 0) {
+        Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, 
+        std::vector<double> integralMinMax = std::vector<double>(), const char* output_name = "func_approx.baobzi", 
+        const int printOrNot = 0) {
             // initialize dimensionless 
             length_scale_ = D; 
             exp_fact_ = alpha * length_scale_ * length_scale_;
@@ -54,12 +55,18 @@ class Chebcoll {
             // (dummy) registeration of parameters
             talpha = alpha; 
             tfreelength = freelength;
-            tD = D; 
             tbbtol = bbtol; 
             on = output_name; 
             ri = runind; 
             tpon = printOrNot; 
             speak("Tolerance of Bobazi Family", bbtol); 
+            // only need to set up integral min/max value in the REVERSE LOOKUP 
+            if (integralMinMax.size() > 0) {
+                assert(runind == 3); 
+                integral_min_ = integralMinMax[0];
+                integral_max_ = integralMinMax[1]; 
+                std::cout << "Setup integral max/min value in Constructor: " << integral_min_ << "," << integral_max_ << std::endl; 
+            }
         }
 
         inline double calcBoltzmann(double dist_cent) const {
@@ -103,12 +110,16 @@ class Chebcoll {
                 for (int i = 0; i < tempkk.size(); i++) {
                     double rr = tempkk[i][1];
                     double ll = tempkk[i][0];
-                    oneFixLength = (rr - ll) / 2; 
+                    oneFixLength = (rr - ll) / 2;
                     // speak("oneFixLength",oneFixLength); 
                     assert(oneFixLength <= 1); 
                     oneFixCenter = ll + oneFixLength; 
+                    // normalization (?)
+                    // oneFixLength *= length_scale_; 
+                    // oneFixCenter *= length_scale_; 
+                    // match order
                     double tGrid = find_order(oneFixLength);
-                    tGrid = std::max(tGrid, 0.01); 
+                    tGrid = std::max(tGrid, 0.1); 
                     // should be integer, as division of 10's powers
                     double rrTimes = otherGrid / tGrid; 
                     // speak("rrTimes", rrTimes);
@@ -124,6 +135,7 @@ class Chebcoll {
                 
                 speak("Size of lengthVec", gridVec.size());
                 speak("Sum of lengthVec", total_sum(gridVec)); 
+                assert(total_sum(gridVec) <= upBound); 
             }
 
             std::vector<double> iterVec;
@@ -135,7 +147,6 @@ class Chebcoll {
                 double gridSize = gg * otherGrid; 
 
                 for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
-
                 // iteratively create Baobzi object
                 speak("Baobzi Objects need to be created", floor((ubound - lbound)/gridSize + 1)); 
                 speak("Grid Size Magnitude", otherGrid); // magnitude of grid size along both dimension
@@ -145,12 +156,11 @@ class Chebcoll {
                 iterVec = cumulativeSum(gridVec); 
             }
 
-            #pragma omp parallel for
             int tri; 
             /* if want to normalize r⊥, change upper bound of iii to 1 (instead of iterVec.size()) */
             for (size_t iii = 0; iii < iterVec.size(); iii++) {
-                double iter = iterVec[iii]; 
-                if (ri == 3) speak("iter",iter); 
+                double thisCenter = iterVec[iii]; 
+                if (ri == 3) speak("thisCenter", thisCenter); 
                 const auto st1 = get_wtime();
                 if (ri == 3) {
                     oneFixLength = lengthVec[iii];
@@ -159,10 +169,9 @@ class Chebcoll {
                 }
                 /* if want to normalize r⊥, change the first coordinates of hl[] and center[] 
                  * to the second coordinate */ 
-                double hl[2] = {otherGrid, oneFixLength};
-                double center[2] = {iter, oneFixCenter}; 
+                double hl[2] = {otherGrid, oneFixCenter};
+                double center[2] = {thisCenter, oneFixCenter}; 
                 if ((hl[1] == 0.0) && (center[1] == 0.0)) {
-                    // std::cout << "Constant Function Approximation Attempt" << std::endl; 
                     tri = 4; 
                     hl[1] = 1; 
                     center[1] = 1; 
@@ -171,16 +180,16 @@ class Chebcoll {
                     tri = ri; 
                 }
                 if (ri == 3) {
-                    std::cout << "hl: " << hl[0] << ";" << hl[1] << std::endl;
-                    std::cout << "center: " << center[0] << ";" << center[1] << std::endl;
+                    // std::cout << "hl: " << hl[0] << ";" << hl[1] << std::endl;
+                    // std::cout << "center: " << center[0] << ";" << center[1] << std::endl;
                 }
-                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, tD, on, tri, tpon, the_upper_bound_);
+                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, on, tri, tpon, the_upper_bound_);
                 double ssTaken = theBaobzi.approxFunc(); // taken space in Mb
                 allCheb.push_back(theBaobzi); 
-                breakPtsCollChange.push_back(iter - otherGrid); 
+                breakPtsCollChange.push_back(thisCenter - otherGrid); 
                 breakPtsCollUnchange.push_back(oneFixCenter - oneFixLength); 
                 chebSpaceTaken.push_back(ssTaken);
-                if ((iii % 10 == 0) && (ri == 3)) { // onlu print log in reverse lookup
+                if ((iii % 10 == 0) && (ri == 3)) { // only print log in reverse lookup
                     const auto ft1 = get_wtime();
                     const double dt1 = get_wtime_diff(&st1, &ft1);
                     speak("Baobzi Created", iii); 
@@ -191,8 +200,8 @@ class Chebcoll {
         }
 
         inline double evalSinglePt(double (&ptCenter)[2], int bs = 1) {
-            // std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
-            // edge case detectino
+            std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
+            // edge case detection
             if (ptCenter[0] > the_upper_bound_) {
                 printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
                 ptCenter[0] = the_upper_bound_ - grid_size_magnitude_; 
@@ -217,9 +226,9 @@ class Chebcoll {
             // brute force search O(n)
             else {
                 for (int i = 0; i < gridNum - 1; i++) {
-                    if ((breakPtsCollChange[i] <= ptCenter[0]) && 
-                        (breakPtsCollChange[i+1] >= ptCenter[0]) &&
-                        (breakPtsCollUnchange[i] <= ptCenter[1])
+                    if ((breakPtsCollChange[i] <= ptCenter[0]) 
+                        && (breakPtsCollChange[i+1] >= ptCenter[0]) 
+                        // && (breakPtsCollUnchange[i] <= ptCenter[1])
                     ) {
                         pickPt = i; 
                         break;
@@ -245,7 +254,7 @@ class Chebcoll {
                 if (recorddata == 1) {
                     std::cout << "==START RECORD DATA==" << std::endl;
                     std::string rootpath = "3d-data/";
-                    std::string strD = std::to_string(tD);
+                    std::string strD = std::to_string(length_scale_);
                     std::string strAlpha = std::to_string(talpha);
                     std::string strFreeLength = std::to_string(tfreelength);
                     std::string searchfilename = rootpath + "D=" + strD + "-" + "alpha=" + strAlpha + "-" + "fl=" + strFreeLength + ".txt"; 
@@ -257,7 +266,7 @@ class Chebcoll {
                 }
                 int cnt = 0; 
                 double prefac = 1; 
-                for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_ / prefac) {
+                for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
                     std::vector<double> integralSaver; 
                     for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
                         double iter[2] = {i,j}; 
@@ -280,11 +289,11 @@ class Chebcoll {
                     double minval = *std::min_element(std::begin(integralSaver), std::end(integralSaver));
                     // integral value must be positive
                     assert(maxval > 0); assert(minval > 0); 
-                    if ((ABS(maxval) <= 1e-3) || (ABS(maxval) <= 1e-3)) {
+                    if ((ABS(maxval) <= 1e-2) || (ABS(minval) <= 1e-2)) {
                         maxval = 0;
                         minval = 0; 
                     }
-                    std::cout << maxval << ";" << minval << std::endl; 
+                    // std::cout << maxval << ";" << minval << std::endl; 
                     std::vector<double> perIntVal = {minval, maxval}; 
                     intSpecSaver.push_back(perIntVal); 
                     cnt++; 
@@ -297,16 +306,22 @@ class Chebcoll {
                     std::cout << "==== Comparison Statistics [Inaccurate Time Measurement] ====" << std::endl;
                     speak("Mean Error of Cheb Family to Real Value over Whole Domain", mean_error(errorTrueSaver));
                     std::cout << "==== END ====" << std::endl; 
-                }
+                }                
 
-                std::vector<double> res = findMinMaxVec(intSpecSaver);
-                // load global max/min integral value [for reference]
-                integral_min_ = res[0];
-                integral_max_ = res[1]; 
-                
                 speak("cnt",cnt); 
             }
             return intSpecSaver; 
+        }
+
+        inline std::vector<double> intMinMax(std::vector<std::vector<double>> intSpecSaver) {
+            std::vector<double> res = findMinMaxVec(intSpecSaver);
+            // load global max/min integral value [for reference]
+            integral_min_ = res[0];
+            integral_max_ = res[1]; 
+            speak("integral_max_", integral_max_); 
+            speak("integral_min_", integral_min_);
+            return res;  
+
         }
 };
 

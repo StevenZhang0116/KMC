@@ -106,6 +106,9 @@ class Cheb {
                 }
             };
 
+            /* Regardless of inputs, approximate the constant value function based on the input parameter 
+             * Used in saving computation cost through approximation in reverse lookup
+             */
             auto approxConstantFunction = [](const double *x, double *y, const void *data) {
                 if (x[1] <= 0) *y = 0; 
                 else {
