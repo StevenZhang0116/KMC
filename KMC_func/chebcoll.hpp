@@ -69,14 +69,31 @@ class Chebcoll {
             }
         }
 
+        /**
+         * @brief calculate Boltzmann factor
+         * @return the value
+         */
+
         inline double calcBoltzmann(double dist_cent) const {
             double r = dist_cent / length_scale_;
             return exp(-exp_fact_ * SQR(r - rest_length_));
         }
 
+        /** 
+         * @brief calculate upperbound for s and r⊥; if value beyonds the limit, clamp to that
+         * @return UB
+         */
+
         double getUpperBound() const {
             return sqrt(-log(small_) / exp_fact_) + rest_length_;
         }
+
+        /**
+         * @brief create Baobzi family over the whole domain with one dimension normalized and other dimension linearly discretized
+         * [the hint of how to normalize both dimensions are included in the comments, but not desirable] 
+         * save all objects respectively in vectors (member variables) and will be used in evalSinglePt() function
+         * @return void 
+        */
 
         inline void createBaobziFamily(std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>()) {
             double upBound; double oneFixLength; 
@@ -119,7 +136,7 @@ class Chebcoll {
                     // oneFixCenter *= length_scale_; 
                     // match order
                     double tGrid = find_order(oneFixLength);
-                    tGrid = std::max(tGrid, 0.1); 
+                    tGrid = std::max(tGrid, 0.01); 
                     // should be integer, as division of 10's powers
                     double rrTimes = otherGrid / tGrid; 
                     // speak("rrTimes", rrTimes);
@@ -199,8 +216,13 @@ class Chebcoll {
             speak("Total Baobzi Family Space (MiB)", total_sum(chebSpaceTaken)); 
         }
 
+        /**
+         * @brief evaluate (either normal or reverse) at given input using either brute-force search or binary search
+         * @return calculated result
+         */
+
         inline double evalSinglePt(double (&ptCenter)[2], int bs = 1) {
-            std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
+            // std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
             // edge case detection
             if (ptCenter[0] > the_upper_bound_) {
                 printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
@@ -210,7 +232,7 @@ class Chebcoll {
 
             if ((ptCenter[1] > integral_max_) && (ri == 3)) {
                 printf("Baobzi Family Warning: integral %g very large, clamp to integral UB %g \n", ptCenter[1], integral_max_);
-                ptCenter[1] = integral_max_ - integral_min_; 
+                ptCenter[1] = integral_max_ - std::max(integral_min_, 1e-5); 
                 bs = 0;  
             }
 
@@ -228,7 +250,7 @@ class Chebcoll {
                 for (int i = 0; i < gridNum - 1; i++) {
                     if ((breakPtsCollChange[i] <= ptCenter[0]) 
                         && (breakPtsCollChange[i+1] >= ptCenter[0]) 
-                        // && (breakPtsCollUnchange[i] <= ptCenter[1])
+                        && (breakPtsCollUnchange[i] <= ptCenter[1])
                     ) {
                         pickPt = i; 
                         break;
@@ -244,6 +266,11 @@ class Chebcoll {
             double approxVal = pickBaobzi.evalFunc(ptCenter);
             return approxVal; 
         }
+
+        /**
+         * @brief (up to choice) to record the data and relative error to true integral with respect to the s and r⊥ over the domain
+         * @return min/max integral value over each linearly discretized grid in the domain
+         */
 
         inline std::vector<std::vector<double>> findExtremeVal(int recorddata = 0, int calerror = 0) {
             std::vector<std::vector<double>> intSpecSaver; 
@@ -265,7 +292,7 @@ class Chebcoll {
                     myfile.open(searchfilename);
                 }
                 int cnt = 0; 
-                double prefac = 1; 
+                double prefac = 10; 
                 for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
                     std::vector<double> integralSaver; 
                     for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
@@ -313,15 +340,17 @@ class Chebcoll {
             return intSpecSaver; 
         }
 
+        /**
+         * @brief return global min/max integral value over the calculated domain
+         * @return vector record global min/max integral value
+         */
+
         inline std::vector<double> intMinMax(std::vector<std::vector<double>> intSpecSaver) {
             std::vector<double> res = findMinMaxVec(intSpecSaver);
             // load global max/min integral value [for reference]
             integral_min_ = res[0];
             integral_max_ = res[1]; 
-            speak("integral_max_", integral_max_); 
-            speak("integral_min_", integral_min_);
             return res;  
-
         }
 };
 
