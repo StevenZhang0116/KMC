@@ -36,7 +36,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     const double tol = 1e-2;
     const double D = 0.024;
     const double alpha = 0.1 / (2 * 0.00411);
-    const double freelength = 0.05;
+    const double freelength = 0.5;
     const double M = alpha * D * D;
     const double ell0 = freelength / D;
 
@@ -47,7 +47,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     LookupTable LUT(&lut_filler);
 
     double distPerp = 0;
-    distPerp = 10 * D;
+    distPerp = 5 * D;
 
     double testbound = LUT.getNonDsbound()/2; 
     double startbound = 0.1; 
@@ -93,12 +93,12 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     speak("hlfc * D", intvaldiff * D);
     speak("midint * D", midint * D); 
 
-    Chebcoll bbcoll(alpha, freelength, D, 1);
-    bbcoll.createBaobziFamily(); 
-    std::vector<std::vector<double>> tempkk = bbcoll.findExtremeVal(0,1); 
-    std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
-    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, integralMinMax);
-    bbcoll2.createBaobziFamily(tempkk); 
+    // Chebcoll bbcoll(alpha, freelength, D, 1);
+    // bbcoll.createBaobziFamily(); 
+    // std::vector<std::vector<double>> tempkk = bbcoll.findExtremeVal(0,1); 
+    // std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
+    // Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, integralMinMax);
+    // bbcoll2.createBaobziFamily(tempkk); 
 
     // const auto st1 = get_wtime();
     Cheb theBaobzi(hl,center,1e-4,alpha,freelength,D,fn,3,0);
@@ -111,22 +111,22 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
         double inval[] = {distPerp / D, val * D}; 
         // speakvec(inval,2);
         double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
-        double a2 = bbcoll2.evalSinglePt(inval, 0); 
+        // double a2 = bbcoll2.evalSinglePt(inval, 0); 
         // speak("Single Baobzi", a1); 
-        std::cout << a2 << "," << std::endl; 
+        std::cout << a1 << "," << std::endl; 
         double bberr = ABS(a1 - sbound * D);
-        double bberr2 = ABS(a2 - sbound * D); 
+        // double bberr2 = ABS(a2 - sbound * D); 
         // speak("Single Baobzi Error", bberr); 
         // speak("Baobzi Error", bberr); 
         baobzierr.push_back(bberr); 
-        baobzierr2.push_back(bberr2); 
+        // baobzierr2.push_back(bberr2); 
         // myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
         // CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
     }
 
     speak("Average Error for Reverse LookUP", mean_error(rlerr));
     speak("Average Error for Chebyshev", mean_error(baobzierr)); 
-    speak("Average Error for Chebyshev 2", mean_error(baobzierr2)); 
+    // speak("Average Error for Chebyshev 2", mean_error(baobzierr2)); 
     // speak("Elapsed Time(s) for Chebyshev", dt1);
 
     // myfile.close(); 

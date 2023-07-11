@@ -144,8 +144,18 @@ class Cheb {
                     };
 
                     auto solve_func = [&](double caluplimit) { 
-                        double residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                            integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1]; 
+                        double residue; 
+                        // if under certain tolerance, consider integral value (x[1]) as 0. 
+                        if (ABS(x[1]) <= errortolerence) {
+                            residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
+                                integrand, 0, caluplimit / D, 10, 1e-6, &error); 
+                        }
+                        
+                        else {
+                            residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
+                                integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1]; 
+                        }
+                        
                         return residue;
                     }; 
 
