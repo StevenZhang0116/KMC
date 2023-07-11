@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 # Require Boost
 find_package(Boost REQUIRED)
+find_package(OpenMP REQUIRED)
+
 include_directories(${Boost_INCLUDE_DIRS})
 
 # Set libraries and include directories
@@ -18,6 +20,7 @@ target_include_directories(KMC INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:>)
     
-target_link_libraries(test_kmc PRIVATE KMC)
+target_link_libraries(test_kmc PRIVATE KMC
+                    OpenMP::OpenMP_CXX)
 
 add_test(NAME kmc_test COMMAND test_kmc)

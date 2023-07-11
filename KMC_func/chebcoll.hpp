@@ -111,6 +111,8 @@ class Chebcoll {
                 oneFixCenter = oneFixLength; 
                 // half-length
                 otherGrid = find_order(oneFixLength); 
+                // magnitude of grid size along both dimension
+                speak("Grid Size Magnitude - 1", otherGrid); 
                 while (the_upper_bound_ / otherGrid <= 1e2) {
                     otherGrid /= 10; 
                     std::cout << "=== MAKE GRID SMALLER === " << std::endl; 
@@ -118,12 +120,13 @@ class Chebcoll {
             }
 
             else if (ri == 3) {
+                double roww = tempkk.size();
                 std::cout << "==== Create Family of Reverse Checking ====" << std::endl; 
                 upBound = getUpperBound();
                 the_upper_bound_ = upBound; 
                 speak("UpBound (for one dimensions)", upBound);  
-                // speak("UpBound (for another dimension)", rr); 
-                otherGrid = 0.1;
+                otherGrid = find_order(upBound / roww);
+                speak("Grid Size Magnitude - 3", otherGrid); 
                 for (int i = 0; i < tempkk.size(); i++) {
                     double rr = tempkk[i][1];
                     double ll = tempkk[i][0];
@@ -136,8 +139,12 @@ class Chebcoll {
                     // oneFixCenter *= length_scale_; 
                     // match order
                     double tGrid = find_order(oneFixLength);
-                    tGrid = std::max(tGrid, 0.01); 
+                    speak("tGrid", tGrid); 
+                    double smallbound = 0.001; 
+                    assert(smallbound <= otherGrid); 
+                    tGrid = std::max(tGrid, smallbound); 
                     // should be integer, as division of 10's powers
+                    assert(tGrid <= otherGrid); 
                     double rrTimes = otherGrid / tGrid; 
                     int kk = ceil(rrTimes);
                     if (kk > 1) kk = round10(kk); 
@@ -164,18 +171,23 @@ class Chebcoll {
                 for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
                 // iteratively create Baobzi object
                 speak("Baobzi Objects need to be created", floor((ubound - lbound)/gridSize + 1)); 
-                speak("Grid Size Magnitude", otherGrid); // magnitude of grid size along both dimension
                 grid_size_magnitude_ = otherGrid; 
             }
             else if (ri == 3){
                 iterVec = cumulativeSum(gridVec); 
             }
 
+            // temporary variables
+            std::vector<Cheb> theallCheb(iterVec.size()); 
+            std::vector<double> thebreakPtsCollChange(iterVec.size()); 
+            std::vector<double> thebreakPtsCollUnchange(iterVec.size()); 
+            std::vector<double> thechebSpaceTaken(iterVec.size()); 
+
             int tri; 
             /* if want to normalize r⊥, change upper bound of iii to 1 (instead of iterVec.size()) */
+            #pragma omp parallel for
             for (size_t iii = 0; iii < iterVec.size(); iii++) {
                 double thisCenter = iterVec[iii]; 
-                if (ri == 3) speak("thisCenter", thisCenter); 
                 const auto st1 = get_wtime();
                 if (ri == 3) {
                     oneFixLength = lengthVec[iii];
@@ -195,15 +207,15 @@ class Chebcoll {
                     tri = ri; 
                 }
                 if (ri == 3) {
-                    std::cout << "hl: " << hl[0] << ";" << hl[1] << std::endl;
-                    std::cout << "center: " << center[0] << ";" << center[1] << std::endl;
+                    std::cout << "hl: " << otherGrid << ";" << oneFixLength << std::endl;
+                    std::cout << "center: " << thisCenter << ";" << oneFixCenter << std::endl;
                 }
                 Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, on, tri, tpon, the_upper_bound_);
                 double ssTaken = theBaobzi.approxFunc(); // taken space in Mb
-                allCheb.push_back(theBaobzi); 
-                breakPtsCollChange.push_back(thisCenter - otherGrid); 
-                breakPtsCollUnchange.push_back(oneFixCenter - oneFixLength); 
-                chebSpaceTaken.push_back(ssTaken);
+                theallCheb[iii] = theBaobzi; 
+                thebreakPtsCollChange[iii] = thisCenter - otherGrid; 
+                thebreakPtsCollUnchange[iii] = oneFixCenter - oneFixLength; 
+                thechebSpaceTaken[iii] = ssTaken;
                 if ((iii % 10 == 0) && (ri == 3)) { // only print log in reverse lookup
                     const auto ft1 = get_wtime();
                     const double dt1 = get_wtime_diff(&st1, &ft1);
@@ -212,6 +224,12 @@ class Chebcoll {
                 }
             }
             speak("Total Baobzi Family Space (MiB)", total_sum(chebSpaceTaken)); 
+
+            // save temporary variables to member variable of class
+            allCheb = theallCheb; 
+            breakPtsCollChange = thebreakPtsCollChange; 
+            breakPtsCollUnchange = thebreakPtsCollUnchange;
+            chebSpaceTaken = thechebSpaceTaken; 
         }
 
         /**
@@ -290,7 +308,7 @@ class Chebcoll {
                     myfile.open(searchfilename);
                 }
                 int cnt = 0; 
-                double prefac = 10; 
+                double prefac = 1; 
                 for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
                     std::vector<double> integralSaver; 
                     for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
@@ -314,7 +332,7 @@ class Chebcoll {
                     double minval = *std::min_element(std::begin(integralSaver), std::end(integralSaver));
                     // integral value must be positive
                     assert(maxval > 0); assert(minval > 0); 
-                    if ((ABS(maxval) <= 1e-2) && (ABS(minval) <= 1e-2)) {
+                    if ((ABS(maxval) <= 1e-3) && (ABS(minval) <= 1e-3)) {
                         maxval = 0;
                         minval = 0; 
                     }

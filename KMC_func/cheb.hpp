@@ -131,7 +131,7 @@ class Cheb {
 
                     double error = 0;
                     double shift = 1e-20; 
-                    double errortolerence = 1e-6; 
+                    double errortolerence = 1e-4; 
 
                     double lower_bound = 0.0 + shift; 
                     double upper_bound = 2; 
@@ -150,7 +150,7 @@ class Cheb {
                             residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
                                 integrand, 0, caluplimit / D, 10, 1e-6, &error); 
                         }
-                        
+
                         else {
                             residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
                                 integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1]; 
@@ -164,15 +164,20 @@ class Cheb {
                         *y = res.first;
                     } 
                     catch(...) {
-                        // *y = 0; 
-                        for (double i = lower_bound; i < upper_bound; i+=0.0001) {
-                            double res = solve_func(i); 
-                            if (ABS(res) < errortolerence) {
-                                *y = i; 
-                                break; 
+                        int did = 0; 
+                        if (did == 0) {
+                            *y = 0; 
+                        }
+                        else {
+                            /* will significant decrease the performance */
+                            for (double i = lower_bound; i < upper_bound; i += 0.0001) {
+                                double res = solve_func(i); 
+                                if (ABS(res) < errortolerence) {
+                                    *y = i; 
+                                    break; 
+                                }
                             }
                         }
-                        // std::cout << "a" << std::endl; 
                     }
                     
                 }

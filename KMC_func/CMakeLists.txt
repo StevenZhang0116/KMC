@@ -2,6 +2,7 @@
 file(GLOB HEADERS CONFIGURE_DEPENDS "*.hpp")
 
 find_package(Boost REQUIRED)
+
 set(LIB ${Boost_LIBRARIES})
 include_directories(${Boost_INCLUDE_DIRS})
 
