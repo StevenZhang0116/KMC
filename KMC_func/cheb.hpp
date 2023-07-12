@@ -21,7 +21,7 @@ class Cheb {
     public:
         double half_length[2];
         double center[2]; 
-        double param[4];
+        double param[10];
         baobzi_input_t input;
         const char* oname; 
         int indicator; 
@@ -36,8 +36,9 @@ class Cheb {
          * @brief constructor of Baobzi object
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
-        double D, const char* output_name, const int runind, const int porn, const double errortolerence = 1e-4, 
-        const double upperbound = 0, const double aconst = 0) {
+        double D, const char* output_name, const int runind, const int porn, const double errtol = 1e-4, 
+        const double upperbound = 0, const double e_fact = 0, const double fdep_length = 0, 
+        const double M1 = 0, const double M2 = 0, const double theconstant = 0) {
             
             memcpy(&half_length, &hl, sizeof(hl)); 
             assert(half_length[0] <= 1); assert(half_length[1] <= 1); // half length, <= 1
@@ -63,19 +64,31 @@ class Cheb {
             input.max_depth = 40; 
 
             // load external parameters to pass into Baobzi object
+            // cross-used in multiple subfunctions in conApproxFunc()
+            // 
             // param[0] = M: exponential constant factor -> exp_fact_
             // param[1] = ell0: protein rest length -> rest_length_
             // param[2] = D; diameter of rod crosslink is binding to  -> length_scale_
             // param[3] = upperbound; the cutoff radius for r⊥ and s
             // param[4] = constant; some arbitrarily defined constant
+            // param[5] = errtol; error tolerance (threshold) in integral value apprximation
+            // param[6] = e_fact; energy(load) sensitivity to unbinding
+            // param[7] = fdep_length; characteristic length for force dependent unbinding
+            // param[8] = M1; exponential constant factor when spring is compressed
+            // param[9] = M2; exponential constant factor when spring is stretched
             double M = alpha * D * D; 
             double ell0 = freelength / D; 
             param[0] = M; 
             param[1] = ell0; 
             param[2] = D; 
             param[3] = upperbound; 
-            param[4] = aconst; 
-            param[5] = errortolerence; 
+            param[4] = theconstant; 
+            param[5] = errtol; 
+            param[6] = e_fact; 
+            param[7] = fdep_length; 
+            param[8] = M1; 
+            param[9] = M2; 
+
             input.data = &param; 
 
             // determines which function approximation is implemented (e.g. lookup, reverse lookup)
@@ -85,15 +98,15 @@ class Cheb {
 
         /**
          *  @brief approximate functions (subject to choose at different scanerios)
-         *  1) carrier line cumulative distribution function 
-         *  2) binding volume function
+         * for whole list of explaining the integral functions, refer KMC_func/integrals.hpp
          *          
          *  @return integral value
          */
         inline std::function<void(const double*, double*, const void*)> conApproxFunc() {
+
             // x[0] = r⊥/lm: perpendicular distance above rod
             // x[1] = s: upper limit of integral
-            /* 1 */
+            /* Normal (Energy Dependent) Integral CDF - 1 */
             auto approxDefaultCDF = [](const double *x, double *y, const void *data) {
                 // check upperbound limit
                 if (x[1] <= 0) *y = 0; 
@@ -102,7 +115,6 @@ class Cheb {
                     const double M = ((double *) data)[0];
                     const double ell0 = ((double *) data)[1];
                     const double D = ((double *) data)[2]; 
-                    double error = 0; 
 
                     auto integrand = [&](double s) {
                         /* if want to normalize r⊥, /D after each *x[0] */
@@ -110,14 +122,93 @@ class Cheb {
                         return exp(-M * exponent * exponent);
                     };
 
+                    double error = 0; 
+                    // normalization with param
                     *y = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                            integrand, 0, x[1] / D, 10, 1e-6, &error); // normalization with param
+                            integrand, 0, x[1] / D, 10, 1e-6, &error); 
+                }
+            };
+
+            // x[0] = r⊥/lm: perpendicular distance above rod
+            // x[1] = s: upper limit of integral
+            /* Force Dependent Integral CDF - 6 */
+            auto approxFdepCDF = [](const double *x, double *y, const void *data) {
+                if (x[1] <= 0) *y = 0;
+                else {
+                    const double M = ((double *) data)[0];
+                    const double ell0 = ((double *) data)[1];
+                    const double D = ((double *) data)[2]; 
+                    const double e_fact = ((double *) data)[6];
+                    const double fdep_length = ((double *) data)[7]; 
+
+                    auto integrand = [&](double s) {
+                        const double rprime = sqrt(s * s + x[0] * x[0]) - ell0;
+                        const double energy_term = 0.5 * (1.0 - e_fact) * rprime * rprime;
+                        const double force_term = fdep_length * rprime;
+                        return exp(-M * (energy_term - force_term));
+                    };
+
+                    double error = 0; 
+                    *y = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
+                            integrand, 0, x[1] / D, 10, 1e-6, &error); 
+
+                }
+            };
+
+            // x[0] = r⊥/lm: perpendicular distance above rod
+            // x[1] = s: upper limit of integral
+            /* Assymetric Integral CDF - 7 */
+            auto approxAsymCDF = [](const double *x, double *y, const void *data) {
+                if (x[1] <= 0) *y = 0;
+                else {
+                    const double ell0 = ((double *) data)[1];
+                    const double D = ((double *) data)[2]; 
+                    const double e_fact = ((double *) data)[6];
+                    const double fdep_length = ((double *) data)[7];
+                    const double M1 = ((double *) data)[8];
+                    const double M2 = ((double *) data)[9];
+
+                    auto integrand = [&](double s) {
+                        const double rprime = sqrt(s * s + x[0] * x[0]) - ell0;
+                        const double energy_term = 0.5 * (1.0 - e_fact) * rprime * rprime;
+                        const double force_term = fdep_length * rprime;
+                        const double M = rprime < 0. ? M1 : M2; 
+                        return exp(-M * (energy_term - force_term));
+                    };
+
+                    double error = 0; 
+                    *y = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
+                            integrand, 0, x[1] / D, 10, 1e-6, &error); 
+
+                }
+            };
+
+            // x[0] = r⊥/lm: perpendicular distance above rod
+            // x[1] = s: upper limit of integral
+            /* Second Order Energy Dependent Integral CDF - 8 */
+            auto approxEdep2ndCDF = [](const double *x, double *y, const void *data) {
+                if (x[1] <= 0) *y = 0;
+                else {
+                    const double M = ((double *) data)[0];
+                    const double ell0 = ((double *) data)[1];
+                    const double D = ((double *) data)[2]; 
+
+                    // what if x[0] < 1? 
+                    auto integrand = [&](double s) {
+                        const double exponent = ((x[0] - 1.0) * sqrt(1.0 + (s * s / (x[0] * x[0])))) - ell0; 
+                        return exp(-M * exponent * exponent); 
+                    };
+
+                    double error = 0; 
+                    *y = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
+                            integrand, 0, x[1] / D, 10, 1e-6, &error); 
+
                 }
             };
 
             // x[0] = r⊥/lm: perpendicular distance above rod
             // x[1] = s': binding place on the rodll
-            /* 5 */
+            /* Normal PDf - 5 */
             auto approxPDF = [](const double *x, double *y, const void *data) {
                 if (x[1] <= 0) *y = 0; 
                 else {
@@ -131,7 +222,7 @@ class Cheb {
                     const double exponent = sqrt(x[1] / D * x[1] / D + x[0] * x[0]) - ell0;
                     const double res = exp(-M * exponent * exponent); 
 
-                    *y = res; 
+                    *y = D * res; 
 
                     /* this way would lead to singularity/non-derivative and is detrimental in approximation*/
                     // if (res > threshold) *y = res;
@@ -140,20 +231,19 @@ class Cheb {
             };
 
             /* Regardless of inputs, approximate the constant value function based on the input parameter 
-             * Used in saving computation cost through approximation in reverse lookup
-             */
-            /* 4 */
+             * Used in saving computation cost through approximation in reverse lookup */
+            /* Constant Function Approximation - 4 */
             auto approxConstantFunction = [](const double *x, double *y, const void *data) {
                 if (x[1] <= 0) *y = 0; 
                 else {
-                    const double cst = ((double*)data)[4]; 
-                    *y = cst; 
+                    const double theconstant = ((double*)data)[4]; 
+                    *y = theconstant; 
                 }
             }; 
 
             // x[0] = r⊥/lm: perpendicular distance above rod
             // x[1] = integral value 
-            /* 3 */
+            /* Reverse Lookup of Regular Integral CDF - 3 */
             auto reverApproxCDF = [](const double* x, double* y, const void* data) {
                 if (x[1] <= 0)
                     *y = 0;
@@ -163,7 +253,7 @@ class Cheb {
                     const double ell0 = ((double*)data)[1];
                     const double D = ((double*)data)[2];
                     const double ub = ((double*)data)[3];
-                    const double errortolerence = ((double*)data)[5]; 
+                    const double errtol = ((double*)data)[5]; 
 
                     double error = 0;
                     double shift = 1e-30; 
@@ -181,7 +271,7 @@ class Cheb {
                     auto solve_func = [&](double caluplimit) { 
                         double residue; 
                         // if under certain tolerance, consider integral value (x[1]) as 0. 
-                        if (ABS(x[1]) <= errortolerence) {
+                        if (ABS(x[1]) <= errtol) {
                             residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
                                 integrand, 0, caluplimit / D, 10, 1e-6, &error); 
                         }
@@ -207,7 +297,7 @@ class Cheb {
                             /* will significant decrease the performance */
                             for (double i = lower_bound; i < upper_bound; i += 0.0001) {
                                 double res = solve_func(i); 
-                                if (ABS(res) < errortolerence) {
+                                if (ABS(res) < errtol) {
                                     *y = i; 
                                     break; 
                                 }
@@ -220,7 +310,7 @@ class Cheb {
 
             // x[0] = s: upper limit of integral
             // x[1] = M (manipulated, not public parameter of class)
-            /* 2 */
+            /* Binding Volume Approximation in the normal CDF scanerio - 2 */
             auto approxBindV = [](const double *x, double *y, const void *data) {
                 if (x[1] <= 0) *y = 0; 
                 else {
@@ -246,6 +336,9 @@ class Cheb {
             else if (indicator == 3) return reverApproxCDF; 
             else if (indicator == 4) return approxConstantFunction; 
             else if (indicator == 5) return approxPDF; 
+            else if (indicator == 6) return approxFdepCDF; 
+            else if (indicator == 7) return approxAsymCDF; 
+            else if (indicator == 8) return approxEdep2ndCDF; 
             else throw std::invalid_argument("Invalid choice -> Parameter Setting Error");
         }
         

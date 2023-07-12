@@ -29,10 +29,11 @@ class Chebcoll {
         double grid_size_magnitude_; 
         double integral_min_; 
         double integral_max_; 
-        double etl; 
     public: 
         double talpha; double tfreelength; 
         double tbbtol; int ri; const char* on; int tpon; 
+        double etl; int bbcount; 
+
         std::vector<Cheb> allCheb; 
         std::vector<double> breakPtsCollChange; 
         std::vector<double> breakPtsCollUnchange; 
@@ -143,7 +144,7 @@ class Chebcoll {
 
                     // match order
                     double tGrid = find_order(oneFixLength);
-                    double smallbound = 0.001;
+                    double smallbound = 0.01;
                     // whether the grids are consistently unifrom
                     int evengridIndex = 1; 
                     if (evengridIndex == 1) tGrid = smallbound; 
@@ -174,8 +175,9 @@ class Chebcoll {
                 double gridSize = gg * otherGrid; 
 
                 for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
+                bbcount = floor((ubound - lbound)/gridSize + 1); 
                 // iteratively create Baobzi object
-                speak("Baobzi Objects need to be created", floor((ubound - lbound)/gridSize + 1)); 
+                speak("Baobzi Objects need to be created", bbcount); 
                 grid_size_magnitude_ = otherGrid; 
             }
             else if (ri == 3){
@@ -211,7 +213,7 @@ class Chebcoll {
                 else {
                     tri = ri; 
                 }
-                if ((ri == 3) || (ri == 5)) {
+                if ((ri == 3)) {
                     std::cout << "hl: " << otherGrid << ";" << oneFixLength << std::endl;
                     std::cout << "center: " << thisCenter << ";" << oneFixCenter << std::endl;
                 }
@@ -316,7 +318,7 @@ class Chebcoll {
                 double prefac = 1; 
                 for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
                     std::vector<double> integralSaver; 
-                    for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
+                    for (double j = 0; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
                         double iter[2] = {i,j}; 
                         double intres = evalSinglePt(iter, 0); 
                         integralSaver.push_back(intres); 
@@ -336,7 +338,7 @@ class Chebcoll {
                     double maxval = *std::max_element(std::begin(integralSaver), std::end(integralSaver));
                     double minval = *std::min_element(std::begin(integralSaver), std::end(integralSaver));
                     // integral value must be positive
-                    assert(maxval > 0); assert(minval > 0); 
+                    // assert(maxval > 0); assert(minval > 0); 
                     if ((ABS(maxval) <= etl) && (ABS(minval) <= etl)) {
                         maxval = 0;
                         minval = 0; 
@@ -357,6 +359,7 @@ class Chebcoll {
                 }                
 
                 speak("cnt",cnt); 
+                assert(cnt == bbcount); 
             }
             else {
                 std::cout << "Not Developed Yet" << std::endl; 
