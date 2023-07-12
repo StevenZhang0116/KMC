@@ -36,7 +36,8 @@ class Cheb {
          * @brief constructor of Baobzi object
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
-        double D, const char* output_name, const int runind, const int porn, const double upperbound = 0, const double aconst = 0) {
+        double D, const char* output_name, const int runind, const int porn, const double errortolerence = 1e-4, 
+        const double upperbound = 0, const double aconst = 0) {
             
             memcpy(&half_length, &hl, sizeof(hl)); 
             assert(half_length[0] <= 1); assert(half_length[1] <= 1); // half length, <= 1
@@ -60,7 +61,8 @@ class Cheb {
             input.split_multi_eval = 1;
             input.min_depth = 0;
             input.max_depth = 40; 
-            // load external parameters
+
+            // load external parameters to pass into Baobzi object
             // param[0] = M: exponential constant factor -> exp_fact_
             // param[1] = ell0: protein rest length -> rest_length_
             // param[2] = D; diameter of rod crosslink is binding to  -> length_scale_
@@ -68,8 +70,14 @@ class Cheb {
             // param[4] = constant; some arbitrarily defined constant
             double M = alpha * D * D; 
             double ell0 = freelength / D; 
-            param[0] = M; param[1] = ell0; param[2] = D; param[3] = upperbound; param[4] = aconst; 
+            param[0] = M; 
+            param[1] = ell0; 
+            param[2] = D; 
+            param[3] = upperbound; 
+            param[4] = aconst; 
+            param[5] = errortolerence; 
             input.data = &param; 
+
             // determines which function approximation is implemented (e.g. lookup, reverse lookup)
             indicator = runind; 
             oname = output_name; 
@@ -85,7 +93,8 @@ class Cheb {
         inline std::function<void(const double*, double*, const void*)> conApproxFunc() {
             // x[0] = r⊥/lm: perpendicular distance above rod
             // x[1] = s: upper limit of integral
-            auto approxCDF = [](const double *x, double *y, const void *data) {
+            /* 1 */
+            auto approxDefaultCDF = [](const double *x, double *y, const void *data) {
                 // check upperbound limit
                 if (x[1] <= 0) *y = 0; 
                 else {
@@ -106,9 +115,34 @@ class Cheb {
                 }
             };
 
+            // x[0] = r⊥/lm: perpendicular distance above rod
+            // x[1] = s': binding place on the rodll
+            /* 5 */
+            auto approxPDF = [](const double *x, double *y, const void *data) {
+                if (x[1] <= 0) *y = 0; 
+                else {
+                    const double M = ((double *) data)[0];
+                    const double ell0 = ((double *) data)[1];
+                    const double D = ((double *) data)[2];
+
+                    const double threshold = 0.1; 
+
+                    // normal integrand
+                    const double exponent = sqrt(x[1] / D * x[1] / D + x[0] * x[0]) - ell0;
+                    const double res = exp(-M * exponent * exponent); 
+
+                    *y = res; 
+
+                    /* this way would lead to singularity/non-derivative and is detrimental in approximation*/
+                    // if (res > threshold) *y = res;
+                    // else *y = 0; 
+                }
+            };
+
             /* Regardless of inputs, approximate the constant value function based on the input parameter 
              * Used in saving computation cost through approximation in reverse lookup
              */
+            /* 4 */
             auto approxConstantFunction = [](const double *x, double *y, const void *data) {
                 if (x[1] <= 0) *y = 0; 
                 else {
@@ -119,6 +153,7 @@ class Cheb {
 
             // x[0] = r⊥/lm: perpendicular distance above rod
             // x[1] = integral value 
+            /* 3 */
             auto reverApproxCDF = [](const double* x, double* y, const void* data) {
                 if (x[1] <= 0)
                     *y = 0;
@@ -128,10 +163,10 @@ class Cheb {
                     const double ell0 = ((double*)data)[1];
                     const double D = ((double*)data)[2];
                     const double ub = ((double*)data)[3];
+                    const double errortolerence = ((double*)data)[5]; 
 
                     double error = 0;
-                    double shift = 1e-20; 
-                    double errortolerence = 1e-4; 
+                    double shift = 1e-30; 
 
                     double lower_bound = 0.0 + shift; 
                     double upper_bound = 2; 
@@ -185,6 +220,7 @@ class Cheb {
 
             // x[0] = s: upper limit of integral
             // x[1] = M (manipulated, not public parameter of class)
+            /* 2 */
             auto approxBindV = [](const double *x, double *y, const void *data) {
                 if (x[1] <= 0) *y = 0; 
                 else {
@@ -205,10 +241,11 @@ class Cheb {
                 }
             };
             
-            if (indicator == 1) return approxCDF;
+            if (indicator == 1) return approxDefaultCDF;
             else if (indicator == 2) return approxBindV; 
             else if (indicator == 3) return reverApproxCDF; 
             else if (indicator == 4) return approxConstantFunction; 
+            else if (indicator == 5) return approxPDF; 
             else throw std::invalid_argument("Invalid choice -> Parameter Setting Error");
         }
         

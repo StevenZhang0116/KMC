@@ -29,6 +29,7 @@ class Chebcoll {
         double grid_size_magnitude_; 
         double integral_min_; 
         double integral_max_; 
+        double etl; 
     public: 
         double talpha; double tfreelength; 
         double tbbtol; int ri; const char* on; int tpon; 
@@ -46,8 +47,8 @@ class Chebcoll {
         ~Chebcoll() = default;
 
         Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, 
-        std::vector<double> integralMinMax = std::vector<double>(), const char* output_name = "func_approx.baobzi", 
-        const int printOrNot = 0) {
+        std::vector<double> integralMinMax = std::vector<double>(), const double errortolerence = 1e-4, 
+        const char* output_name = "func_approx.baobzi", const int printOrNot = 0) {
             // initialize dimensionless 
             length_scale_ = D; 
             exp_fact_ = alpha * length_scale_ * length_scale_;
@@ -65,8 +66,10 @@ class Chebcoll {
                 assert(runind == 3); 
                 integral_min_ = integralMinMax[0];
                 integral_max_ = integralMinMax[1]; 
-                std::cout << "Setup integral max/min value in Constructor: " << integral_min_ << "," << integral_max_ << std::endl; 
+                std::cout << "Setup integral max/min value in Constructor for Reverse Lookup: " << integral_min_ << "," << integral_max_ << std::endl; 
             }
+            etl = errortolerence; 
+            speak("Tolerance of Approximating Integral to 0", etl); 
         }
 
         /**
@@ -101,7 +104,7 @@ class Chebcoll {
             std::vector<double> lengthVec; 
             std::vector<double> centerVec; 
             std::vector<double> gridVec;
-            if (ri == 1){
+            if ((ri == 1) || (ri == 5)){
                 std::cout << "==== Create Family of Positive Checking ====" << std::endl; 
                 upBound = getUpperBound();
                 the_upper_bound_ = upBound; 
@@ -137,10 +140,11 @@ class Chebcoll {
                     // normalization (?)
                     // oneFixLength *= length_scale_; 
                     // oneFixCenter *= length_scale_; 
+
                     // match order
                     double tGrid = find_order(oneFixLength);
-                    double smallbound = 0.01;
-
+                    double smallbound = 0.001;
+                    // whether the grids are consistently unifrom
                     int evengridIndex = 1; 
                     if (evengridIndex == 1) tGrid = smallbound; 
                     else tGrid = std::max(tGrid, smallbound);
@@ -162,7 +166,7 @@ class Chebcoll {
             }
 
             std::vector<double> iterVec;
-            if (ri == 1) {
+            if ((ri == 1) || (ri == 5)) {
                 // declare bound for the fixed parameter, usually distPerp (vertical distance)
                 double lbound = otherGrid; 
                 double ubound = upBound - otherGrid; 
@@ -186,7 +190,7 @@ class Chebcoll {
 
             int tri; 
             /* if want to normalize r⊥, change upper bound of iii to 1 (instead of iterVec.size()) */
-            #pragma omp parallel for
+            // #pragma omp parallel for
             for (size_t iii = 0; iii < iterVec.size(); iii++) {
                 double thisCenter = iterVec[iii]; 
                 const auto st1 = get_wtime();
@@ -207,11 +211,11 @@ class Chebcoll {
                 else {
                     tri = ri; 
                 }
-                if (ri == 3) {
+                if ((ri == 3) || (ri == 5)) {
                     std::cout << "hl: " << otherGrid << ";" << oneFixLength << std::endl;
                     std::cout << "center: " << thisCenter << ";" << oneFixCenter << std::endl;
                 }
-                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, on, tri, tpon, the_upper_bound_);
+                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, on, tri, tpon, etl, the_upper_bound_);
                 double ssTaken = theBaobzi.approxFunc(); // taken space in Mb
                 theallCheb[iii] = theBaobzi; 
                 thebreakPtsCollChange[iii] = thisCenter - otherGrid; 
@@ -293,7 +297,7 @@ class Chebcoll {
             std::vector<std::vector<double>> intSpecSaver; 
             std::vector<double> errorTrueSaver;
             // currently only allow normal lookup
-            if (ri == 1) {
+            if ((ri == 1) || (ri == 5)) {
                 std::ofstream myfile; 
                 if (recorddata == 1) {
                     std::cout << "==START RECORD DATA==" << std::endl;
@@ -314,7 +318,7 @@ class Chebcoll {
                     std::vector<double> integralSaver; 
                     for (double j = grid_size_magnitude_; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
                         double iter[2] = {i,j}; 
-                        double intres = evalSinglePt(iter,0); 
+                        double intres = evalSinglePt(iter, 0); 
                         integralSaver.push_back(intres); 
                         if (recorddata == 1){ 
                             // [vertical distance] << [scan length] << [lookup table result]
@@ -333,7 +337,7 @@ class Chebcoll {
                     double minval = *std::min_element(std::begin(integralSaver), std::end(integralSaver));
                     // integral value must be positive
                     assert(maxval > 0); assert(minval > 0); 
-                    if ((ABS(maxval) <= 1e-3) && (ABS(minval) <= 1e-3)) {
+                    if ((ABS(maxval) <= etl) && (ABS(minval) <= etl)) {
                         maxval = 0;
                         minval = 0; 
                     }
@@ -355,7 +359,7 @@ class Chebcoll {
                 speak("cnt",cnt); 
             }
             else {
-                std::cout << "Not Developed Yet" << std::endl; ll
+                std::cout << "Not Developed Yet" << std::endl; 
             }
             return intSpecSaver; 
         }
