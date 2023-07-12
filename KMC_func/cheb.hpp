@@ -37,7 +37,7 @@ class Cheb {
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
         double D, const char* output_name, const int runind, const int porn, const double upperbound = 0, const double aconst = 0) {
-            // std::cout << "Construct Baobzi Object" << std::endl;
+            
             memcpy(&half_length, &hl, sizeof(hl)); 
             assert(half_length[0] <= 1); assert(half_length[1] <= 1); // half length, <= 1
             memcpy(&center, &cen, sizeof(cen)); 

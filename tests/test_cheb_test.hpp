@@ -35,7 +35,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::cout << "==== DEMO REVERSE CHECK SPRING TEST ====" << std::endl; 
     const double tol = 1e-2;
     const double D = 0.024;
-    const double alpha = 0.1 / (2 * 0.00411);
+    const double alpha = 1 / (2 * 0.00411);
     const double freelength = 0.05;
     const double M = alpha * D * D;
     const double ell0 = freelength / D;

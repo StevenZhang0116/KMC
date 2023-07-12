@@ -139,12 +139,13 @@ class Chebcoll {
                     // oneFixCenter *= length_scale_; 
                     // match order
                     double tGrid = find_order(oneFixLength);
-                    speak("tGrid", tGrid); 
-                    double smallbound = 0.001; 
-                    assert(smallbound <= otherGrid); 
-                    tGrid = std::max(tGrid, smallbound); 
+                    double smallbound = 0.01;
+
+                    int evengridIndex = 1; 
+                    if (evengridIndex == 1) tGrid = smallbound; 
+                    else tGrid = std::max(tGrid, smallbound);
+                    
                     // should be integer, as division of 10's powers
-                    assert(tGrid <= otherGrid); 
                     double rrTimes = otherGrid / tGrid; 
                     int kk = ceil(rrTimes);
                     if (kk > 1) kk = round10(kk); 
@@ -352,6 +353,9 @@ class Chebcoll {
                 }                
 
                 speak("cnt",cnt); 
+            }
+            else {
+                std::cout << "Not Developed Yet" << std::endl; ll
             }
             return intSpecSaver; 
         }
