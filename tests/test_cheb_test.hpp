@@ -35,7 +35,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::cout << "==== DEMO REVERSE CHECK SPRING TEST ====" << std::endl; 
     const double tol = 1e-2;
     const double D = 0.024;
-    const double alpha = 1 / (2 * 0.00411);
+    const double alpha = 0.5 / (2 * 0.00411);
     const double freelength = 0.05;
     const double M = alpha * D * D;
     const double ell0 = freelength / D;
@@ -47,7 +47,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     LookupTable LUT(&lut_filler);
 
     double distPerp = 0;
-    distPerp = 4 * D;
+    distPerp = 2 * D;
 
     double testbound = LUT.getNonDsbound()/2; 
     double startbound = 0.1; 
@@ -60,7 +60,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::vector<double> baobzierr2; 
 
     // ("distPerp = 0.2 > D+ell0, single peaked")
-    for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
+    for (double sbound = startbound; sbound < testbound - 0.5; sbound += boundgrid) {
         double val = integral(distPerp / D, 0, sbound, M, ell0);
         double a1 = LUT.ReverseLookup(distPerp, val * D); 
         std::cout << a1 << "," << std::endl; 
@@ -97,14 +97,14 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     bbcoll.createBaobziFamily(); 
     std::vector<std::vector<double>> tempkk = bbcoll.findExtremeVal(0, 1); 
     std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
-    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, integralMinMax, 1e-3);
+    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-2, integralMinMax, 1e-3);
     bbcoll2.createBaobziFamily(tempkk); 
 
     // const auto st1 = get_wtime();
-    Cheb theBaobzi(hl,center,1e-4,alpha,freelength,D,fn,3,0);
+    Cheb theBaobzi(hl, center, 1e-1, alpha, freelength, D, fn, 3, 0);
     theBaobzi.approxFunc();
 
-    for (double sbound = startbound; sbound < testbound - startbound; sbound += boundgrid) {
+    for (double sbound = startbound; sbound < testbound - 0.5; sbound += boundgrid) {
         // speak("sbound", sbound); 
         double val = integral(distPerp / D, 0, sbound, M, ell0); 
         // speak("val*D",val * D); 

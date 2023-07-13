@@ -36,12 +36,14 @@ class Cheb {
          * @brief constructor of Baobzi object
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
-        double D, const char* output_name, const int runind, const int porn, const double errtol = 1e-4, 
+        double D, const char* output_name, const int runind, const int porn, const double errtol = 1e-3, 
         const double upperbound = 0, const double e_fact = 0, const double fdep_length = 0, 
         const double M1 = 0, const double M2 = 0, const double theconstant = 0) {
             
             memcpy(&half_length, &hl, sizeof(hl)); 
-            assert(half_length[0] <= 1); assert(half_length[1] <= 1); // half length, <= 1
+            // half length, <= 1, to satisfy Baobzi requirement
+            assert(half_length[0] <= 1); 
+            assert(half_length[1] <= 1); 
             memcpy(&center, &cen, sizeof(cen)); 
             // whether to log output
             printOrNot = porn; 
@@ -259,7 +261,7 @@ class Cheb {
                     double shift = 1e-30; 
 
                     double lower_bound = 0.0 + shift; 
-                    double upper_bound = 2; 
+                    double upper_bound = 20; 
                     boost::uintmax_t max_iter = 1000; // Maximum number of iterations
                     boost::math::tools::eps_tolerance<double> tolerance(30); // Desired tolerance
 
@@ -289,11 +291,9 @@ class Cheb {
                         *y = res.first;
                     } 
                     catch(...) {
-                        int did = 0; 
-                        if (did == 0) {
-                            *y = 0; 
-                        }
-                        else {
+                        int did = 1;  
+                        if (did == 0) *y = 0; 
+                        else if (did == 1) {
                             /* will significant decrease the performance */
                             for (double i = lower_bound; i < upper_bound; i += 0.0001) {
                                 double res = solve_func(i); 
@@ -303,6 +303,7 @@ class Cheb {
                                 }
                             }
                         }
+                        else throw std::invalid_argument("Root Seeking Error!");
                     }
                     
                 }
@@ -374,10 +375,14 @@ class Cheb {
          * 
          * @return binary value
          */
-        inline int checkInclude(double (&pt)[2]) {
+        inline int checkInclude(double (&pt)[2], const int errorIndex) {
             try {
-                // std::cout << center[0] << "," << half_length[0] << "," << pt[0] << std::endl; 
-                // std::cout << center[1] << "," << half_length[1] << "," << pt[1] << std::endl; 
+                if (errorIndex == 1) {
+                    std::cout << "==========" << std::endl; 
+                    std::cout << center[0] << "," << half_length[0] << "," << pt[0] << std::endl; 
+                    std::cout << center[1] << "," << half_length[1] << "," << pt[1] << std::endl; 
+                    std::cout << "==========" << std::endl; 
+                }
                 if ((pt[0] >= center[0] - half_length[0]) && (pt[0] <= center[0] + half_length[0]) 
                 && (pt[1] >= center[1] - half_length[1]) && (pt[1] <= center[1] + half_length[1])) {
                     return 1; 

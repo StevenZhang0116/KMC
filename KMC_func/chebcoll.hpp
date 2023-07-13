@@ -30,9 +30,14 @@ class Chebcoll {
         double integral_min_; 
         double integral_max_; 
     public: 
-        double talpha; double tfreelength; 
-        double tbbtol; int ri; const char* on; int tpon; 
-        double etl; int bbcount; 
+        double talpha; 
+        double tfreelength; 
+        double tbbtol; 
+        int ri; 
+        const char* on; 
+        int tpon; 
+        double etl; 
+        int bbcount; 
 
         std::vector<Cheb> allCheb; 
         std::vector<double> breakPtsCollChange; 
@@ -41,14 +46,14 @@ class Chebcoll {
     
     private:
         static constexpr double small_ = 1e-6;
-        static constexpr double shift_small_ = 1e-10; 
+        const double buffer_distance_ = 1e-2; 
     
     public:
         Chebcoll() = default;
         ~Chebcoll() = default;
 
         Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, 
-        std::vector<double> integralMinMax = std::vector<double>(), const double errortolerence = 1e-4, 
+        std::vector<double> integralMinMax = std::vector<double>(), const double errortolerence = 1e-3, 
         const char* output_name = "func_approx.baobzi", const int printOrNot = 0) {
             // initialize dimensionless 
             length_scale_ = D; 
@@ -100,11 +105,16 @@ class Chebcoll {
         */
 
         inline void createBaobziFamily(std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>()) {
-            double upBound; double oneFixLength; 
-            double oneFixCenter; double otherGrid; 
+            double upBound; 
+            double oneFixLength; 
+            double oneFixCenter; 
+            double otherGrid; 
+            double gridLoader = 1e-10; 
+
             std::vector<double> lengthVec; 
             std::vector<double> centerVec; 
             std::vector<double> gridVec;
+            // normal lookup scanerio
             if ((ri == 1) || (ri == 5)){
                 std::cout << "==== Create Family of Positive Checking ====" << std::endl; 
                 upBound = getUpperBound();
@@ -122,7 +132,7 @@ class Chebcoll {
                     std::cout << "=== MAKE GRID SMALLER === " << std::endl; 
                 }
             }
-
+            // reverse lookup scanerio
             else if (ri == 3) {
                 double roww = tempkk.size();
                 std::cout << "==== Create Family of Reverse Checking ====" << std::endl; 
@@ -144,7 +154,15 @@ class Chebcoll {
 
                     // match order
                     double tGrid = find_order(oneFixLength);
-                    double smallbound = 0.01;
+                    // randomly chosen ~0.01 seems to be a reasonable choice
+                    double smallbound = 0.01; 
+                    gridLoader = smallbound; 
+
+                    if (tbbtol < gridLoader) {
+                        tbbtol = gridLoader; 
+                        std::cout << "Change tolerance to " << gridLoader << std::endl; 
+                    }
+                    
                     // whether the grids are consistently unifrom
                     int evengridIndex = 1; 
                     if (evengridIndex == 1) tGrid = smallbound; 
@@ -191,6 +209,7 @@ class Chebcoll {
             std::vector<double> thechebSpaceTaken(iterVec.size()); 
 
             int tri; 
+            double totalTime; 
             /* if want to normalize r⊥, change upper bound of iii to 1 (instead of iterVec.size()) */
             // #pragma omp parallel for
             for (size_t iii = 0; iii < iterVec.size(); iii++) {
@@ -203,8 +222,9 @@ class Chebcoll {
                 }
                 /* if want to normalize r⊥, change the first coordinates of hl[] and center[] 
                  * to the second coordinate */ 
-                double hl[2] = {otherGrid, oneFixCenter};
+                double hl[2] = {otherGrid, oneFixLength};
                 double center[2] = {thisCenter, oneFixCenter}; 
+                // only happens in reverse lookup where the small integral value is clamped to 0
                 if ((hl[1] == 0.0) && (center[1] == 0.0)) {
                     tri = 4; 
                     hl[1] = 1; 
@@ -213,24 +233,29 @@ class Chebcoll {
                 else {
                     tri = ri; 
                 }
-                if ((ri == 3)) {
+
+                if ((ri == 3) && (tpon == 1)) {
                     std::cout << "hl: " << otherGrid << ";" << oneFixLength << std::endl;
                     std::cout << "center: " << thisCenter << ";" << oneFixCenter << std::endl;
                 }
+
                 Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, on, tri, tpon, etl, the_upper_bound_);
                 double ssTaken = theBaobzi.approxFunc(); // taken space in Mb
                 theallCheb[iii] = theBaobzi; 
                 thebreakPtsCollChange[iii] = thisCenter - otherGrid; 
                 thebreakPtsCollUnchange[iii] = oneFixCenter - oneFixLength; 
                 thechebSpaceTaken[iii] = ssTaken;
-                if ((iii % 10 == 0) && (ri == 3)) { // only print log in reverse lookup
-                    const auto ft1 = get_wtime();
-                    const double dt1 = get_wtime_diff(&st1, &ft1);
+                const auto ft1 = get_wtime();
+                const double dt1 = get_wtime_diff(&st1, &ft1);
+                totalTime += dt1; 
+                // only print log in reverse lookup
+                if ((iii % 100 == 0) && (ri == 3)) { 
                     speak("Baobzi Created", iii); 
                     speak("Needed Time per object (s)", dt1); 
                 }
             }
             speak("Total Baobzi Family Space (MiB)", total_sum(chebSpaceTaken)); 
+            speak("Total Time to Build Up Baobzi Family", totalTime); 
 
             // save temporary variables to member variable of class
             allCheb = theallCheb; 
@@ -273,7 +298,7 @@ class Chebcoll {
                 for (int i = 0; i < gridNum - 1; i++) {
                     if ((breakPtsCollChange[i] <= ptCenter[0]) 
                         && (breakPtsCollChange[i+1] >= ptCenter[0]) 
-                        // && (breakPtsCollUnchange[i] <= ptCenter[1])
+                        && (breakPtsCollUnchange[i] <= ptCenter[1])
                     ) {
                         pickPt = i; 
                         break;
@@ -282,12 +307,13 @@ class Chebcoll {
                 }
             }            
 
-            // speak("pickpt", pickPt); 
             Cheb pickBaobzi = allCheb[pickPt];
-            int checkContain = pickBaobzi.checkInclude(ptCenter); 
-            assert(checkContain == 1); 
-            double approxVal = pickBaobzi.evalFunc(ptCenter);
-            return approxVal; 
+            int checkContain = pickBaobzi.checkInclude(ptCenter, 0); 
+            if (checkContain == 1) {
+                double approxVal = pickBaobzi.evalFunc(ptCenter);
+                return approxVal; 
+            }
+            else throw std::invalid_argument("LOOKUP ERROR -- MUST BE DOMAIN ISSUE");
         }
 
         /**
@@ -349,11 +375,10 @@ class Chebcoll {
                     cnt++; 
                 }
                 if (recorddata == 1) {
-                    std::cout << "==FINISH RECORD DATA==" << std::endl;
+                    std::cout << "== FINISH RECORD DATA ==" << std::endl;
                     myfile.close(); 
                 }
                 if (calerror == 1){
-                    std::cout << "==== Comparison Statistics [Inaccurate Time Measurement] ====" << std::endl;
                     speak("Mean Error of Cheb Family to Real Value over Whole Domain", mean_error(errorTrueSaver));
                     std::cout << "==== END ====" << std::endl; 
                 }                
