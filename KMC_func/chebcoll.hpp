@@ -234,7 +234,7 @@ class Chebcoll {
                     tri = ri; 
                 }
 
-                if ((ri == 3) && (tpon == 1)) {
+                if ((ri == 3)) {
                     std::cout << "hl: " << otherGrid << ";" << oneFixLength << std::endl;
                     std::cout << "center: " << thisCenter << ";" << oneFixCenter << std::endl;
                 }
@@ -254,7 +254,7 @@ class Chebcoll {
                     speak("Needed Time per object (s)", dt1); 
                 }
             }
-            speak("Total Baobzi Family Space (MiB)", total_sum(chebSpaceTaken)); 
+            speak("Total Baobzi Family Space (MiB)", total_sum(thechebSpaceTaken)); 
             speak("Total Time to Build Up Baobzi Family", totalTime); 
 
             // save temporary variables to member variable of class
@@ -275,12 +275,6 @@ class Chebcoll {
             if (ptCenter[0] > the_upper_bound_) {
                 // printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
                 ptCenter[0] = the_upper_bound_ - grid_size_magnitude_; 
-                bs = 0;  
-            }
-
-            if ((ptCenter[1] > integral_max_) && (ri == 3)) {
-                printf("Baobzi Family Warning: integral %g very large, clamp to integral UB %g \n", ptCenter[1], integral_max_);
-                ptCenter[1] = integral_max_ - std::max(integral_min_, 1e-5); 
                 bs = 0;  
             }
 
@@ -305,15 +299,26 @@ class Chebcoll {
                     }
                     pickPt = gridNum - 1; 
                 }
-            }            
+            }    
+            
+            // desired Baobzi object after searching for calculation
+            Cheb pickBaobzi = allCheb[pickPt]; 
 
-            Cheb pickBaobzi = allCheb[pickPt];
+            double intOB = pickBaobzi.center[1] + pickBaobzi.half_length[1]; 
+            if ((ptCenter[1] > intOB) && (ri == 3)) {
+                printf("Baobzi Family Warning: integral %g very large, clamp to integral UB %g \n", ptCenter[1], intOB);
+                ptCenter[1] = intOB - std::max(integral_min_, 1e-5);
+            }       
+
+            
             int checkContain = pickBaobzi.checkInclude(ptCenter, 0); 
             if (checkContain == 1) {
                 double approxVal = pickBaobzi.evalFunc(ptCenter);
                 return approxVal; 
             }
-            else throw std::invalid_argument("LOOKUP ERROR -- MUST BE DOMAIN ISSUE");
+            else {
+                throw std::invalid_argument("BAOBZI DOMAIN ERROR");
+            }
         }
 
         /**

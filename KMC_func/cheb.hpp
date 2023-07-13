@@ -70,7 +70,7 @@ class Cheb {
             // 
             // param[0] = M: exponential constant factor -> exp_fact_
             // param[1] = ell0: protein rest length -> rest_length_
-            // param[2] = D; diameter of rod crosslink is binding to  -> length_scale_
+            // param[2] = D; dimensional diameter of rod crosslink is binding to  -> length_scale_
             // param[3] = upperbound; the cutoff radius for r⊥ and s
             // param[4] = constant; some arbitrarily defined constant
             // param[5] = errtol; error tolerance (threshold) in integral value apprximation
@@ -348,7 +348,7 @@ class Cheb {
          * 
          * @return null
         */
-        inline double approxFunc() {
+        inline size_t approxFunc() {
             if (printOrNot == 1) std::cout << "Generate Function Approximator" << std::endl; 
             baobzi::Function<2,10,0,double> func_approx(&input, center, half_length, conApproxFunc(), {});
             double spaceTaken = func_approx.print_stats(printOrNot);
