@@ -35,7 +35,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::cout << "==== DEMO REVERSE CHECK SPRING TEST ====" << std::endl; 
     const double tol = 1e-2;
     const double D = 0.024;
-    const double alpha = 0.1 / (2 * 0.00411);
+    const double alpha = 10 / (2 * 0.00411);
     const double freelength = 0.05;
     const double M = alpha * D * D;
     const double ell0 = freelength / D;
@@ -56,6 +56,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     size_t gridcnt = (testbound - startbound) / boundgrid; 
     std::vector<double> intval; 
     std::vector<double> rlerr; 
+    std::vector<double> rlerr2;
     std::vector<double> baobzierr; 
     std::vector<double> baobzierr2; 
 
@@ -63,7 +64,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     for (double sbound = startbound; sbound < testbound - 0.5; sbound += boundgrid) {
         double val = integral(distPerp / D, 0, sbound, M, ell0);
         double a1 = LUT.ReverseLookup(distPerp, val * D); 
-        std::cout << a1 << "," << std::endl; 
+        // std::cout << a1 << "," << std::endl; 
         // speak("val",val); 
         double err = ABS(a1 - sbound * D); 
         rlerr.push_back(err); 
@@ -99,38 +100,45 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
     Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, integralMinMax, 1e-3);
     bbcoll2.createBaobziFamily(tempkk); 
+    std::vector<std::vector<double>> tempkk2 = bbcoll2.findExtremeVal(1,1,testbound);
 
     // const auto st1 = get_wtime();
     // Cheb theBaobzi(hl, center, 1e-1, alpha, freelength, D, fn, 3, 0);
     // theBaobzi.approxFunc();
 
-    for (double i = 0; i < std::floor(bbcoll2.getUpperBound()); i++)
-        distPerp = i * D; 
-        for (double sbound = startbound; sbound < testbound - 0.5; sbound += boundgrid) {
-            // speak("sbound", sbound); 
-            double val = integral(distPerp / D, 0, sbound, M, ell0); 
-            // speak("val*D",val * D); 
-            double inval[] = {distPerp / D, val * D}; 
-            // speakvec(inval,2);
-            // double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
-            double a2 = bbcoll2.evalSinglePt(inval, 0); 
-            // speak("Single Baobzi", a1); 
-            // double bberr = ABS(a1 - sbound * D);
-            double bberr2 = ABS(a2 - sbound * D); 
-            std::cout << a2 << "," << std::endl; 
-            // speak("Single Baobzi Error", bberr); 
-            // speak("Baobzi Error", bberr); 
-            baobzierr.push_back(bberr); 
-            baobzierr2.push_back(bberr2); 
-            // myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
-            // CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
-        }
-    }
+    // int cnt = 0; 
+    // for (double i = 0; i < testbound - 0.5; i += 0.1) {
+    //     distPerp = i * D; 
+    //     for (double sbound = startbound; sbound < testbound - 0.5; sbound += boundgrid) {
+    //         // speak("sbound", sbound); 
+    //         double val = integral(distPerp / D, 0, sbound, M, ell0); 
+    //         // speak("val*D",val * D); 
+    //         double inval[] = {distPerp / D, val * D}; 
+    //         // speakvec(inval,2);
+    //         double a0 = LUT.ReverseLookup(distPerp, val * D); 
+    //         // double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
+    //         double a2 = bbcoll2.evalSinglePt(inval, 0); 
+    //         // speak("Single Baobzi", a1); 
+    //         double bberr0 = ABS(a0 - sbound * D);
+    //         // double bberr = ABS(a1 - sbound * D);
+    //         double bberr2 = ABS(a2 - sbound * D); 
+    //         // std::cout << a2 << "," << std::endl; 
+    //         // speak("Single Baobzi Error", bberr); 
+    //         // speak("Baobzi Error", bberr); 
+    //         rlerr2.push_back(bberr0); 
+    //         // baobzierr.push_back(bberr); 
+    //         baobzierr2.push_back(bberr2); 
+    //         cnt ++; 
+    //         // myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
+    //         // CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
+    //     }
+    // }
 
-    speak("Average Error for Reverse LookUP", mean_error(rlerr));
-    // speak("Average Error for Chebyshev", mean_error(baobzierr)); 
-    speak("Average Error for Chebyshev 2", mean_error(baobzierr2)); 
-    // speak("Elapsed Time(s) for Chebyshev", dt1);
+    // speak("Average Error for Reverse LookUP", mean_error(rlerr2));
+    // // speak("Average Error for Chebyshev", mean_error(baobzierr)); 
+    // speak("Average Error for Chebyshev 2", mean_error(baobzierr2)); 
+    // // speak("Elapsed Time(s) for Chebyshev", dt1);
+    // speak("Total Test Case", cnt); 
 
     // myfile.close(); 
 }
@@ -148,9 +156,9 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 //     // Physical Parameters Setting
 //     constexpr double errTol = 1e-3;
 //     const double D = 0.024;
-//     const double alpha = 1 / (2 * 0.00411);
+//     const double alpha = 0.1 / (2 * 0.00411);
 //     // check to larger value (default = 0.05) to observe convexity/concavity of CDF in normal lookup
-//     const double freelength = 0.05; 
+//     const double freelength = 0.5; 
 //     const double M = alpha * D * D; 
 //     const double ell0 = freelength / D;
 
@@ -195,9 +203,9 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 //     const char* fn = "func_approx.baobzi"; 
 
 //     const auto st4 = get_wtime();
-//     Chebcoll bbcoll(alpha, freelength, D, 1, 1e-5);
+//     Chebcoll bbcoll(alpha, freelength, D, 1, 1e-4);
 //     bbcoll.createBaobziFamily(); 
-//     std::vector<std::vector<double>> tempkk = bbcoll.findExtremeVal(1,0); 
+//     std::vector<std::vector<double>> tempkk = bbcoll.findExtremeVal(1,1); 
 //     const auto ft4 = get_wtime();
 //     const double dt4 = get_wtime_diff(&st4, &ft4);
 

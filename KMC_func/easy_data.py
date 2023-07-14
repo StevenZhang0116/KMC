@@ -22,7 +22,7 @@ os.chdir(parentroot)
 colnames = ["x","y","val","error"]
 
 fig = plt.figure()
-fig.set_size_inches(18.5, 10.5, forward=True)
+# fig.set_size_inches(18.5, 10.5, forward=True)
 
 # Create custom LogFormatter
 class PowerLogFormatter(ticker.LogFormatter):
@@ -40,37 +40,36 @@ for file in glob.glob("*.txt"):
 
     # ax.set_xticks(np.round(np.linspace(min(df["x"]), max(df["x"]), 10)))
     # ax.set_yticks(np.round(np.linspace(min(df["y"]), max(df["y"]), 10)))
-    # ax.set_zticks(np.round(np.linspace(min(df["val"]), max(df["val"]), 10), 4))
+    # ax.set_zticks(np.round(np.linspace(min(df["val"]), max(df["val"]), 10), 2))
 
-    # ax.set_xlabel("Vertical Distance", fontsize = 16)
-    # ax.set_ylabel("Scan Length", fontsize = 16)
-    # ax.set_zlabel("Lookup Table Result", fontsize = 16)
-    # ax.set_title(f"{oname}", fontsize = 16)
+    # ax.set_xlabel("Vertical Distance", fontsize = 12)
+    # ax.set_ylabel("Scan Length", fontsize = 12)
+    # ax.set_zlabel("Lookup Table Result", fontsize = 12)
+    # # ax.set_title(f"{oname}", fontsize = 12)
 
     # fig.savefig(f"{oname}-3D-result.jpeg", dpi=100)
     # plt.clf()
 
     # error plot
-    # plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm(vmin=min(df["error"]), vmax=max(df["error"])))
-    # cbar = plt.colorbar(label='error')
-    # cbar.ax.set_yscale('log')
-    # cbar.ax.set_ylabel('Error (log scale)')
-    # plt.axis('equal')
-    # fig.savefig(f"{oname}-error-contour.jpeg", dpi=100)
+    plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm(vmin=min(df["error"]), vmax=max(df["error"])))
+    cbar = plt.colorbar(label='error')
+    cbar.ax.set_yscale('log')
+    cbar.ax.set_ylabel('Error (log scale)')
+    plt.axis('equal')
+    fig.savefig(f"{oname}-error-contour.jpeg", dpi=100)
+    plt.clf()
 
     # boundary plot
-    fig, ax = plt.subplots()
-    threshold = 0.01
-    # filter everything smaller than threshold to 0
-    df["val"] = df["val"].apply(lambda x: 0 if x < threshold else x)
-    # scatter
-    plot = ax.scatter(df["x"], df["y"], c = df["val"], cmap = 'viridis')
-    colorbar = plt.colorbar(plot)
-    ax.axis('equal')
-    fig.savefig(f"{oname}-boundary-result.jpeg", dpi=100)
-
-
-    plt.clf()
+    # fig, ax = plt.subplots()
+    # threshold = 0.01
+    # # filter everything smaller than threshold to 0
+    # df["val"] = df["val"].apply(lambda x: 0 if x < threshold else x)
+    # # scatter
+    # plot = ax.scatter(df["x"], df["y"], c = df["val"], cmap = 'viridis')
+    # colorbar = plt.colorbar(plot)
+    # ax.axis('equal')
+    # fig.savefig(f"{oname}-boundary-result.jpeg", dpi=100)
+    # plt.clf()
 
     print(oname)
 

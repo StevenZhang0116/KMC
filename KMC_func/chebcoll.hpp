@@ -110,6 +110,7 @@ class Chebcoll {
             double oneFixCenter; 
             double otherGrid; 
             double gridLoader = 1e-10; 
+            double smallbound; 
 
             std::vector<double> lengthVec; 
             std::vector<double> centerVec; 
@@ -200,6 +201,7 @@ class Chebcoll {
             }
             else if (ri == 3){
                 iterVec = cumulativeSum(gridVec); 
+                grid_size_magnitude_ = smallbound; 
             }
 
             // temporary variables
@@ -310,7 +312,6 @@ class Chebcoll {
                 ptCenter[1] = intOB - std::max(integral_min_, 1e-5);
             }       
 
-            
             int checkContain = pickBaobzi.checkInclude(ptCenter, 0); 
             if (checkContain == 1) {
                 double approxVal = pickBaobzi.evalFunc(ptCenter);
@@ -326,33 +327,40 @@ class Chebcoll {
          * @return min/max integral value over each linearly discretized grid in the domain
          */
 
-        inline std::vector<std::vector<double>> findExtremeVal(int recorddata = 0, int calerror = 0) {
+        inline std::vector<std::vector<double>> findExtremeVal(int recorddata = 0, int calerror = 0, int ubound = 0) {
+            // TODO: calculate upper bound of reverse lookup internally in the class? 
+            if (ri == 3) assert(ubound > 0); 
+
             std::vector<std::vector<double>> intSpecSaver; 
             std::vector<double> errorTrueSaver;
-            // currently only allow normal lookup
-            if ((ri == 1) || (ri == 5)) {
-                std::ofstream myfile; 
-                if (recorddata == 1) {
-                    std::cout << "==START RECORD DATA==" << std::endl;
-                    std::string rootpath = "3d-data/";
-                    std::string strD = std::to_string(length_scale_);
-                    std::string strAlpha = std::to_string(talpha);
-                    std::string strFreeLength = std::to_string(tfreelength);
-                    std::string searchfilename = rootpath + "D=" + strD + "-" + "alpha=" + strAlpha + "-" + "fl=" + strFreeLength + ".txt"; 
-                    try{
-                        std::filesystem::remove(searchfilename);
-                    }
-                    catch (...) {}
-                    myfile.open(searchfilename);
+            std::ofstream myfile; 
+            int cnt = 0; 
+            if (recorddata == 1) {
+                std::cout << "==START RECORD DATA==" << std::endl;
+                std::string rootpath = "3d-data/";
+                std::string strD = std::to_string(length_scale_);
+                std::string strAlpha = std::to_string(talpha);
+                std::string strFreeLength = std::to_string(tfreelength);
+                std::string categoryName; 
+                // set up category name
+                if ((ri == 1) || (ri == 5)) categoryName = "CDF-"; 
+                if (ri == 3) categoryName = "ReverseCDF-"; 
+                std::string searchfilename = rootpath + categoryName + "D=" + strD + "-" + "alpha=" + strAlpha + "-" + "fl=" + strFreeLength + ".txt"; 
+                try {
+                    std::filesystem::remove(searchfilename);
                 }
-                int cnt = 0; 
-                double prefac = 1; 
+                catch (...) {}
+                myfile.open(searchfilename);
+            }
+
+            if ((ri == 1) || (ri == 5)) {
+                double prefac = 10; 
                 for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
-                    std::vector<double> integralSaver; 
+                    std::vector<double> gridResultSaver; 
                     for (double j = 0; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
                         double iter[2] = {i,j}; 
                         double intres = evalSinglePt(iter, 0); 
-                        integralSaver.push_back(intres); 
+                        gridResultSaver.push_back(intres); 
                         if (recorddata == 1){ 
                             // [vertical distance] << [scan length] << [lookup table result]
                             myfile << i << "," << j / length_scale_ << "," << intres; 
@@ -366,34 +374,55 @@ class Chebcoll {
                         }
                         myfile << std::endl;
                     }
-                    double maxval = *std::max_element(std::begin(integralSaver), std::end(integralSaver));
-                    double minval = *std::min_element(std::begin(integralSaver), std::end(integralSaver));
+                    double maxval = *std::max_element(std::begin(gridResultSaver), std::end(gridResultSaver));
+                    double minval = *std::min_element(std::begin(gridResultSaver), std::end(gridResultSaver));
                     // integral value must be positive
-                    // assert(maxval > 0); assert(minval > 0); 
                     if ((ABS(maxval) <= etl) && (ABS(minval) <= etl)) {
                         maxval = 0;
                         minval = 0; 
                     }
-                    // std::cout << maxval << ";" << minval << std::endl; 
                     std::vector<double> perIntVal = {minval, maxval}; 
                     intSpecSaver.push_back(perIntVal); 
                     cnt++; 
                 }
-                if (recorddata == 1) {
-                    std::cout << "== FINISH RECORD DATA ==" << std::endl;
-                    myfile.close(); 
-                }
-                if (calerror == 1){
-                    speak("Mean Error of Cheb Family to Real Value over Whole Domain", mean_error(errorTrueSaver));
-                    std::cout << "==== END ====" << std::endl; 
-                }                
-
-                speak("cnt",cnt); 
                 assert(cnt == bbcount); 
             }
-            else {
-                std::cout << "Not Developed Yet" << std::endl; 
+            else if (ri == 3) {
+                double prefac = 1;
+                double bdd = 0.01; 
+                for (double i = prefac * bdd; i < ubound - 0.2; i += prefac * bdd) {
+                    double distPerp = i * length_scale_; 
+                    std::vector<double> gridResultSaver; 
+                    for (double j = prefac * bdd; j < ubound - 0.2; j += prefac * bdd) {
+                        double val = integral(distPerp / length_scale_, 0, j, exp_fact_, rest_length_); 
+                        double inval[] = {distPerp / length_scale_, val * length_scale_}; 
+                        double revres = evalSinglePt(inval, 0); 
+                        double relerr = ABS(revres - j * length_scale_); 
+                        gridResultSaver.push_back(revres); 
+                        if (recorddata == 1) {
+                            myfile << i << "," << j << "," << revres; 
+                        }  
+                        if (calerror == 1) {
+                            errorTrueSaver.push_back(relerr);
+                            myfile << "," << relerr; 
+                        }
+                        myfile << std::endl; 
+                    }
+                    cnt++; 
+                }
             }
+
+            if (recorddata == 1) {
+                std::cout << "== FINISH RECORD DATA ==" << std::endl;
+                myfile.close(); 
+            }
+
+            if (calerror == 1){
+                speak("Mean Error of Cheb Family to Real Value over Whole Domain", mean_error(errorTrueSaver));
+                std::cout << "==== END ====" << std::endl; 
+            }                
+            speak("cnt",cnt); 
+
             return intSpecSaver; 
         }
 

@@ -65,20 +65,10 @@ CMAKE_BINARY_DIR = /mnt/home/zzhang1/aLENS/KMC
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-.PHONY : test/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -172,32 +162,6 @@ depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named docs
-
-# Build rule for target.
-docs: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs
-.PHONY : docs
-
-# fast build rule for target.
-docs/fast:
-	$(MAKE) $(MAKESILENT) -f docs/CMakeFiles/docs.dir/build.make docs/CMakeFiles/docs.dir/build
-.PHONY : docs/fast
-
-#=============================================================================
-# Target rules for targets named test_kmc
-
-# Build rule for target.
-test_kmc: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_kmc
-.PHONY : test_kmc
-
-# fast build rule for target.
-test_kmc/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test_kmc.dir/build.make tests/CMakeFiles/test_kmc.dir/build
-.PHONY : test_kmc/fast
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -210,9 +174,6 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... test"
-	@echo "... docs"
-	@echo "... test_kmc"
 .PHONY : help
 
 
