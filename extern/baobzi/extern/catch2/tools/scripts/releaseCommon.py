@@ -1,10 +1,6 @@
-from  __future__ import  print_function
-
 import os
-import sys
 import re
 import string
-import glob
 import fnmatch
 
 from scriptCommon import catchPath
@@ -15,6 +11,7 @@ versionPath = os.path.join( rootPath, "catch_version.cpp" )
 definePath = os.path.join(rootPath, 'catch_version_macros.hpp')
 readmePath = os.path.join( catchPath, "README.md" )
 cmakePath = os.path.join(catchPath, 'CMakeLists.txt')
+mesonPath = os.path.join(catchPath, 'meson.build')
 
 class Version:
     def __init__(self):
@@ -82,9 +79,19 @@ class Version:
 def updateCmakeFile(version):
     with open(cmakePath, 'rb') as file:
         lines = file.readlines()
-    replacementRegex = re.compile(b'project\\(Catch2 LANGUAGES CXX VERSION \\d+\\.\\d+\\.\\d+\\)')
-    replacement = 'project(Catch2 LANGUAGES CXX VERSION {0})'.format(version.getVersionString()).encode('ascii')
+    replacementRegex = re.compile(b'''VERSION (\\d+.\\d+.\\d+) # CML version placeholder, don't delete''')
+    replacement = '''VERSION {0} # CML version placeholder, don't delete'''.format(version.getVersionString()).encode('ascii')
     with open(cmakePath, 'wb') as file:
+        for line in lines:
+            file.write(replacementRegex.sub(replacement, line))
+
+
+def updateMesonFile(version):
+    with open(mesonPath, 'rb') as file:
+        lines = file.readlines()
+    replacementRegex = re.compile(b'''version\s*:\s*'(\\d+.\\d+.\\d+)', # CML version placeholder, don't delete''')
+    replacement = '''version: '{0}', # CML version placeholder, don't delete'''.format(version.getVersionString()).encode('ascii')
+    with open(mesonPath, 'wb') as file:
         for line in lines:
             file.write(replacementRegex.sub(replacement, line))
 
@@ -127,9 +134,10 @@ def performUpdates(version):
     version.updateVersionFile()
     updateVersionDefine(version)
 
-    import generateAmalgamatedFile
-    generateAmalgamatedFile.generate_header()
-    generateAmalgamatedFile.generate_cpp()
+    import generateAmalgamatedFiles
+    generateAmalgamatedFiles.generate_header()
+    generateAmalgamatedFiles.generate_cpp()
 
     updateCmakeFile(version)
+    updateMesonFile(version)
     updateDocumentationVersionPlaceholders(version)

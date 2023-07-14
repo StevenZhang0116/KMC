@@ -17,6 +17,9 @@ maintainer's explicit consent._
 
 ## Libraries & Frameworks
 
+### [accessorpp](https://github.com/wqking/accessorpp)
+C++ library for implementing property and data binding.
+
 ### [alpaka](https://github.com/alpaka-group/alpaka)
 A header-only C++14 abstraction library for accelerator development.
 
@@ -50,6 +53,9 @@ Header-only C++11 library to encode/decode base64, base64url, base32, base32hex 
 ### [DtCraft](https://github.com/twhuang-uiuc/DtCraft)
 A High-performance Cluster Computing Engine.
 
+### [eventpp](https://github.com/wqking/eventpp)
+C++ event library for callbacks, event dispatcher, and event queue. With eventpp you can easily implement signal and slot mechanism, publisher and subscriber pattern, or observer pattern.
+
 ### [forest](https://github.com/xorz57/forest)
 Template Library of Tree Data Structures.
 
@@ -66,7 +72,7 @@ A header-only template engine for modern C++.
 A C++17 template header-only library for the abstraction of memory access patterns.
 
 ### [libcluon](https://github.com/chrberger/libcluon)
-A single-header-only library written in C++14 to glue distributed software components (UDP, TCP, shared memory) supporting natively Protobuf, LCM/ZCM, MsgPack, and JSON for dynamic message transformations in-between. 
+A single-header-only library written in C++14 to glue distributed software components (UDP, TCP, shared memory) supporting natively Protobuf, LCM/ZCM, MsgPack, and JSON for dynamic message transformations in-between.
 
 ### [MNMLSTC Core](https://github.com/mnmlstc/core)
 A small and easy to use C++11 library that adds a functionality set that will be available in C++14 and later, as well as some useful additions.
@@ -76,6 +82,9 @@ A small C++ library wrapper for the native C ODBC API.
 
 ### [Nonius](https://github.com/libnonius/nonius)
 A header-only framework for benchmarking small snippets of C++ code.
+
+### [OpenALpp](https://github.com/Laguna1989/OpenALpp)
+A modern OOP C++14 audio library built on OpenAL for Windows, Linux and web (emscripten).
 
 ### [polymorphic_value](https://github.com/jbcoe/polymorphic_value)
 A polymorphic value-type for C++.
@@ -108,6 +117,9 @@ A high available cloud native micro-service application management platform impl
 
 ### [ArangoDB](https://github.com/arangodb/arangodb)
 ArangoDB is a native multi-model database with flexible data models for documents, graphs, and key-values.
+
+### [Cytopia](https://github.com/CytopiaTeam/Cytopia)
+Cytopia is a free, open source retro pixel-art city building game with a big focus on mods. It utilizes a custom isometric rendering engine based on SDL2.
 
 ### [d-SEAMS](https://github.com/d-SEAMS/seams-core)
 Open source molecular dynamics simulation structure analysis suite of tools in modern C++.

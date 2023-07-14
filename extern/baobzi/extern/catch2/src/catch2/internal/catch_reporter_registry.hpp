@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -21,10 +21,10 @@ namespace Catch {
         ReporterRegistry();
         ~ReporterRegistry() override; // = default, out of line to allow fwd decl
 
-        IStreamingReporterPtr create( std::string const& name, ReporterConfig const& config ) const override;
+        IEventListenerPtr create( std::string const& name, ReporterConfig&& config ) const override;
 
         void registerReporter( std::string const& name, IReporterFactoryPtr factory );
-        void registerListener( IReporterFactoryPtr factory );
+        void registerListener( Detail::unique_ptr<EventListenerFactory> factory );
 
         FactoryMap const& getFactories() const override;
         Listeners const& getListeners() const override;

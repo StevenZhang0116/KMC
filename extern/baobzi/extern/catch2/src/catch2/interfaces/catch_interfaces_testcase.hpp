@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -15,15 +15,17 @@ namespace Catch {
     class TestSpec;
     struct TestCaseInfo;
 
-    struct ITestInvoker {
+    class ITestInvoker {
+    public:
         virtual void invoke () const = 0;
         virtual ~ITestInvoker(); // = default
     };
 
     class TestCaseHandle;
-    struct IConfig;
+    class IConfig;
 
-    struct ITestCaseRegistry {
+    class ITestCaseRegistry {
+    public:
         virtual ~ITestCaseRegistry(); // = default
         // TODO: this exists only for adding filenames to test cases -- let's expose this in a saner way later
         virtual std::vector<TestCaseInfo* > const& getAllInfos() const = 0;

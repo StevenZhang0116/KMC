@@ -355,6 +355,7 @@ class Chebcoll {
 
             if ((ri == 1) || (ri == 5)) {
                 double prefac = 10; 
+                // for calculation on global domain for energy dependent first-order CDF/PDF
                 for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
                     std::vector<double> gridResultSaver; 
                     for (double j = 0; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
@@ -387,8 +388,9 @@ class Chebcoll {
                 }
                 assert(cnt == bbcount); 
             }
+            // for calculation on global domain for reverse lookup
             else if (ri == 3) {
-                double prefac = 1;
+                double prefac = 0.1;
                 double bdd = 0.01; 
                 for (double i = prefac * bdd; i < ubound - 0.2; i += prefac * bdd) {
                     double distPerp = i * length_scale_; 

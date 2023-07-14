@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -12,6 +12,7 @@
 #include <catch2/internal/catch_compiler_capabilities.hpp>
 
 #include <cassert>
+#include <cstddef>
 #include <iterator>
 #include <random>
 
@@ -119,11 +120,15 @@ using Catch::Benchmark::Detail::sample;
 
     double standard_deviation(std::vector<double>::iterator first, std::vector<double>::iterator last) {
         auto m = Catch::Benchmark::Detail::mean(first, last);
-        double variance = std::accumulate(first, last, 0., [m](double a, double b) {
-            double diff = b - m;
-            return a + diff * diff;
-            }) / (last - first);
-            return std::sqrt(variance);
+        double variance = std::accumulate( first,
+                                           last,
+                                           0.,
+                                           [m]( double a, double b ) {
+                                               double diff = b - m;
+                                               return a + diff * diff;
+                                           } ) /
+                          ( last - first );
+        return std::sqrt( variance );
     }
 
 }
@@ -132,6 +137,15 @@ namespace Catch {
     namespace Benchmark {
         namespace Detail {
 
+#if defined( __GNUC__ ) || defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wfloat-equal"
+#endif
+            bool directCompare( double lhs, double rhs ) { return lhs == rhs; }
+#if defined( __GNUC__ ) || defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif
+
             double weighted_average_quantile(int k, int q, std::vector<double>::iterator first, std::vector<double>::iterator last) {
                 auto count = last - first;
                 double idx = (count - 1) * k / static_cast<double>(q);
@@ -139,7 +153,9 @@ namespace Catch {
                 double g = idx - j;
                 std::nth_element(first, first + j, last);
                 auto xj = first[j];
-                if (g == 0) return xj;
+                if ( directCompare( g, 0 ) ) {
+                    return xj;
+                }
 
                 auto xj1 = *std::min_element(first + (j + 1), last);
                 return xj + g * (xj1 - xj);

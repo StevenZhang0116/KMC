@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -17,17 +17,18 @@
 namespace Catch {
     using exceptionTranslateFunction = std::string(*)();
 
-    struct IExceptionTranslator;
+    class IExceptionTranslator;
     using ExceptionTranslators = std::vector<Detail::unique_ptr<IExceptionTranslator const>>;
 
-    struct IExceptionTranslator {
+    class IExceptionTranslator {
+    public:
         virtual ~IExceptionTranslator(); // = default
         virtual std::string translate( ExceptionTranslators::const_iterator it, ExceptionTranslators::const_iterator itEnd ) const = 0;
     };
 
-    struct IExceptionTranslatorRegistry {
+    class IExceptionTranslatorRegistry {
+    public:
         virtual ~IExceptionTranslatorRegistry(); // = default
-
         virtual std::string translateActiveException() const = 0;
     };
 

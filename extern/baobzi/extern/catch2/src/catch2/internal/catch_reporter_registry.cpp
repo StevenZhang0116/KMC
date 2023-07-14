@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -17,6 +17,7 @@
 #include <catch2/reporters/catch_reporter_teamcity.hpp>
 #include <catch2/reporters/catch_reporter_xml.hpp>
 #include <catch2/internal/catch_move_and_forward.hpp>
+#include <catch2/internal/catch_enforce.hpp>
 
 namespace Catch {
 
@@ -36,17 +37,21 @@ namespace Catch {
     ReporterRegistry::~ReporterRegistry() = default;
 
 
-    IStreamingReporterPtr ReporterRegistry::create( std::string const& name, ReporterConfig const& config ) const {
+    IEventListenerPtr ReporterRegistry::create( std::string const& name, ReporterConfig&& config ) const {
         auto it =  m_factories.find( name );
         if( it == m_factories.end() )
             return nullptr;
-        return it->second->create( config );
+        return it->second->create( CATCH_MOVE(config) );
     }
 
     void ReporterRegistry::registerReporter( std::string const& name, IReporterFactoryPtr factory ) {
-        m_factories.emplace(name, CATCH_MOVE(factory));
+        CATCH_ENFORCE( name.find( "::" ) == name.npos,
+                       "'::' is not allowed in reporter name: '" + name + '\'' );
+        auto ret = m_factories.emplace(name, CATCH_MOVE(factory));
+        CATCH_ENFORCE( ret.second, "reporter using '" + name + "' as name was already registered" );
     }
-    void ReporterRegistry::registerListener( IReporterFactoryPtr factory ) {
+    void ReporterRegistry::registerListener(
+        Detail::unique_ptr<EventListenerFactory> factory ) {
         m_listeners.push_back( CATCH_MOVE(factory) );
     }
 

@@ -349,9 +349,8 @@ class Cheb {
          * @return null
         */
         inline size_t approxFunc() {
-            if (printOrNot == 1) std::cout << "Generate Function Approximator" << std::endl; 
             baobzi::Function<2,10,0,double> func_approx(&input, center, half_length, conApproxFunc(), {});
-            double spaceTaken = func_approx.print_stats(printOrNot);
+            double spaceTaken = func_approx.memory_usage() / (1024 * 1024);
             savefunc = func_approx; 
             return spaceTaken;
         }

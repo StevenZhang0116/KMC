@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -23,13 +23,13 @@
 namespace Catch {
     namespace {
 
-        void listTests(IStreamingReporter& reporter, IConfig const& config) {
+        void listTests(IEventListener& reporter, IConfig const& config) {
             auto const& testSpec = config.testSpec();
             auto matchedTestCases = filterTests(getAllTestCasesSorted(config), testSpec, config);
             reporter.listTests(matchedTestCases);
         }
 
-        void listTags(IStreamingReporter& reporter, IConfig const& config) {
+        void listTags(IEventListener& reporter, IConfig const& config) {
             auto const& testSpec = config.testSpec();
             std::vector<TestCaseHandle> matchedTestCases = filterTests(getAllTestCasesSorted(config), testSpec, config);
 
@@ -51,7 +51,7 @@ namespace Catch {
             reporter.listTags(infos);
         }
 
-        void listReporters(IStreamingReporter& reporter) {
+        void listReporters(IEventListener& reporter) {
             std::vector<ReporterDescription> descriptions;
 
             IReporterRegistry::FactoryMap const& factories = getRegistryHub().getReporterRegistry().getFactories();
@@ -61,6 +61,19 @@ namespace Catch {
             }
 
             reporter.listReporters(descriptions);
+        }
+
+        void listListeners(IEventListener& reporter) {
+            std::vector<ListenerDescription> descriptions;
+
+            auto const& factories =
+                getRegistryHub().getReporterRegistry().getListeners();
+            descriptions.reserve( factories.size() );
+            for ( auto const& fac : factories ) {
+                descriptions.push_back( { fac->getName(), fac->getDescription() } );
+            }
+
+            reporter.listListeners( descriptions );
         }
 
     } // end anonymous namespace
@@ -86,7 +99,7 @@ namespace Catch {
         return out;
     }
 
-    bool list( IStreamingReporter& reporter, Config const& config ) {
+    bool list( IEventListener& reporter, Config const& config ) {
         bool listed = false;
         if (config.listTests()) {
             listed = true;
@@ -99,6 +112,10 @@ namespace Catch {
         if (config.listReporters()) {
             listed = true;
             listReporters(reporter);
+        }
+        if ( config.listListeners() ) {
+            listed = true;
+            listListeners( reporter );
         }
         return listed;
     }

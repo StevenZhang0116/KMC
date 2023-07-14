@@ -26,8 +26,54 @@
 
 #include <baobzi/header.h>
 
+namespace msgpack {
+MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
+    namespace adaptor {
+
+    // Place class template specialization here
+    template <>
+    struct convert<baobzi_header_t> {
+        msgpack::object const &operator()(msgpack::object const &o, baobzi_header_t &v) const {
+            if (o.type != msgpack::type::ARRAY)
+                throw msgpack::type_error();
+            if (o.via.array.size != 3)
+                throw msgpack::type_error();
+            v = baobzi_header_t{.dim = o.via.array.ptr[0].as<int>(),
+                                .order = o.via.array.ptr[1].as<int>(),
+                                .version = o.via.array.ptr[2].as<int>()};
+            return o;
+        }
+    };
+
+    template <>
+    struct pack<baobzi_header_t> {
+        template <typename Stream>
+        packer<Stream> &operator()(msgpack::packer<Stream> &o, baobzi_header_t const &v) const {
+            o.pack_array(3);
+            o.pack(v.dim);
+            o.pack(v.order);
+            o.pack(v.version);
+            return o;
+        }
+    };
+
+    } // namespace adaptor
+} // MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+} // namespace msgpack
+
 /// Namespace for baobzi
 namespace baobzi {
+static baobzi_input_t input_default = {.func = NULL,
+                                       .data = NULL,
+                                       .dim = 1,
+                                       .output_dim = 1,
+                                       .order = 8,
+                                       .tol = 1E-10,
+                                       .minimum_leaf_fraction = 0.0,
+                                       .split_multi_eval = 0,
+                                       .min_depth = 0,
+                                       .max_depth = 50};
+
 using raw_leaf_node = struct {
     double a;
     double L;
@@ -540,7 +586,7 @@ class Function {
     }
 
     /// @brief Calculate and print various information about object instance to stdout
-    double print_stats(const int printOrNot) const {
+    void print_stats() const {
         std::size_t n_nodes = 0;
         std::size_t n_leaves = 0;
         std::size_t n_subtrees = subtrees_.size();
@@ -552,20 +598,15 @@ class Function {
             for (const auto &node : subtree.nodes_)
                 n_leaves += node.is_leaf();
         }
-        double reqSpace = (T)mem / (1024 * 1024); 
 
-        if (printOrNot == 1){
-            std::cout << "Baobzi function mapping " << DIM << " to " << output_dim_ << std::endl;
-            std::cout << "Tree represented by " << n_nodes << " nodes, of which " << n_leaves << " are leaves\n";
-            std::cout << "Nodes are distributed across " << n_subtrees << " subtrees at an initial depth of "
-                    << stats_.base_depth << " with a maximum subtree depth of " << max_depth << "\n";
-            std::cout << "Total function evaluations required for fit: "
-                    << n_nodes * (int)std::pow(ORDER, DIM) + stats_.n_evals_root << std::endl;
-            std::cout << "Total time to create tree: " << stats_.t_elapsed << " milliseconds\n";
-            std::cout << "Approximate memory usage of tree: " << reqSpace << " MiB" << std::endl;
-        }
-        return reqSpace; 
-
+        std::cout << "Baobzi function mapping " << DIM << " to " << output_dim_ << std::endl;
+        std::cout << "Tree represented by " << n_nodes << " nodes, of which " << n_leaves << " are leaves\n";
+        std::cout << "Nodes are distributed across " << n_subtrees << " subtrees at an initial depth of "
+                  << stats_.base_depth << " with a maximum subtree depth of " << max_depth << "\n";
+        std::cout << "Total function evaluations required for fit: "
+                  << n_nodes * (int)std::pow(ORDER, DIM) + stats_.n_evals_root << std::endl;
+        std::cout << "Total time to create tree: " << stats_.t_elapsed << " milliseconds\n";
+        std::cout << "Approximate memory usage of tree: " << (T)mem / (1024 * 1024) << " MiB" << std::endl;
     }
 
     /// @brief calculate vandermonde matrix
@@ -857,12 +898,12 @@ class Function {
     /// @brief eval function approximation at point
     /// @param[in] x [DIM] point to evaluate function at
     /// @returns function approximation at point x
-    inline T operator()(const VecDimD &x) const { return eval(x); }
+    inline T operator()(const VecDimD &x) const { return output_dim_ > 1 ? NAN : eval(x); }
 
     /// @brief eval function approximation at point
     /// @param[in] x point to evaluate function at
     /// @returns function approximation at point x
-    inline T operator()(const T *x) const { return eval(x); }
+    inline T operator()(const T *x) const { return output_dim_ > 1 ? NAN : eval(x); }
 
     /// @brief eval function approximation at n_trg points
     /// @param[in] xp [DIM * n_trg] array of points to evaluate function at
@@ -870,6 +911,9 @@ class Function {
     /// @param[in] n_trg number of points to evaluate
     inline void operator()(const T *xp, T *res, int n_trg) const { eval(xp, res, n_trg); }
 
+    /// @brief eval function approximation at 1 point by reference
+    /// @param[in] xp [DIM] array of points to evaluate function at
+    /// @param[out] res [DIM] array of results
     inline void operator()(const T *xp, T *res) const { eval(xp, res); }
 
     /// @brief save function approximation to file

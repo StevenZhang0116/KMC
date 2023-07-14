@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -14,6 +14,7 @@
 #include <catch2/internal/catch_stringref.hpp>
 #include <catch2/internal/catch_unique_ptr.hpp>
 #include <catch2/internal/catch_unique_name.hpp>
+#include <catch2/internal/catch_preprocessor_remove_parens.hpp>
 
 // GCC 5 and older do not properly handle disabling unused-variable warning
 // with a _Pragma. This means that we have to leak the suppression to the
@@ -76,7 +77,8 @@ struct AutoReg : Detail::NonCopyable {
         static void TestName(); \
         CATCH_INTERNAL_START_WARNINGS_SUPPRESSION \
         CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS \
-        namespace{ Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME( autoRegistrar )( Catch::makeTestInvoker( &TestName ), CATCH_INTERNAL_LINEINFO, Catch::StringRef(), Catch::NameAndTags{ __VA_ARGS__ } ); } /* NOLINT */ \
+        CATCH_INTERNAL_SUPPRESS_UNUSED_VARIABLE_WARNINGS \
+        namespace{ const Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME( autoRegistrar )( Catch::makeTestInvoker( &TestName ), CATCH_INTERNAL_LINEINFO, Catch::StringRef(), Catch::NameAndTags{ __VA_ARGS__ } ); } /* NOLINT */ \
         CATCH_INTERNAL_STOP_WARNINGS_SUPPRESSION \
         static void TestName()
     #define INTERNAL_CATCH_TESTCASE( ... ) \
@@ -86,18 +88,30 @@ struct AutoReg : Detail::NonCopyable {
     #define INTERNAL_CATCH_METHOD_AS_TEST_CASE( QualifiedMethod, ... ) \
         CATCH_INTERNAL_START_WARNINGS_SUPPRESSION \
         CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS \
-        namespace{ Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME( autoRegistrar )( Catch::makeTestInvoker( &QualifiedMethod ), CATCH_INTERNAL_LINEINFO, "&" #QualifiedMethod, Catch::NameAndTags{ __VA_ARGS__ } ); } /* NOLINT */ \
+        CATCH_INTERNAL_SUPPRESS_UNUSED_VARIABLE_WARNINGS \
+        namespace {                                                           \
+        const Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME( autoRegistrar )( \
+            Catch::makeTestInvoker( &QualifiedMethod ),                   \
+            CATCH_INTERNAL_LINEINFO,                                      \
+            "&" #QualifiedMethod##_catch_sr,                              \
+            Catch::NameAndTags{ __VA_ARGS__ } );                          \
+    } /* NOLINT */ \
         CATCH_INTERNAL_STOP_WARNINGS_SUPPRESSION
 
     ///////////////////////////////////////////////////////////////////////////////
     #define INTERNAL_CATCH_TEST_CASE_METHOD2( TestName, ClassName, ... )\
         CATCH_INTERNAL_START_WARNINGS_SUPPRESSION \
         CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS \
+        CATCH_INTERNAL_SUPPRESS_UNUSED_VARIABLE_WARNINGS \
         namespace{ \
             struct TestName : INTERNAL_CATCH_REMOVE_PARENS(ClassName) { \
                 void test(); \
             }; \
-            Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME( autoRegistrar ) ( Catch::makeTestInvoker( &TestName::test ), CATCH_INTERNAL_LINEINFO, #ClassName, Catch::NameAndTags{ __VA_ARGS__ } ); /* NOLINT */ \
+            const Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME( autoRegistrar )( \
+            Catch::makeTestInvoker( &TestName::test ),                    \
+            CATCH_INTERNAL_LINEINFO,                                      \
+            #ClassName##_catch_sr,                                        \
+            Catch::NameAndTags{ __VA_ARGS__ } ); /* NOLINT */ \
         } \
         CATCH_INTERNAL_STOP_WARNINGS_SUPPRESSION \
         void TestName::test()
@@ -109,6 +123,7 @@ struct AutoReg : Detail::NonCopyable {
         do { \
             CATCH_INTERNAL_START_WARNINGS_SUPPRESSION \
             CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS \
+            CATCH_INTERNAL_SUPPRESS_UNUSED_VARIABLE_WARNINGS \
             Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME( autoRegistrar )( Catch::makeTestInvoker( Function ), CATCH_INTERNAL_LINEINFO, Catch::StringRef(), Catch::NameAndTags{ __VA_ARGS__ } ); /* NOLINT */ \
             CATCH_INTERNAL_STOP_WARNINGS_SUPPRESSION \
         } while(false)

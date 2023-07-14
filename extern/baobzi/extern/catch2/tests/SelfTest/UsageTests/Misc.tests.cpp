@@ -1,7 +1,10 @@
-/*
- *  Distributed under the Boost Software License, Version 1.0. (See accompanying
- *  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
- */
+
+//              Copyright Catch2 Authors
+// Distributed under the Boost Software License, Version 1.0.
+//   (See accompanying file LICENSE.txt or copy at
+//        https://www.boost.org/LICENSE_1_0.txt)
+
+// SPDX-License-Identifier: BSL-1.0
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_template_test_macros.hpp>
@@ -472,10 +475,15 @@ TEST_CASE( "# A test name that starts with a #" ) {
     SUCCEED( "yay" );
 }
 
-TEST_CASE( "#835 -- errno should not be touched by Catch", "[.][failing][!shouldfail]" ) {
+TEST_CASE( "#835 -- errno should not be touched by Catch2", "[.][failing][!shouldfail]" ) {
     errno = 1;
+    // Check that reporting failed test doesn't change errno.
     CHECK(f() == 0);
-    REQUIRE(errno == 1); // Check that f() doesn't touch errno.
+    // We want to avoid expanding `errno` macro in assertion, because
+    // we capture the expression after macro expansion, and would have
+    // to normalize the ways different platforms spell `errno`.
+    const auto errno_after = errno;
+    REQUIRE(errno_after == 1);
 }
 
 TEST_CASE( "#961 -- Dynamically created sections should all be reported", "[.]" ) {
@@ -500,7 +508,8 @@ TEMPLATE_TEST_CASE_SIG("#1954 - 7 arg template test case sig compiles", "[regres
 TEST_CASE("Same test name but with different tags is fine", "[.approvals][some-tag]") {}
 TEST_CASE("Same test name but with different tags is fine", "[.approvals][other-tag]") {}
 
-#if defined(CATCH_PLATFORM_WINDOWS)
+// MinGW doesn't support __try, and Clang has only very partial support
+#if defined(_MSC_VER)
 void throw_and_catch()
 {
     __try {
@@ -529,4 +538,16 @@ TEST_CASE("Validate SEH behavior - unhandled", "[.approvals][FatalConditionHandl
     // Validate that Catch2 framework correctly handles tests raising and not handling SEH exceptions.
     throw_no_catch();
 }
-#endif
+
+static LONG CALLBACK dummyExceptionFilter(PEXCEPTION_POINTERS ExceptionInfo) {
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+TEST_CASE("Validate SEH behavior - no crash for stack unwinding", "[approvals][!throws][!shouldfail][FatalConditionHandler][CATCH_PLATFORM_WINDOWS]")
+{
+    // Trigger stack unwinding with SEH top-level filter changed and validate the test fails expectedly with no application crash
+    SetUnhandledExceptionFilter(dummyExceptionFilter);
+    throw 1;
+}
+
+#endif // _MSC_VER

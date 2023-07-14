@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -9,20 +9,20 @@
 #define CATCH_REPORTER_STREAMING_BASE_HPP_INCLUDED
 
 #include <catch2/interfaces/catch_interfaces_reporter.hpp>
+#include <catch2/reporters/catch_reporter_common_base.hpp>
+#include <catch2/internal/catch_move_and_forward.hpp>
 
-#include <iosfwd>
-#include <string>
 #include <vector>
 
 namespace Catch {
 
-    class StreamingReporterBase : public IStreamingReporter {
+    class StreamingReporterBase : public ReporterBase {
     public:
-        StreamingReporterBase( ReporterConfig const& _config ):
-            IStreamingReporter( _config.fullConfig() ),
-            m_stream( _config.stream() ) {}
-
-
+        // GCC5 compat: we cannot use inherited constructor, because it
+        //              doesn't implement backport of P0136
+        StreamingReporterBase(ReporterConfig&& _config):
+            ReporterBase(CATCH_MOVE(_config))
+        {}
         ~StreamingReporterBase() override;
 
         void benchmarkPreparing( StringRef ) override {}
@@ -61,14 +61,7 @@ namespace Catch {
             // It can optionally be overridden in the derived class.
         }
 
-        void listReporters( std::vector<ReporterDescription> const& descriptions ) override;
-        void listTests( std::vector<TestCaseHandle> const& tests ) override;
-        void listTags( std::vector<TagInfo> const& tags ) override;
-
     protected:
-        //! Stream that the reporter output should be written to
-        std::ostream& m_stream;
-
         TestRunInfo currentTestRunInfo{ "test run has not started yet"_sr };
         TestCaseInfo const* currentTestCaseInfo = nullptr;
 

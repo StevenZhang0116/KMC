@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -23,6 +23,10 @@ namespace Catch {
     namespace Benchmark {
         namespace Detail {
             using sample = std::vector<double>;
+
+            // Used when we know we want == comparison of two doubles
+            // to centralize warning suppression
+            bool directCompare( double lhs, double rhs );
 
             double weighted_average_quantile(int k, int q, std::vector<double>::iterator first, std::vector<double>::iterator last);
 
@@ -54,7 +58,7 @@ namespace Catch {
             double mean(Iterator first, Iterator last) {
                 auto count = last - first;
                 double sum = std::accumulate(first, last, 0.);
-                return sum / count;
+                return sum / static_cast<double>(count);
             }
 
             template <typename Estimator, typename Iterator>
@@ -100,22 +104,25 @@ namespace Catch {
                 });
 
                 double accel = sum_cubes / (6 * std::pow(sum_squares, 1.5));
-                int n = static_cast<int>(resample.size());
+                long n = static_cast<long>(resample.size());
                 double prob_n = std::count_if(resample.begin(), resample.end(), [point](double x) { return x < point; }) / static_cast<double>(n);
                 // degenerate case with uniform samples
-                if (prob_n == 0) return { point, point, point, confidence_level };
+                if ( directCompare( prob_n, 0. ) ) {
+                    return { point, point, point, confidence_level };
+                }
 
                 double bias = normal_quantile(prob_n);
                 double z1 = normal_quantile((1. - confidence_level) / 2.);
 
-                auto cumn = [n](double x) -> int {
-                    return std::lround(normal_cdf(x) * n); };
+                auto cumn = [n]( double x ) -> long {
+                    return std::lround( normal_cdf( x ) * static_cast<double>(n) );
+                };
                 auto a = [bias, accel](double b) { return bias + b / (1. - accel * b); };
                 double b1 = bias + z1;
                 double b2 = bias - z1;
                 double a1 = a(b1);
                 double a2 = a(b2);
-                auto lo = static_cast<size_t>((std::max)(cumn(a1), 0));
+                auto lo = static_cast<size_t>((std::max)(cumn(a1), 0l));
                 auto hi = static_cast<size_t>((std::min)(cumn(a2), n - 1));
 
                 return { point, resample[lo], resample[hi], confidence_level };

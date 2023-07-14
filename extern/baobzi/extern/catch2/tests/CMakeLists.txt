@@ -1,4 +1,4 @@
-include(MiscFunctions)
+include(CatchMiscFunctions)
 
 if (CATCH_BUILD_SURROGATES)
   message(STATUS "Configuring targets for surrogate TUs")
@@ -77,24 +77,33 @@ endif(MSVC) #Temporary workaround
 # Please keep these ordered alphabetically
 set(TEST_SOURCES
         ${SELF_TEST_DIR}/TestRegistrations.cpp
+        ${SELF_TEST_DIR}/IntrospectiveTests/Algorithms.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/Clara.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/CmdLine.tests.cpp
+        ${SELF_TEST_DIR}/IntrospectiveTests/CmdLineHelpers.tests.cpp
+        ${SELF_TEST_DIR}/IntrospectiveTests/ColourImpl.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/Details.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/FloatingPoint.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/GeneratorsImpl.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/InternalBenchmark.tests.cpp
+        ${SELF_TEST_DIR}/IntrospectiveTests/Parse.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/PartTracker.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/RandomNumberGeneration.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/Reporters.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/Tag.tests.cpp
+        ${SELF_TEST_DIR}/IntrospectiveTests/TestCaseInfoHasher.tests.cpp
+        ${SELF_TEST_DIR}/IntrospectiveTests/TestSpec.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/TestSpecParser.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/TextFlow.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/Sharding.tests.cpp
+        ${SELF_TEST_DIR}/IntrospectiveTests/Stream.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/String.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/StringManip.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/Xml.tests.cpp
+        ${SELF_TEST_DIR}/IntrospectiveTests/Traits.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/ToString.tests.cpp
         ${SELF_TEST_DIR}/IntrospectiveTests/UniquePtr.tests.cpp
+        ${SELF_TEST_DIR}/helpers/parse_test_spec.cpp
         ${SELF_TEST_DIR}/TimingTests/Sleep.tests.cpp
         ${SELF_TEST_DIR}/UsageTests/Approx.tests.cpp
         ${SELF_TEST_DIR}/UsageTests/BDD.tests.cpp
@@ -108,6 +117,7 @@ set(TEST_SOURCES
         ${SELF_TEST_DIR}/UsageTests/Generators.tests.cpp
         ${SELF_TEST_DIR}/UsageTests/Message.tests.cpp
         ${SELF_TEST_DIR}/UsageTests/Misc.tests.cpp
+        ${SELF_TEST_DIR}/UsageTests/Skip.tests.cpp
         ${SELF_TEST_DIR}/UsageTests/ToStringByte.tests.cpp
         ${SELF_TEST_DIR}/UsageTests/ToStringChrono.tests.cpp
         ${SELF_TEST_DIR}/UsageTests/ToStringGeneral.tests.cpp
@@ -122,6 +132,12 @@ set(TEST_SOURCES
         ${SELF_TEST_DIR}/UsageTests/MatchersRanges.tests.cpp
         ${SELF_TEST_DIR}/UsageTests/Matchers.tests.cpp
         )
+
+set(TEST_HEADERS
+  ${SELF_TEST_DIR}/helpers/parse_test_spec.hpp
+  ${SELF_TEST_DIR}/helpers/range_test_helpers.hpp
+  ${SELF_TEST_DIR}/helpers/type_with_lit_0_comparisons.hpp
+)
 
 
 # Specify the headers, too, so CLion recognises them as project files
@@ -140,8 +156,15 @@ set(HEADERS
 
 include(CTest)
 
-add_executable(SelfTest ${TEST_SOURCES})
+add_executable(SelfTest ${TEST_SOURCES} ${TEST_HEADERS})
+target_include_directories(SelfTest PRIVATE ${SELF_TEST_DIR})
 target_link_libraries(SelfTest PRIVATE Catch2WithMain)
+if (BUILD_SHARED_LIBS AND WIN32)
+    add_custom_command(TARGET SelfTest PRE_LINK
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Catch2>
+        $<TARGET_FILE:Catch2WithMain> $<TARGET_FILE_DIR:SelfTest>
+    )
+endif()
 
 if (CATCH_ENABLE_COVERAGE)
     set(ENABLE_COVERAGE ON CACHE BOOL "Enable coverage build." FORCE)
@@ -155,7 +178,7 @@ endif()
 add_test(NAME RunTests COMMAND $<TARGET_FILE:SelfTest> --order rand --rng-seed time)
 set_tests_properties(RunTests PROPERTIES
     FAIL_REGULAR_EXPRESSION "Filters:"
-    COST 60
+    COST 15
 )
 
 # Because CTest does not allow us to check both return code _and_ expected
@@ -203,7 +226,29 @@ set_tests_properties(List::Reporters::XmlOutput PROPERTIES
     FAIL_REGULAR_EXPRESSION "Available reporters:"
 )
 
-
+add_test(NAME List::Listeners::Output
+  COMMAND
+    $<TARGET_FILE:SelfTest> --list-listeners
+)
+set_tests_properties(List::Listeners::Output
+  PROPERTIES
+    PASS_REGULAR_EXPRESSION "Registered listeners:"
+)
+add_test(NAME List::Listeners::ExitCode
+  COMMAND
+    $<TARGET_FILE:SelfTest> --list-listeners
+)
+add_test(NAME List::Listeners::XmlOutput
+  COMMAND
+    $<TARGET_FILE:SelfTest>
+      --list-listeners
+      --reporter xml
+)
+set_tests_properties(List::Listeners::XmlOutput
+  PROPERTIES
+    PASS_REGULAR_EXPRESSION "<RegisteredListeners>"
+    FAIL_REGULAR_EXPRESSION "Registered listeners:"
+)
 
 add_test(NAME NoAssertions COMMAND $<TARGET_FILE:SelfTest> -w NoAssertions "An empty test with no assertions")
 set_tests_properties(NoAssertions PROPERTIES PASS_REGULAR_EXPRESSION "No assertions in test case")
@@ -215,7 +260,7 @@ add_test(NAME TestSpecs::CombiningMatchingAndNonMatchingIsOk-1 COMMAND $<TARGET_
 
 add_test(NAME TestSpecs::CombiningMatchingAndNonMatchingIsOk-2 COMMAND $<TARGET_FILE:SelfTest> Tracker, "___nonexistent_test___")
 set_tests_properties(TestSpecs::CombiningMatchingAndNonMatchingIsOk-2 PROPERTIES
-    PASS_REGULAR_EXPRESSION "No test cases matched '___nonexistent_test___'"
+    PASS_REGULAR_EXPRESSION "No test cases matched '\"___nonexistent_test___\"'"
     FAIL_REGULAR_EXPRESSION "No tests ran"
 )
 
@@ -228,6 +273,18 @@ set_tests_properties(TestSpecs::NoMatchedTestsFail
 )
 add_test(NAME TestSpecs::OverrideFailureWithNoMatchedTests
   COMMAND $<TARGET_FILE:SelfTest> "___nonexistent_test___" --allow-running-no-tests
+)
+
+add_test(NAME TestSpecs::OverrideAllSkipFailure
+  COMMAND $<TARGET_FILE:SelfTest> "tests can be skipped dynamically at runtime" --allow-running-no-tests
+)
+
+add_test(NAME TestSpecs::NonMatchingTestSpecIsRoundTrippable
+    COMMAND $<TARGET_FILE:SelfTest> Tracker, "this test does not exist" "[nor does this tag]"
+)
+set_tests_properties(TestSpecs::NonMatchingTestSpecIsRoundTrippable
+  PROPERTIES
+    PASS_REGULAR_EXPRESSION "No test cases matched '\"this test does not exist\" \\[nor does this tag\\]'"
 )
 
 add_test(NAME Warnings::UnmatchedTestSpecIsAccepted
@@ -285,6 +342,7 @@ add_test(
     $<TARGET_FILE:SelfTest> "#2025: same-level sections"
     -c "A"
     -c "B"
+    --colour-mode none
 )
 set_tests_properties(FilteredSection::GeneratorsDontCauseInfiniteLoop-2
   PROPERTIES
@@ -292,19 +350,30 @@ set_tests_properties(FilteredSection::GeneratorsDontCauseInfiniteLoop-2
 )
 
 # AppVeyor has a Python 2.7 in path, but doesn't have .py files as autorunnable
-add_test(NAME ApprovalTests COMMAND ${PYTHON_EXECUTABLE} ${CATCH_DIR}/tools/scripts/approvalTests.py $<TARGET_FILE:SelfTest>)
+add_test(NAME ApprovalTests
+  COMMAND
+    ${PYTHON_EXECUTABLE}
+    ${CATCH_DIR}/tools/scripts/approvalTests.py
+    $<TARGET_FILE:SelfTest>
+    "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
 set_tests_properties(ApprovalTests
   PROPERTIES
     FAIL_REGULAR_EXPRESSION "Results differed"
-    COST 120 # We know that this is either the most, or second most,
-    # expensive test in the test suite, so we give it high estimate for CI runs
+
+    # This is the most expensive test in the basic test suite, so we give
+    # it high cost estimate so that CI runs it as one of the first ones,
+    # for better parallelization.
+    COST 30
+    LABELS "uses-python"
 )
 
 add_test(NAME RegressionCheck-1670 COMMAND $<TARGET_FILE:SelfTest> "#1670 regression check" -c A -r compact)
-set_tests_properties(RegressionCheck-1670 PROPERTIES PASS_REGULAR_EXPRESSION "Passed 1 test case with 2 assertions.")
+set_tests_properties(RegressionCheck-1670 PROPERTIES PASS_REGULAR_EXPRESSION "All tests passed \\(2 assertions in 1 test case\\)")
 
 add_test(NAME VersionCheck COMMAND $<TARGET_FILE:SelfTest> -h)
-set_tests_properties(VersionCheck PROPERTIES PASS_REGULAR_EXPRESSION "Catch v${PROJECT_VERSION}")
+set_tests_properties(VersionCheck PROPERTIES PASS_REGULAR_EXPRESSION "Catch2 v${PROJECT_VERSION}")
 
 add_test(NAME LibIdentityTest COMMAND $<TARGET_FILE:SelfTest> --libidentify)
 set_tests_properties(LibIdentityTest PROPERTIES PASS_REGULAR_EXPRESSION "description:    A Catch2 test executable")
@@ -348,11 +417,31 @@ set_tests_properties(TagAlias PROPERTIES
 
 add_test(NAME RandomTestOrdering COMMAND ${PYTHON_EXECUTABLE}
   ${CATCH_DIR}/tests/TestScripts/testRandomOrder.py $<TARGET_FILE:SelfTest>)
-
+set_tests_properties(RandomTestOrdering
+  PROPERTIES
+    LABELS "uses-python"
+)
 
 add_test(NAME CheckConvenienceHeaders
   COMMAND
     ${PYTHON_EXECUTABLE} ${CATCH_DIR}/tools/scripts/checkConvenienceHeaders.py
+)
+set_tests_properties(CheckConvenienceHeaders
+  PROPERTIES
+    LABELS "uses-python"
+)
+
+add_test(NAME "Benchmarking::SkipBenchmarkMacros"
+  COMMAND
+    $<TARGET_FILE:SelfTest> "Skip benchmark macros"
+      --reporter console
+      --skip-benchmarks
+      --colour-mode none
+)
+set_tests_properties("Benchmarking::SkipBenchmarkMacros"
+  PROPERTIES
+    PASS_REGULAR_EXPRESSION "All tests passed \\(2 assertions in 1 test case\\)"
+    FAIL_REGULAR_EXPRESSION "benchmark name"
 )
 
 
@@ -431,8 +520,8 @@ if (NOT MEMORYCHECK_COMMAND)
   add_test(NAME "MultiReporter::CapturingReportersDontPropagateStdOut"
     COMMAND
       $<TARGET_FILE:SelfTest> "Sends stuff to stdout and stderr"
-        --reporter xml::${_NullFile}
-        --reporter junit::${_NullFile}
+        --reporter xml::out=${_NullFile}
+        --reporter junit::out=${_NullFile}
   )
   set_tests_properties("MultiReporter::CapturingReportersDontPropagateStdOut"
     PROPERTIES
@@ -443,8 +532,8 @@ endif()
 add_test(NAME "MultiReporter::NonCapturingReportersPropagateStdout"
   COMMAND
     $<TARGET_FILE:SelfTest> "Sends stuff to stdout and stderr"
-      --reporter xml::${_NullFile}
-      --reporter console::${_NullFile}
+      --reporter xml::out=${_NullFile}
+      --reporter console::out=${_NullFile}
 )
 set_tests_properties("MultiReporter::NonCapturingReportersPropagateStdout"
   PROPERTIES
@@ -455,6 +544,7 @@ add_test(NAME "Outputs::DashAsOutLocationSendsOutputToStdout"
   COMMAND
     $<TARGET_FILE:SelfTest> "Factorials are computed"
       --out=-
+      --colour-mode none
 )
 set_tests_properties("Outputs::DashAsOutLocationSendsOutputToStdout"
   PROPERTIES
@@ -464,21 +554,112 @@ set_tests_properties("Outputs::DashAsOutLocationSendsOutputToStdout"
 add_test(NAME "Reporters::DashAsLocationInReporterSpecSendsOutputToStdout"
   COMMAND
     $<TARGET_FILE:SelfTest> "Factorials are computed"
-      --reporter console::-
+      --reporter console::out=-
+      --colour-mode none
 )
 set_tests_properties("Reporters::DashAsLocationInReporterSpecSendsOutputToStdout"
   PROPERTIES
     PASS_REGULAR_EXPRESSION "All tests passed \\(5 assertions in 1 test case\\)"
 )
 
+add_test(NAME "Reporters::ReporterSpecificColourOverridesDefaultColour"
+  COMMAND
+    $<TARGET_FILE:SelfTest> "Factorials are computed"
+      --reporter console::colour-mode=ansi
+      --colour-mode none
+)
+set_tests_properties("Reporters::ReporterSpecificColourOverridesDefaultColour"
+  PROPERTIES
+    PASS_REGULAR_EXPRESSION "\\[1\;32mAll tests passed"
+)
 
-if (CATCH_USE_VALGRIND)
-    add_test(NAME ValgrindRunTests COMMAND valgrind --leak-check=full --error-exitcode=1 $<TARGET_FILE:SelfTest>)
-    add_test(NAME ValgrindListTests COMMAND valgrind --leak-check=full --error-exitcode=1 $<TARGET_FILE:SelfTest> --list-tests --verbosity high)
-    set_tests_properties(ValgrindListTests PROPERTIES PASS_REGULAR_EXPRESSION "definitely lost: 0 bytes in 0 blocks")
-    add_test(NAME ValgrindListTags COMMAND valgrind --leak-check=full --error-exitcode=1 $<TARGET_FILE:SelfTest> --list-tags)
-    set_tests_properties(ValgrindListTags PROPERTIES PASS_REGULAR_EXPRESSION "definitely lost: 0 bytes in 0 blocks")
+add_test(NAME "Reporters::UnrecognizedOptionInSpecCausesError"
+  COMMAND
+    $<TARGET_FILE:SelfTest> "Factorials are computed"
+      --reporter console::bad-option=ansi
+)
+set_tests_properties("Reporters::UnrecognizedOptionInSpecCausesError"
+  PROPERTIES
+    WILL_FAIL ON
+)
+
+add_test(NAME "Colours::ColourModeCanBeExplicitlySetToAnsi"
+  COMMAND
+    $<TARGET_FILE:SelfTest> "Factorials are computed"
+      --reporter console
+      --colour-mode ansi
+)
+set_tests_properties("Colours::ColourModeCanBeExplicitlySetToAnsi"
+  PROPERTIES
+    PASS_REGULAR_EXPRESSION "\\[1\;32mAll tests passed"
+)
+
+add_test(NAME "Reporters::JUnit::NamespacesAreNormalized"
+  COMMAND
+    $<TARGET_FILE:SelfTest>
+      --reporter junit
+      "A TEST_CASE_METHOD testing junit classname normalization"
+)
+set_tests_properties("Reporters::JUnit::NamespacesAreNormalized"
+  PROPERTIES
+    PASS_REGULAR_EXPRESSION "testcase classname=\"SelfTest(\.exe)?\\.A\\.B\\.TestClass\""
+)
+
+if (CATCH_ENABLE_CONFIGURE_TESTS)
+    foreach(testName "DefaultReporter" "Disable" "DisableStringification"
+                     "ExperimentalRedirect")
+
+        add_test(NAME "CMakeConfig::${testName}"
+          COMMAND
+            "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/TestScripts/testConfigure${testName}.py" "${CATCH_DIR}" "${CMAKE_CURRENT_BINARY_DIR}"
+        )
+        set_tests_properties("CMakeConfig::${testName}"
+          PROPERTIES
+            COST 240
+            LABELS "uses-python"
+        )
+
+    endforeach()
 endif()
+
+foreach (reporterName # "Automake" - the simple .trs format does not support any kind of comments/metadata
+                      "compact"
+                      "console"
+                      "JUnit"
+                      "SonarQube"
+                      "TAP"
+                      # "TeamCity" - does not seem to support test suite-level metadata/comments
+                      "XML")
+
+    add_test(NAME "Reporters:Filters:${reporterName}"
+      COMMAND
+        $<TARGET_FILE:SelfTest> [comparisons][string-case] "CaseInsensitiveLess is case insensitive"
+          --reporter ${reporterName}
+    )
+    # Different regex for these two reporters, because the commas end up xml-escaped
+    if (reporterName MATCHES "JUnit|XML")
+      set(testCaseNameFormat "&quot;CaseInsensitiveLess is case insensitive&quot;")
+    else()
+      set(testCaseNameFormat "\"CaseInsensitiveLess is case insensitive\"")
+    endif()
+    set_tests_properties("Reporters:Filters:${reporterName}"
+      PROPERTIES
+        PASS_REGULAR_EXPRESSION "[fF]ilters.+\\[comparisons\\] \\[string-case\\] ${testCaseNameFormat}"
+    )
+
+    add_test(NAME "Reporters:RngSeed:${reporterName}"
+      COMMAND
+        $<TARGET_FILE:SelfTest> "Factorials are computed"
+          --reporter ${reporterName}
+          --rng-seed 18181818
+    )
+    set_tests_properties("Reporters:RngSeed:${reporterName}"
+      PROPERTIES
+        PASS_REGULAR_EXPRESSION "18181818"
+    )
+
+endforeach()
+
 
 list(APPEND CATCH_WARNING_TARGETS SelfTest)
 set(CATCH_WARNING_TARGETS ${CATCH_WARNING_TARGETS} PARENT_SCOPE)

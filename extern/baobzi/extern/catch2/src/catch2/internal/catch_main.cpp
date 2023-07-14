@@ -1,7 +1,7 @@
 
 //              Copyright Catch2 Authors
 // Distributed under the Boost Software License, Version 1.0.
-//   (See accompanying file LICENSE_1_0.txt or copy at
+//   (See accompanying file LICENSE.txt or copy at
 //        https://www.boost.org/LICENSE_1_0.txt)
 
 // SPDX-License-Identifier: BSL-1.0
@@ -14,7 +14,7 @@
 namespace Catch {
     CATCH_INTERNAL_START_WARNINGS_SUPPRESSION
     CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS
-    LeakDetector leakDetector;
+    static LeakDetector leakDetector;
     CATCH_INTERNAL_STOP_WARNINGS_SUPPRESSION
 }
 
