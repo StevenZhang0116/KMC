@@ -101,6 +101,7 @@ class Chebcoll {
          * @brief create Baobzi family over the whole domain with one dimension normalized and other dimension linearly discretized
          * [the hint of how to normalize both dimensions are included in the comments, but not desirable] 
          * save all objects respectively in vectors (member variables) and will be used in evalSinglePt() function
+         * @param[in]: tempkk: optional, only used in reverse lookup to input prior knowledge of integral range (ri == 3)
          * @return void 
         */
 
@@ -242,7 +243,7 @@ class Chebcoll {
                 }
 
                 Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, on, tri, tpon, etl, the_upper_bound_);
-                double ssTaken = theBaobzi.approxFunc(); // taken space in Mb
+                size_t ssTaken = theBaobzi.approxFunc(); // taken space in Mb
                 theallCheb[iii] = theBaobzi; 
                 thebreakPtsCollChange[iii] = thisCenter - otherGrid; 
                 thebreakPtsCollUnchange[iii] = oneFixCenter - oneFixLength; 
@@ -256,7 +257,8 @@ class Chebcoll {
                     speak("Needed Time per object (s)", dt1); 
                 }
             }
-            speak("Total Baobzi Family Space (MiB)", total_sum(thechebSpaceTaken)); 
+            // transfer to MB
+            speak("Total Baobzi Family Space (MiB)", total_sum(thechebSpaceTaken) / (1024 * 1024)); 
             speak("Total Time to Build Up Baobzi Family", totalTime); 
 
             // save temporary variables to member variable of class
@@ -268,6 +270,8 @@ class Chebcoll {
 
         /**
          * @brief evaluate (either normal or reverse) at given input using either brute-force search or binary search
+         * @param[in]: ptCenter: 2D coordinate of evaluated points
+         * @param[in]: bs: index of using binary search or brute force 
          * @return calculated result
          */
 
@@ -305,13 +309,13 @@ class Chebcoll {
             
             // desired Baobzi object after searching for calculation
             Cheb pickBaobzi = allCheb[pickPt]; 
-
+            // check if integral is beyond the scope; only calculate after knowing which exact object is used
             double intOB = pickBaobzi.center[1] + pickBaobzi.half_length[1]; 
             if ((ptCenter[1] > intOB) && (ri == 3)) {
                 printf("Baobzi Family Warning: integral %g very large, clamp to integral UB %g \n", ptCenter[1], intOB);
                 ptCenter[1] = intOB - std::max(integral_min_, 1e-5);
             }       
-
+            // final check of whether evaluated point is in the domain
             int checkContain = pickBaobzi.checkInclude(ptCenter, 0); 
             if (checkContain == 1) {
                 double approxVal = pickBaobzi.evalFunc(ptCenter);
@@ -324,10 +328,13 @@ class Chebcoll {
 
         /**
          * @brief (up to choice) to record the data and relative error to true integral with respect to the s and r⊥ over the domain
+         * @param[in]: recorddata: whether to record data in all kinds of lookup
+         * @param[in]: recorderror: whether to record error in all kinds of lookup
+         * @param[in]: optional, only used in reverse lookup to set up grid bound
          * @return min/max integral value over each linearly discretized grid in the domain
          */
 
-        inline std::vector<std::vector<double>> findExtremeVal(int recorddata = 0, int calerror = 0, int ubound = 0) {
+        inline std::vector<std::vector<double>> findExtremeVal(int recorddata = 0, int recorderror = 0, int ubound = 0, double prefactor = 1) {
             // TODO: calculate upper bound of reverse lookup internally in the class? 
             if (ri == 3) assert(ubound > 0); 
 
@@ -335,6 +342,7 @@ class Chebcoll {
             std::vector<double> errorTrueSaver;
             std::ofstream myfile; 
             int cnt = 0; 
+            // ostream setup
             if (recorddata == 1) {
                 std::cout << "==START RECORD DATA==" << std::endl;
                 std::string rootpath = "3d-data/";
@@ -354,11 +362,10 @@ class Chebcoll {
             }
 
             if ((ri == 1) || (ri == 5)) {
-                double prefac = 10; 
                 // for calculation on global domain for energy dependent first-order CDF/PDF
                 for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
                     std::vector<double> gridResultSaver; 
-                    for (double j = 0; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefac){
+                    for (double j = 0; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefactor){
                         double iter[2] = {i,j}; 
                         double intres = evalSinglePt(iter, 0); 
                         gridResultSaver.push_back(intres); 
@@ -366,7 +373,7 @@ class Chebcoll {
                             // [vertical distance] << [scan length] << [lookup table result]
                             myfile << i << "," << j / length_scale_ << "," << intres; 
                         }
-                        if (calerror == 1) {
+                        if (recorderror == 1) {
                             double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
                             double relerr = ABS(intres - realres); 
                             errorTrueSaver.push_back(relerr); 
@@ -390,12 +397,11 @@ class Chebcoll {
             }
             // for calculation on global domain for reverse lookup
             else if (ri == 3) {
-                double prefac = 0.1;
                 double bdd = 0.01; 
-                for (double i = prefac * bdd; i < ubound - 0.2; i += prefac * bdd) {
+                for (double i = prefactor * bdd; i < ubound - 0.2; i += prefactor * bdd) {
                     double distPerp = i * length_scale_; 
                     std::vector<double> gridResultSaver; 
-                    for (double j = prefac * bdd; j < ubound - 0.2; j += prefac * bdd) {
+                    for (double j = prefactor * bdd; j < ubound - 0.2; j += prefactor * bdd) {
                         double val = integral(distPerp / length_scale_, 0, j, exp_fact_, rest_length_); 
                         double inval[] = {distPerp / length_scale_, val * length_scale_}; 
                         double revres = evalSinglePt(inval, 0); 
@@ -404,7 +410,7 @@ class Chebcoll {
                         if (recorddata == 1) {
                             myfile << i << "," << j << "," << revres; 
                         }  
-                        if (calerror == 1) {
+                        if (recorderror == 1) {
                             errorTrueSaver.push_back(relerr);
                             myfile << "," << relerr; 
                         }
@@ -419,7 +425,7 @@ class Chebcoll {
                 myfile.close(); 
             }
 
-            if (calerror == 1){
+            if (recorderror == 1){
                 speak("Mean Error of Cheb Family to Real Value over Whole Domain", mean_error(errorTrueSaver));
                 std::cout << "==== END ====" << std::endl; 
             }                

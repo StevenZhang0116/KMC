@@ -1,7 +1,7 @@
-set(CMAKE_CXX_COMPILER "/usr/bin/c++")
+set(CMAKE_CXX_COMPILER "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++")
 set(CMAKE_CXX_COMPILER_ARG1 "")
 set(CMAKE_CXX_COMPILER_ID "GNU")
-set(CMAKE_CXX_COMPILER_VERSION "8.5.0")
+set(CMAKE_CXX_COMPILER_VERSION "10.4.0")
 set(CMAKE_CXX_COMPILER_VERSION_INTERNAL "")
 set(CMAKE_CXX_COMPILER_WRAPPER "")
 set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT "14")
@@ -22,9 +22,9 @@ set(CMAKE_CXX_SIMULATE_VERSION "")
 
 
 set(CMAKE_AR "/usr/bin/ar")
-set(CMAKE_CXX_COMPILER_AR "/usr/bin/gcc-ar")
+set(CMAKE_CXX_COMPILER_AR "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/gcc-ar")
 set(CMAKE_RANLIB "/usr/bin/ranlib")
-set(CMAKE_CXX_COMPILER_RANLIB "/usr/bin/gcc-ranlib")
+set(CMAKE_CXX_COMPILER_RANLIB "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/gcc-ranlib")
 set(CMAKE_LINKER "/usr/bin/ld")
 set(CMAKE_MT "")
 set(CMAKE_COMPILER_IS_GNUCXX 1)
@@ -85,7 +85,7 @@ endif()
 
 
 
-set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include;/cm/shared/apps/slurm/current/include;/mnt/home/zzhang1/local/baobzi/include;/usr/include/c++/8;/usr/include/c++/8/x86_64-redhat-linux;/usr/include/c++/8/backward;/usr/lib/gcc/x86_64-redhat-linux/8/include;/usr/local/include;/usr/include")
+set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include;/cm/shared/apps/slurm/current/include;/mnt/home/zzhang1/local/baobzi/include;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0/x86_64-pc-linux-gnu;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0/backward;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include;/usr/local/include;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed;/usr/include")
 set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "stdc++;m;gcc_s;gcc;c;gcc_s;gcc")
-set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "/cm/shared/apps/slurm/current/lib64;/mnt/home/zzhang1/local/baobzi/lib64;/usr/lib/gcc/x86_64-redhat-linux/8;/usr/lib64;/lib64;/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib;/usr/lib")
+set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "/cm/shared/apps/slurm/current/lib64;/mnt/home/zzhang1/local/baobzi/lib64;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64;/lib64;/usr/lib64;/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib")
 set(CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")

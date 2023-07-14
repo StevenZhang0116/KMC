@@ -51,11 +51,15 @@ for file in glob.glob("*.txt"):
     # plt.clf()
 
     # error plot
+    fig, ax = plt.subplots()
     plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm(vmin=min(df["error"]), vmax=max(df["error"])))
     cbar = plt.colorbar(label='error')
     cbar.ax.set_yscale('log')
     cbar.ax.set_ylabel('Error (log scale)')
+    cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,-1))
+
     plt.axis('equal')
+    ax.set_title(f"{oname}", fontsize = 12)
     fig.savefig(f"{oname}-error-contour.jpeg", dpi=100)
     plt.clf()
 

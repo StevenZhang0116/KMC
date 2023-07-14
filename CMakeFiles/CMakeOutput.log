@@ -1,6 +1,6 @@
-The system is: Linux - 5.15.117.1.fi - x86_64
+The system is: Linux - 5.15.90.1.fi - x86_64
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
-Compiler: /usr/bin/c++ 
+Compiler: /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++ 
 Build flags: 
 Id flags:  
 
@@ -15,66 +15,63 @@ The CXX compiler identification is GNU, found in "/mnt/home/zzhang1/aLENS/KMC/CM
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_bd015/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_bd015.dir/build.make CMakeFiles/cmTC_bd015.dir/build
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_78dee/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_78dee.dir/build.make CMakeFiles/cmTC_78dee.dir/build
 gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/c++   -v -o CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
-Using built-in specs.
-COLLECT_GCC=/usr/bin/c++
-OFFLOAD_TARGET_NAMES=nvptx-none
-OFFLOAD_TARGET_DEFAULT=1
-Target: x86_64-redhat-linux
-Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+Building CXX object CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o
+/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++   -v -o CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs
+COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++
+Target: x86_64-pc-linux-gnu
+Configured with: /dev/shm/nix-build-gcc-10.4.0.drv-0/nixbld1/spack-stage-gcc-10.4.0-ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w/spack-src/configure --prefix=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0 --with-pkgversion='Spack GCC' --with-bugurl=https://github.com/spack/spack/issues --disable-multilib --enable-languages=c,c++,fortran,jit --disable-nls --disable-canonical-system-headers --with-system-zlib --with-zstd-include=/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/include --with-zstd-lib=/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib --enable-host-shared --enable-bootstrap --with-mpfr-include=/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/include --with-mpfr-lib=/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib --with-gmp-include=/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/include --with-gmp-lib=/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib --with-mpc-include=/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/include --with-mpc-lib=/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib --without-isl --with-stage1-ldflags='-Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -Wl,-rpath,/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib -Wl,-rpath,/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib -Wl,-rpath,/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib -Wl,-rpath,/usr/lib -Wl,-rpath,/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib -Wl,-rpath,/usr/lib64' --with-boot-ldflags='-Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -Wl,-rpath,/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib -Wl,-rpath,/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib -Wl,-rpath,/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib -Wl,-rpath,/usr/lib -Wl,-rpath,/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib -Wl,-rpath,/usr/lib64 -static-libstdc++ -static-libgcc' --with-build-config=spack
 Thread model: posix
-gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC) 
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /usr/libexec/gcc/x86_64-redhat-linux/8/cc1plus -quiet -v -D_GNU_SOURCE /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccV39JOq.s
-GNU C++14 (GCC) version 8.5.0 20210514 (Red Hat 8.5.0-18) (x86_64-redhat-linux)
-	compiled by GNU C version 8.5.0 20210514 (Red Hat 8.5.0-18), GMP version 6.1.2, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version isl-0.16.1-GMP
-
+Supported LTO compression algorithms: zlib zstd
+gcc version 10.4.0 (Spack GCC) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/cc1plus -quiet -v -D_GNU_SOURCE /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccfboez8.s
+GNU C++14 (Spack GCC) version 10.4.0 (x86_64-pc-linux-gnu)
+	compiled by GNU C version 10.4.0, GMP version 6.2.1, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version none
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/8/include-fixed"
-ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../x86_64-redhat-linux/include"
+ignoring nonexistent directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../x86_64-pc-linux-gnu/include"
 #include "..." search starts here:
 #include <...> search starts here:
  /mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include
  /cm/shared/apps/slurm/current/include
  /mnt/home/zzhang1/local/baobzi/include
- /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8
- /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/x86_64-redhat-linux
- /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/backward
- /usr/lib/gcc/x86_64-redhat-linux/8/include
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/x86_64-pc-linux-gnu
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/backward
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include
  /usr/local/include
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed
  /usr/include
 End of search list.
-GNU C++14 (GCC) version 8.5.0 20210514 (Red Hat 8.5.0-18) (x86_64-redhat-linux)
-	compiled by GNU C version 8.5.0 20210514 (Red Hat 8.5.0-18), GMP version 6.1.2, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version isl-0.16.1-GMP
-
+GNU C++14 (Spack GCC) version 10.4.0 (x86_64-pc-linux-gnu)
+	compiled by GNU C version 10.4.0, GMP version 6.2.1, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version none
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-Compiler executable checksum: 5fff5568034dc3b480d38ad647f6abb8
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- as -v --64 -o CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccV39JOq.s
+Compiler executable checksum: a4af5ecab056c6d88c58dbb96bd1c1d1
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ as -v --64 -o CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccfboez8.s
 GNU assembler version 2.30 (x86_64-redhat-linux) using BFD version version 2.30-119.el8
-COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/
-LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
-Linking CXX executable cmTC_bd015
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bd015.dir/link.txt --verbose=1
-/usr/bin/c++  -v CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_bd015 
-Using built-in specs.
-COLLECT_GCC=/usr/bin/c++
-COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper
-OFFLOAD_TARGET_NAMES=nvptx-none
-OFFLOAD_TARGET_DEFAULT=1
-Target: x86_64-redhat-linux
-Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/
+LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Linking CXX executable cmTC_78dee
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_78dee.dir/link.txt --verbose=1
+/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++  -v CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_78dee 
+Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs
+COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++
+COLLECT_LTO_WRAPPER=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper
+Target: x86_64-pc-linux-gnu
+Configured with: /dev/shm/nix-build-gcc-10.4.0.drv-0/nixbld1/spack-stage-gcc-10.4.0-ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w/spack-src/configure --prefix=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0 --with-pkgversion='Spack GCC' --with-bugurl=https://github.com/spack/spack/issues --disable-multilib --enable-languages=c,c++,fortran,jit --disable-nls --disable-canonical-system-headers --with-system-zlib --with-zstd-include=/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/include --with-zstd-lib=/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib --enable-host-shared --enable-bootstrap --with-mpfr-include=/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/include --with-mpfr-lib=/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib --with-gmp-include=/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/include --with-gmp-lib=/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib --with-mpc-include=/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/include --with-mpc-lib=/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib --without-isl --with-stage1-ldflags='-Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -Wl,-rpath,/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib -Wl,-rpath,/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib -Wl,-rpath,/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib -Wl,-rpath,/usr/lib -Wl,-rpath,/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib -Wl,-rpath,/usr/lib64' --with-boot-ldflags='-Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -Wl,-rpath,/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib -Wl,-rpath,/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib -Wl,-rpath,/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib -Wl,-rpath,/usr/lib -Wl,-rpath,/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib -Wl,-rpath,/usr/lib64 -static-libstdc++ -static-libgcc' --with-build-config=spack
 Thread model: posix
-gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC) 
-COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/
-LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_bd015' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /usr/libexec/gcc/x86_64-redhat-linux/8/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/8/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper -plugin-opt=-fresolution=/tmp/cctEPDrh.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_bd015 /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/8 -L/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/usr/lib/gcc/x86_64-redhat-linux/8/../../.. CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/8/crtend.o /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_bd015' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Supported LTO compression algorithms: zlib zstd
+gcc version 10.4.0 (Spack GCC) 
+COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/
+LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_78dee' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2 -plugin /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so -plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccFiukOT.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_78dee /lib/../lib64/crt1.o /lib/../lib64/crti.o /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o -rpath /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../.. CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtend.o /lib/../lib64/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_78dee' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
 gmake[1]: Leaving directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp'
 
 
@@ -85,481 +82,15 @@ Parsed CXX implicit include dir info from above output: rv=done
     add: [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
     add: [/cm/shared/apps/slurm/current/include]
     add: [/mnt/home/zzhang1/local/baobzi/include]
-    add: [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8]
-    add: [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/x86_64-redhat-linux]
-    add: [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/backward]
-    add: [/usr/lib/gcc/x86_64-redhat-linux/8/include]
-    add: [/usr/local/include]
-    add: [/usr/include]
-  end of search list found
-  collapse include dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include] ==> [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
-  collapse include dir [/cm/shared/apps/slurm/current/include] ==> [/cm/shared/apps/slurm/current/include]
-  collapse include dir [/mnt/home/zzhang1/local/baobzi/include] ==> [/mnt/home/zzhang1/local/baobzi/include]
-  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8] ==> [/usr/include/c++/8]
-  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/x86_64-redhat-linux] ==> [/usr/include/c++/8/x86_64-redhat-linux]
-  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/backward] ==> [/usr/include/c++/8/backward]
-  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/8/include] ==> [/usr/lib/gcc/x86_64-redhat-linux/8/include]
-  collapse include dir [/usr/local/include] ==> [/usr/local/include]
-  collapse include dir [/usr/include] ==> [/usr/include]
-  implicit include dirs: [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include;/cm/shared/apps/slurm/current/include;/mnt/home/zzhang1/local/baobzi/include;/usr/include/c++/8;/usr/include/c++/8/x86_64-redhat-linux;/usr/include/c++/8/backward;/usr/lib/gcc/x86_64-redhat-linux/8/include;/usr/local/include;/usr/include]
-
-
-Parsed CXX implicit link information from above output:
-  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp]
-  ignore line: []
-  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_bd015/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_bd015.dir/build.make CMakeFiles/cmTC_bd015.dir/build]
-  ignore line: [gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp']
-  ignore line: [Building CXX object CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Using built-in specs.]
-  ignore line: [COLLECT_GCC=/usr/bin/c++]
-  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
-  ignore line: [OFFLOAD_TARGET_DEFAULT=1]
-  ignore line: [Target: x86_64-redhat-linux]
-  ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
-  ignore line: [Thread model: posix]
-  ignore line: [gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC) ]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  ignore line: [ /usr/libexec/gcc/x86_64-redhat-linux/8/cc1plus -quiet -v -D_GNU_SOURCE /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccV39JOq.s]
-  ignore line: [GNU C++14 (GCC) version 8.5.0 20210514 (Red Hat 8.5.0-18) (x86_64-redhat-linux)]
-  ignore line: [	compiled by GNU C version 8.5.0 20210514 (Red Hat 8.5.0-18)  GMP version 6.1.2  MPFR version 3.1.6-p2  MPC version 1.1.0  isl version isl-0.16.1-GMP]
-  ignore line: []
-  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
-  ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/8/include-fixed"]
-  ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../x86_64-redhat-linux/include"]
-  ignore line: [#include "..." search starts here:]
-  ignore line: [#include <...> search starts here:]
-  ignore line: [ /mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
-  ignore line: [ /cm/shared/apps/slurm/current/include]
-  ignore line: [ /mnt/home/zzhang1/local/baobzi/include]
-  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8]
-  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/x86_64-redhat-linux]
-  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/backward]
-  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/8/include]
-  ignore line: [ /usr/local/include]
-  ignore line: [ /usr/include]
-  ignore line: [End of search list.]
-  ignore line: [GNU C++14 (GCC) version 8.5.0 20210514 (Red Hat 8.5.0-18) (x86_64-redhat-linux)]
-  ignore line: [	compiled by GNU C version 8.5.0 20210514 (Red Hat 8.5.0-18)  GMP version 6.1.2  MPFR version 3.1.6-p2  MPC version 1.1.0  isl version isl-0.16.1-GMP]
-  ignore line: []
-  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
-  ignore line: [Compiler executable checksum: 5fff5568034dc3b480d38ad647f6abb8]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  ignore line: [ as -v --64 -o CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccV39JOq.s]
-  ignore line: [GNU assembler version 2.30 (x86_64-redhat-linux) using BFD version version 2.30-119.el8]
-  ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/]
-  ignore line: [LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  ignore line: [Linking CXX executable cmTC_bd015]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bd015.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/c++  -v CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_bd015 ]
-  ignore line: [Using built-in specs.]
-  ignore line: [COLLECT_GCC=/usr/bin/c++]
-  ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper]
-  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
-  ignore line: [OFFLOAD_TARGET_DEFAULT=1]
-  ignore line: [Target: x86_64-redhat-linux]
-  ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
-  ignore line: [Thread model: posix]
-  ignore line: [gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC) ]
-  ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/]
-  ignore line: [LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_bd015' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/libexec/gcc/x86_64-redhat-linux/8/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/8/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper -plugin-opt=-fresolution=/tmp/cctEPDrh.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_bd015 /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/8 -L/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/usr/lib/gcc/x86_64-redhat-linux/8/../../.. CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/8/crtend.o /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o]
-    arg [/usr/libexec/gcc/x86_64-redhat-linux/8/collect2] ==> ignore
-    arg [-plugin] ==> ignore
-    arg [/usr/libexec/gcc/x86_64-redhat-linux/8/liblto_plugin.so] ==> ignore
-    arg [-plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/cctEPDrh.res] ==> ignore
-    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
-    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
-    arg [-plugin-opt=-pass-through=-lc] ==> ignore
-    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
-    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
-    arg [--build-id] ==> ignore
-    arg [--no-add-needed] ==> ignore
-    arg [--eh-frame-hdr] ==> ignore
-    arg [--hash-style=gnu] ==> ignore
-    arg [-m] ==> ignore
-    arg [elf_x86_64] ==> ignore
-    arg [-dynamic-linker] ==> ignore
-    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
-    arg [-o] ==> ignore
-    arg [cmTC_bd015] ==> ignore
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o]
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o]
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o]
-    arg [-L/cm/shared/apps/slurm/current/lib64/../lib64] ==> dir [/cm/shared/apps/slurm/current/lib64/../lib64]
-    arg [-L/mnt/home/zzhang1/local/baobzi/lib64/../lib64] ==> dir [/mnt/home/zzhang1/local/baobzi/lib64/../lib64]
-    arg [-L/usr/lib/gcc/x86_64-redhat-linux/8] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/8]
-    arg [-L/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64]
-    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
-    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
-    arg [-L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib] ==> dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
-    arg [-L/cm/shared/apps/slurm/current/lib64] ==> dir [/cm/shared/apps/slurm/current/lib64]
-    arg [-L/mnt/home/zzhang1/local/baobzi/lib64] ==> dir [/mnt/home/zzhang1/local/baobzi/lib64]
-    arg [-L/usr/lib/gcc/x86_64-redhat-linux/8/../../..] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../..]
-    arg [CMakeFiles/cmTC_bd015.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
-    arg [-lstdc++] ==> lib [stdc++]
-    arg [-lm] ==> lib [m]
-    arg [-lgcc_s] ==> lib [gcc_s]
-    arg [-lgcc] ==> lib [gcc]
-    arg [-lc] ==> lib [c]
-    arg [-lgcc_s] ==> lib [gcc_s]
-    arg [-lgcc] ==> lib [gcc]
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/crtend.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/crtend.o]
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o]
-  collapse obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o] ==> [/usr/lib64/crt1.o]
-  collapse obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o] ==> [/usr/lib64/crti.o]
-  collapse obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o] ==> [/usr/lib64/crtn.o]
-  collapse library dir [/cm/shared/apps/slurm/current/lib64/../lib64] ==> [/cm/shared/apps/slurm/current/lib64]
-  collapse library dir [/mnt/home/zzhang1/local/baobzi/lib64/../lib64] ==> [/mnt/home/zzhang1/local/baobzi/lib64]
-  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/8] ==> [/usr/lib/gcc/x86_64-redhat-linux/8]
-  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64] ==> [/usr/lib64]
-  collapse library dir [/lib/../lib64] ==> [/lib64]
-  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
-  collapse library dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib] ==> [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
-  collapse library dir [/cm/shared/apps/slurm/current/lib64] ==> [/cm/shared/apps/slurm/current/lib64]
-  collapse library dir [/mnt/home/zzhang1/local/baobzi/lib64] ==> [/mnt/home/zzhang1/local/baobzi/lib64]
-  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../..] ==> [/usr/lib]
-  implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
-  implicit objs: [/usr/lib64/crt1.o;/usr/lib64/crti.o;/usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o;/usr/lib/gcc/x86_64-redhat-linux/8/crtend.o;/usr/lib64/crtn.o]
-  implicit dirs: [/cm/shared/apps/slurm/current/lib64;/mnt/home/zzhang1/local/baobzi/lib64;/usr/lib/gcc/x86_64-redhat-linux/8;/usr/lib64;/lib64;/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib;/usr/lib]
-  implicit fwks: []
-
-
-The system is: Linux - 5.15.117.1.fi - x86_64
-Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
-Compiler: /usr/bin/c++ 
-Build flags: 
-Id flags:  
-
-The output was:
-0
-
-
-Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
-
-The CXX compiler identification is GNU, found in "/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/3.25.1/CompilerIdCXX/a.out"
-
-Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-2nxwXX
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_bb345/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_bb345.dir/build.make CMakeFiles/cmTC_bb345.dir/build
-gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-2nxwXX'
-Building CXX object CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/c++   -v -o CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o -c /mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp
-Using built-in specs.
-COLLECT_GCC=/usr/bin/c++
-OFFLOAD_TARGET_NAMES=nvptx-none
-OFFLOAD_TARGET_DEFAULT=1
-Target: x86_64-redhat-linux
-Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
-Thread model: posix
-gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC) 
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /usr/libexec/gcc/x86_64-redhat-linux/8/cc1plus -quiet -v -D_GNU_SOURCE /mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccV3hhBl.s
-GNU C++14 (GCC) version 8.5.0 20210514 (Red Hat 8.5.0-18) (x86_64-redhat-linux)
-	compiled by GNU C version 8.5.0 20210514 (Red Hat 8.5.0-18), GMP version 6.1.2, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version isl-0.16.1-GMP
-
-GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/8/include-fixed"
-ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../x86_64-redhat-linux/include"
-#include "..." search starts here:
-#include <...> search starts here:
- /mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include
- /cm/shared/apps/slurm/current/include
- /mnt/home/zzhang1/local/baobzi/include
- /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8
- /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/x86_64-redhat-linux
- /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/backward
- /usr/lib/gcc/x86_64-redhat-linux/8/include
- /usr/local/include
- /usr/include
-End of search list.
-GNU C++14 (GCC) version 8.5.0 20210514 (Red Hat 8.5.0-18) (x86_64-redhat-linux)
-	compiled by GNU C version 8.5.0 20210514 (Red Hat 8.5.0-18), GMP version 6.1.2, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version isl-0.16.1-GMP
-
-GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-Compiler executable checksum: 5fff5568034dc3b480d38ad647f6abb8
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- as -v --64 -o CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccV3hhBl.s
-GNU assembler version 2.30 (x86_64-redhat-linux) using BFD version version 2.30-119.el8
-COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/
-LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
-Linking CXX executable cmTC_bb345
-/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bb345.dir/link.txt --verbose=1
-/usr/bin/c++  -v CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_bb345 
-Using built-in specs.
-COLLECT_GCC=/usr/bin/c++
-COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper
-OFFLOAD_TARGET_NAMES=nvptx-none
-OFFLOAD_TARGET_DEFAULT=1
-Target: x86_64-redhat-linux
-Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
-Thread model: posix
-gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC) 
-COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/
-LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_bb345' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /usr/libexec/gcc/x86_64-redhat-linux/8/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/8/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccaIFDWX.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_bb345 /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/8 -L/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/usr/lib/gcc/x86_64-redhat-linux/8/../../.. CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/8/crtend.o /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_bb345' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
-gmake[1]: Leaving directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-2nxwXX'
-
-
-
-Parsed CXX implicit include dir info from above output: rv=done
-  found start of include info
-  found start of implicit include info
-    add: [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
-    add: [/cm/shared/apps/slurm/current/include]
-    add: [/mnt/home/zzhang1/local/baobzi/include]
-    add: [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8]
-    add: [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/x86_64-redhat-linux]
-    add: [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/backward]
-    add: [/usr/lib/gcc/x86_64-redhat-linux/8/include]
-    add: [/usr/local/include]
-    add: [/usr/include]
-  end of search list found
-  collapse include dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include] ==> [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
-  collapse include dir [/cm/shared/apps/slurm/current/include] ==> [/cm/shared/apps/slurm/current/include]
-  collapse include dir [/mnt/home/zzhang1/local/baobzi/include] ==> [/mnt/home/zzhang1/local/baobzi/include]
-  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8] ==> [/usr/include/c++/8]
-  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/x86_64-redhat-linux] ==> [/usr/include/c++/8/x86_64-redhat-linux]
-  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/backward] ==> [/usr/include/c++/8/backward]
-  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/8/include] ==> [/usr/lib/gcc/x86_64-redhat-linux/8/include]
-  collapse include dir [/usr/local/include] ==> [/usr/local/include]
-  collapse include dir [/usr/include] ==> [/usr/include]
-  implicit include dirs: [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include;/cm/shared/apps/slurm/current/include;/mnt/home/zzhang1/local/baobzi/include;/usr/include/c++/8;/usr/include/c++/8/x86_64-redhat-linux;/usr/include/c++/8/backward;/usr/lib/gcc/x86_64-redhat-linux/8/include;/usr/local/include;/usr/include]
-
-
-Parsed CXX implicit link information from above output:
-  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-2nxwXX]
-  ignore line: []
-  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_bb345/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_bb345.dir/build.make CMakeFiles/cmTC_bb345.dir/build]
-  ignore line: [gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-2nxwXX']
-  ignore line: [Building CXX object CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o -c /mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Using built-in specs.]
-  ignore line: [COLLECT_GCC=/usr/bin/c++]
-  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
-  ignore line: [OFFLOAD_TARGET_DEFAULT=1]
-  ignore line: [Target: x86_64-redhat-linux]
-  ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
-  ignore line: [Thread model: posix]
-  ignore line: [gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC) ]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  ignore line: [ /usr/libexec/gcc/x86_64-redhat-linux/8/cc1plus -quiet -v -D_GNU_SOURCE /mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccV3hhBl.s]
-  ignore line: [GNU C++14 (GCC) version 8.5.0 20210514 (Red Hat 8.5.0-18) (x86_64-redhat-linux)]
-  ignore line: [	compiled by GNU C version 8.5.0 20210514 (Red Hat 8.5.0-18)  GMP version 6.1.2  MPFR version 3.1.6-p2  MPC version 1.1.0  isl version isl-0.16.1-GMP]
-  ignore line: []
-  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
-  ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/8/include-fixed"]
-  ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/8/../../../../x86_64-redhat-linux/include"]
-  ignore line: [#include "..." search starts here:]
-  ignore line: [#include <...> search starts here:]
-  ignore line: [ /mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
-  ignore line: [ /cm/shared/apps/slurm/current/include]
-  ignore line: [ /mnt/home/zzhang1/local/baobzi/include]
-  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8]
-  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/x86_64-redhat-linux]
-  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/backward]
-  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/8/include]
-  ignore line: [ /usr/local/include]
-  ignore line: [ /usr/include]
-  ignore line: [End of search list.]
-  ignore line: [GNU C++14 (GCC) version 8.5.0 20210514 (Red Hat 8.5.0-18) (x86_64-redhat-linux)]
-  ignore line: [	compiled by GNU C version 8.5.0 20210514 (Red Hat 8.5.0-18)  GMP version 6.1.2  MPFR version 3.1.6-p2  MPC version 1.1.0  isl version isl-0.16.1-GMP]
-  ignore line: []
-  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
-  ignore line: [Compiler executable checksum: 5fff5568034dc3b480d38ad647f6abb8]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  ignore line: [ as -v --64 -o CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccV3hhBl.s]
-  ignore line: [GNU assembler version 2.30 (x86_64-redhat-linux) using BFD version version 2.30-119.el8]
-  ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/]
-  ignore line: [LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  ignore line: [Linking CXX executable cmTC_bb345]
-  ignore line: [/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bb345.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/c++  -v CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_bb345 ]
-  ignore line: [Using built-in specs.]
-  ignore line: [COLLECT_GCC=/usr/bin/c++]
-  ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper]
-  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
-  ignore line: [OFFLOAD_TARGET_DEFAULT=1]
-  ignore line: [Target: x86_64-redhat-linux]
-  ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
-  ignore line: [Thread model: posix]
-  ignore line: [gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC) ]
-  ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/8/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/]
-  ignore line: [LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/usr/lib/gcc/x86_64-redhat-linux/8/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_bb345' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/libexec/gcc/x86_64-redhat-linux/8/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/8/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccaIFDWX.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_bb345 /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/8 -L/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/usr/lib/gcc/x86_64-redhat-linux/8/../../.. CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/8/crtend.o /usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o]
-    arg [/usr/libexec/gcc/x86_64-redhat-linux/8/collect2] ==> ignore
-    arg [-plugin] ==> ignore
-    arg [/usr/libexec/gcc/x86_64-redhat-linux/8/liblto_plugin.so] ==> ignore
-    arg [-plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/8/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccaIFDWX.res] ==> ignore
-    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
-    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
-    arg [-plugin-opt=-pass-through=-lc] ==> ignore
-    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
-    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
-    arg [--build-id] ==> ignore
-    arg [--no-add-needed] ==> ignore
-    arg [--eh-frame-hdr] ==> ignore
-    arg [--hash-style=gnu] ==> ignore
-    arg [-m] ==> ignore
-    arg [elf_x86_64] ==> ignore
-    arg [-dynamic-linker] ==> ignore
-    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
-    arg [-o] ==> ignore
-    arg [cmTC_bb345] ==> ignore
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o]
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o]
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o]
-    arg [-L/cm/shared/apps/slurm/current/lib64/../lib64] ==> dir [/cm/shared/apps/slurm/current/lib64/../lib64]
-    arg [-L/mnt/home/zzhang1/local/baobzi/lib64/../lib64] ==> dir [/mnt/home/zzhang1/local/baobzi/lib64/../lib64]
-    arg [-L/usr/lib/gcc/x86_64-redhat-linux/8] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/8]
-    arg [-L/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64]
-    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
-    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
-    arg [-L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib] ==> dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
-    arg [-L/cm/shared/apps/slurm/current/lib64] ==> dir [/cm/shared/apps/slurm/current/lib64]
-    arg [-L/mnt/home/zzhang1/local/baobzi/lib64] ==> dir [/mnt/home/zzhang1/local/baobzi/lib64]
-    arg [-L/usr/lib/gcc/x86_64-redhat-linux/8/../../..] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../..]
-    arg [CMakeFiles/cmTC_bb345.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
-    arg [-lstdc++] ==> lib [stdc++]
-    arg [-lm] ==> lib [m]
-    arg [-lgcc_s] ==> lib [gcc_s]
-    arg [-lgcc] ==> lib [gcc]
-    arg [-lc] ==> lib [c]
-    arg [-lgcc_s] ==> lib [gcc_s]
-    arg [-lgcc] ==> lib [gcc]
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/crtend.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/crtend.o]
-    arg [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o]
-  collapse obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crt1.o] ==> [/usr/lib64/crt1.o]
-  collapse obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crti.o] ==> [/usr/lib64/crti.o]
-  collapse obj [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64/crtn.o] ==> [/usr/lib64/crtn.o]
-  collapse library dir [/cm/shared/apps/slurm/current/lib64/../lib64] ==> [/cm/shared/apps/slurm/current/lib64]
-  collapse library dir [/mnt/home/zzhang1/local/baobzi/lib64/../lib64] ==> [/mnt/home/zzhang1/local/baobzi/lib64]
-  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/8] ==> [/usr/lib/gcc/x86_64-redhat-linux/8]
-  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../../../lib64] ==> [/usr/lib64]
-  collapse library dir [/lib/../lib64] ==> [/lib64]
-  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
-  collapse library dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib] ==> [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
-  collapse library dir [/cm/shared/apps/slurm/current/lib64] ==> [/cm/shared/apps/slurm/current/lib64]
-  collapse library dir [/mnt/home/zzhang1/local/baobzi/lib64] ==> [/mnt/home/zzhang1/local/baobzi/lib64]
-  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/8/../../..] ==> [/usr/lib]
-  implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
-  implicit objs: [/usr/lib64/crt1.o;/usr/lib64/crti.o;/usr/lib/gcc/x86_64-redhat-linux/8/crtbegin.o;/usr/lib/gcc/x86_64-redhat-linux/8/crtend.o;/usr/lib64/crtn.o]
-  implicit dirs: [/cm/shared/apps/slurm/current/lib64;/mnt/home/zzhang1/local/baobzi/lib64;/usr/lib/gcc/x86_64-redhat-linux/8;/usr/lib64;/lib64;/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib;/usr/lib]
-  implicit fwks: []
-
-
-The system is: Linux - 5.15.117.1.fi - x86_64
-Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
-Compiler: /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++ 
-Build flags: 
-Id flags:  
-
-The output was:
-0
-
-
-Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
-
-The CXX compiler identification is GNU, found in "/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/3.25.1/CompilerIdCXX/a.out"
-
-Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-77VBKY
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_97683/fast && gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-77VBKY'
-/usr/bin/gmake  -f CMakeFiles/cmTC_97683.dir/build.make CMakeFiles/cmTC_97683.dir/build
-gmake[2]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-77VBKY'
-Building CXX object CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o
-/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++   -v -o CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o -c /mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp
-Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs
-COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++
-Target: x86_64-pc-linux-gnu
-Configured with: /dev/shm/nix-build-gcc-10.4.0.drv-0/nixbld1/spack-stage-gcc-10.4.0-ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w/spack-src/configure --prefix=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0 --with-pkgversion='Spack GCC' --with-bugurl=https://github.com/spack/spack/issues --disable-multilib --enable-languages=c,c++,fortran,jit --disable-nls --disable-canonical-system-headers --with-system-zlib --with-zstd-include=/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/include --with-zstd-lib=/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib --enable-host-shared --enable-bootstrap --with-mpfr-include=/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/include --with-mpfr-lib=/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib --with-gmp-include=/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/include --with-gmp-lib=/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib --with-mpc-include=/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/include --with-mpc-lib=/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib --without-isl --with-stage1-ldflags='-Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -Wl,-rpath,/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib -Wl,-rpath,/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib -Wl,-rpath,/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib -Wl,-rpath,/usr/lib -Wl,-rpath,/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib -Wl,-rpath,/usr/lib64' --with-boot-ldflags='-Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -Wl,-rpath,/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib -Wl,-rpath,/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib -Wl,-rpath,/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib -Wl,-rpath,/usr/lib -Wl,-rpath,/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib -Wl,-rpath,/usr/lib64 -static-libstdc++ -static-libgcc' --with-build-config=spack
-Thread model: posix
-Supported LTO compression algorithms: zlib zstd
-gcc version 10.4.0 (Spack GCC) 
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/cc1plus -quiet -v -D_GNU_SOURCE /mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccTWlPQY.s
-GNU C++14 (Spack GCC) version 10.4.0 (x86_64-pc-linux-gnu)
-	compiled by GNU C version 10.4.0, GMP version 6.2.1, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version none
-GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-ignoring duplicate directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include"
-ignoring nonexistent directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../x86_64-pc-linux-gnu/include"
-#include "..." search starts here:
-#include <...> search starts here:
- /mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/include
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include
- /mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include
- /cm/shared/apps/slurm/current/include
- /mnt/home/zzhang1/local/baobzi/include
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/x86_64-pc-linux-gnu
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/backward
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include
- /usr/local/include
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed
- /usr/include
-End of search list.
-GNU C++14 (Spack GCC) version 10.4.0 (x86_64-pc-linux-gnu)
-	compiled by GNU C version 10.4.0, GMP version 6.2.1, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version none
-GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-Compiler executable checksum: a4af5ecab056c6d88c58dbb96bd1c1d1
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- as -v --64 -o CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccTWlPQY.s
-GNU assembler version 2.30 (x86_64-redhat-linux) using BFD version version 2.30-119.el8
-COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/
-LIBRARY_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64/:/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
-Linking CXX executable cmTC_97683
-/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_97683.dir/link.txt --verbose=1
-/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++  -v CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_97683 
-Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs
-COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++
-COLLECT_LTO_WRAPPER=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper
-Target: x86_64-pc-linux-gnu
-Configured with: /dev/shm/nix-build-gcc-10.4.0.drv-0/nixbld1/spack-stage-gcc-10.4.0-ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w/spack-src/configure --prefix=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0 --with-pkgversion='Spack GCC' --with-bugurl=https://github.com/spack/spack/issues --disable-multilib --enable-languages=c,c++,fortran,jit --disable-nls --disable-canonical-system-headers --with-system-zlib --with-zstd-include=/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/include --with-zstd-lib=/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib --enable-host-shared --enable-bootstrap --with-mpfr-include=/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/include --with-mpfr-lib=/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib --with-gmp-include=/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/include --with-gmp-lib=/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib --with-mpc-include=/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/include --with-mpc-lib=/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib --without-isl --with-stage1-ldflags='-Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -Wl,-rpath,/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib -Wl,-rpath,/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib -Wl,-rpath,/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib -Wl,-rpath,/usr/lib -Wl,-rpath,/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib -Wl,-rpath,/usr/lib64' --with-boot-ldflags='-Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -Wl,-rpath,/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -Wl,-rpath,/mnt/sw/nix/store/6bk6q0i2w76qncfjhbgswq8y2981l57g-gmp-6.2.1/lib -Wl,-rpath,/mnt/sw/nix/store/p8a81s6gf7c7mbyh08393jb1v4jlfzi4-mpc-1.1.0/lib -Wl,-rpath,/mnt/sw/nix/store/js0wc17hc0r7rfvz1mgwmcjz4lk27ksj-mpfr-3.1.6/lib -Wl,-rpath,/usr/lib -Wl,-rpath,/mnt/sw/nix/store/9lj2mr0bfc9gf63ng3qlr6y4rpbbm4c2-zstd-1.5.2/lib -Wl,-rpath,/usr/lib64 -static-libstdc++ -static-libgcc' --with-build-config=spack
-Thread model: posix
-Supported LTO compression algorithms: zlib zstd
-gcc version 10.4.0 (Spack GCC) 
-COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/
-LIBRARY_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64/:/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_97683' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2 -plugin /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so -plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc3BaX3f.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_97683 /lib/../lib64/crt1.o /lib/../lib64/crti.o /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o -rpath /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64 -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../.. CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtend.o /lib/../lib64/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_97683' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
-gmake[2]: Leaving directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-77VBKY'
-gmake[1]: Leaving directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-77VBKY'
-
-
-
-Parsed CXX implicit include dir info from above output: rv=done
-  found start of include info
-  found start of implicit include info
-    add: [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/include]
-    add: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include]
-    add: [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
-    add: [/cm/shared/apps/slurm/current/include]
-    add: [/mnt/home/zzhang1/local/baobzi/include]
     add: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0]
     add: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/x86_64-pc-linux-gnu]
     add: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/backward]
     add: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include]
     add: [/usr/local/include]
+    add: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include]
     add: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed]
     add: [/usr/include]
   end of search list found
-  collapse include dir [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/include] ==> [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/include]
-  collapse include dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include]
   collapse include dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include] ==> [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
   collapse include dir [/cm/shared/apps/slurm/current/include] ==> [/cm/shared/apps/slurm/current/include]
   collapse include dir [/mnt/home/zzhang1/local/baobzi/include] ==> [/mnt/home/zzhang1/local/baobzi/include]
@@ -568,20 +99,20 @@ Parsed CXX implicit include dir info from above output: rv=done
   collapse include dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/backward] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0/backward]
   collapse include dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include]
   collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include]
   collapse include dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed]
   collapse include dir [/usr/include] ==> [/usr/include]
-  implicit include dirs: [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/include;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include;/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include;/cm/shared/apps/slurm/current/include;/mnt/home/zzhang1/local/baobzi/include;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0/x86_64-pc-linux-gnu;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0/backward;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include;/usr/local/include;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed;/usr/include]
+  implicit include dirs: [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include;/cm/shared/apps/slurm/current/include;/mnt/home/zzhang1/local/baobzi/include;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0/x86_64-pc-linux-gnu;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include/c++/10.4.0/backward;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include;/usr/local/include;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed;/usr/include]
 
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-77VBKY]
+  ignore line: [Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_97683/fast && gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-77VBKY']
-  ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_97683.dir/build.make CMakeFiles/cmTC_97683.dir/build]
-  ignore line: [gmake[2]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-77VBKY']
-  ignore line: [Building CXX object CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++   -v -o CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o -c /mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_78dee/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_78dee.dir/build.make CMakeFiles/cmTC_78dee.dir/build]
+  ignore line: [gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++   -v -o CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
   ignore line: [Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs]
   ignore line: [COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++]
   ignore line: [Target: x86_64-pc-linux-gnu]
@@ -589,17 +120,14 @@ Parsed CXX implicit link information from above output:
   ignore line: [Thread model: posix]
   ignore line: [Supported LTO compression algorithms: zlib zstd]
   ignore line: [gcc version 10.4.0 (Spack GCC) ]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/cc1plus -quiet -v -D_GNU_SOURCE /mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccTWlPQY.s]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/cc1plus -quiet -v -D_GNU_SOURCE /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccfboez8.s]
   ignore line: [GNU C++14 (Spack GCC) version 10.4.0 (x86_64-pc-linux-gnu)]
   ignore line: [	compiled by GNU C version 10.4.0  GMP version 6.2.1  MPFR version 3.1.6-p2  MPC version 1.1.0  isl version none]
   ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
-  ignore line: [ignoring duplicate directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include"]
   ignore line: [ignoring nonexistent directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../x86_64-pc-linux-gnu/include"]
   ignore line: [#include "..." search starts here:]
   ignore line: [#include <...> search starts here:]
-  ignore line: [ /mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/include]
-  ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include]
   ignore line: [ /mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
   ignore line: [ /cm/shared/apps/slurm/current/include]
   ignore line: [ /mnt/home/zzhang1/local/baobzi/include]
@@ -608,6 +136,7 @@ Parsed CXX implicit link information from above output:
   ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/backward]
   ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include]
   ignore line: [ /usr/local/include]
+  ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include]
   ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed]
   ignore line: [ /usr/include]
   ignore line: [End of search list.]
@@ -615,15 +144,15 @@ Parsed CXX implicit link information from above output:
   ignore line: [	compiled by GNU C version 10.4.0  GMP version 6.2.1  MPFR version 3.1.6-p2  MPC version 1.1.0  isl version none]
   ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
   ignore line: [Compiler executable checksum: a4af5ecab056c6d88c58dbb96bd1c1d1]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  ignore line: [ as -v --64 -o CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccTWlPQY.s]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  ignore line: [ as -v --64 -o CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccfboez8.s]
   ignore line: [GNU assembler version 2.30 (x86_64-redhat-linux) using BFD version version 2.30-119.el8]
   ignore line: [COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/]
-  ignore line: [LIBRARY_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64/:/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  ignore line: [Linking CXX executable cmTC_97683]
-  ignore line: [/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_97683.dir/link.txt --verbose=1]
-  ignore line: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++  -v CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_97683 ]
+  ignore line: [LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  ignore line: [Linking CXX executable cmTC_78dee]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_78dee.dir/link.txt --verbose=1]
+  ignore line: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++  -v CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_78dee ]
   ignore line: [Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs]
   ignore line: [COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++]
   ignore line: [COLLECT_LTO_WRAPPER=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper]
@@ -633,14 +162,14 @@ Parsed CXX implicit link information from above output:
   ignore line: [Supported LTO compression algorithms: zlib zstd]
   ignore line: [gcc version 10.4.0 (Spack GCC) ]
   ignore line: [COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/]
-  ignore line: [LIBRARY_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64/:/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_97683' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  link line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2 -plugin /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so -plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc3BaX3f.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_97683 /lib/../lib64/crt1.o /lib/../lib64/crti.o /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o -rpath /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64 -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../.. CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtend.o /lib/../lib64/crtn.o]
+  ignore line: [LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_78dee' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2 -plugin /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so -plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccFiukOT.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_78dee /lib/../lib64/crt1.o /lib/../lib64/crti.o /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o -rpath /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../.. CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtend.o /lib/../lib64/crtn.o]
     arg [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/cc3BaX3f.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccFiukOT.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -652,28 +181,23 @@ Parsed CXX implicit link information from above output:
     arg [-dynamic-linker] ==> ignore
     arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_97683] ==> ignore
+    arg [cmTC_78dee] ==> ignore
     arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
     arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
     arg [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o] ==> obj [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o]
     arg [-rpath] ==> ignore
     arg [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64] ==> ignore
-    arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64]
-    arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64]
     arg [-L/cm/shared/apps/slurm/current/lib64/../lib64] ==> dir [/cm/shared/apps/slurm/current/lib64/../lib64]
     arg [-L/mnt/home/zzhang1/local/baobzi/lib64/../lib64] ==> dir [/mnt/home/zzhang1/local/baobzi/lib64/../lib64]
     arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0]
     arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64]
     arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
     arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
-    arg [-L/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib] ==> dir [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib]
-    arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
-    arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib]
     arg [-L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib] ==> dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
     arg [-L/cm/shared/apps/slurm/current/lib64] ==> dir [/cm/shared/apps/slurm/current/lib64]
     arg [-L/mnt/home/zzhang1/local/baobzi/lib64] ==> dir [/mnt/home/zzhang1/local/baobzi/lib64]
     arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../..] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../..]
-    arg [CMakeFiles/cmTC_97683.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_78dee.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -686,35 +210,29 @@ Parsed CXX implicit link information from above output:
   collapse obj [/lib/../lib64/crt1.o] ==> [/lib64/crt1.o]
   collapse obj [/lib/../lib64/crti.o] ==> [/lib64/crti.o]
   collapse obj [/lib/../lib64/crtn.o] ==> [/lib64/crtn.o]
-  collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
-  collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
   collapse library dir [/cm/shared/apps/slurm/current/lib64/../lib64] ==> [/cm/shared/apps/slurm/current/lib64]
   collapse library dir [/mnt/home/zzhang1/local/baobzi/lib64/../lib64] ==> [/mnt/home/zzhang1/local/baobzi/lib64]
   collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0]
   collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
   collapse library dir [/lib/../lib64] ==> [/lib64]
   collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
-  collapse library dir [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib] ==> [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib]
-  collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
-  collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib]
   collapse library dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib] ==> [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
   collapse library dir [/cm/shared/apps/slurm/current/lib64] ==> [/cm/shared/apps/slurm/current/lib64]
   collapse library dir [/mnt/home/zzhang1/local/baobzi/lib64] ==> [/mnt/home/zzhang1/local/baobzi/lib64]
   collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../..] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib]
   implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
   implicit objs: [/lib64/crt1.o;/lib64/crti.o;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtend.o;/lib64/crtn.o]
-  implicit dirs: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64;/cm/shared/apps/slurm/current/lib64;/mnt/home/zzhang1/local/baobzi/lib64;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0;/lib64;/usr/lib64;/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib;/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
+  implicit dirs: [/cm/shared/apps/slurm/current/lib64;/mnt/home/zzhang1/local/baobzi/lib64;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64;/lib64;/usr/lib64;/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib]
   implicit fwks: []
 
 
 Detecting CXX OpenMP compiler ABI info compiled with the following output:
-Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx
+Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_db8d3/fast && gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx'
-/usr/bin/gmake  -f CMakeFiles/cmTC_db8d3.dir/build.make CMakeFiles/cmTC_db8d3.dir/build
-gmake[2]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx'
-Building CXX object CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o
-/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++   -fopenmp -v -std=gnu++17 -o CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o -c /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx/OpenMPTryFlag.cpp
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_ab8ee/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_ab8ee.dir/build.make CMakeFiles/cmTC_ab8ee.dir/build
+gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o
+/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++   -fopenmp -v -std=gnu++17 -o CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o -c /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/FindOpenMP/OpenMPTryFlag.cpp
 Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs
 COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++
 Target: x86_64-pc-linux-gnu
@@ -722,17 +240,14 @@ Configured with: /dev/shm/nix-build-gcc-10.4.0.drv-0/nixbld1/spack-stage-gcc-10.
 Thread model: posix
 Supported LTO compression algorithms: zlib zstd
 gcc version 10.4.0 (Spack GCC) 
-COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/cc1plus -quiet -v -D_GNU_SOURCE -D_REENTRANT /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx/OpenMPTryFlag.cpp -quiet -dumpbase OpenMPTryFlag.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o -std=gnu++17 -version -fopenmp -o /tmp/cc7pJLlT.s
+COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/cc1plus -quiet -v -D_GNU_SOURCE -D_REENTRANT /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/FindOpenMP/OpenMPTryFlag.cpp -quiet -dumpbase OpenMPTryFlag.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o -std=gnu++17 -version -fopenmp -o /tmp/ccNlx4B3.s
 GNU C++17 (Spack GCC) version 10.4.0 (x86_64-pc-linux-gnu)
 	compiled by GNU C version 10.4.0, GMP version 6.2.1, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version none
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-ignoring duplicate directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include"
 ignoring nonexistent directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../x86_64-pc-linux-gnu/include"
 #include "..." search starts here:
 #include <...> search starts here:
- /mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/include
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include
  /mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include
  /cm/shared/apps/slurm/current/include
  /mnt/home/zzhang1/local/baobzi/include
@@ -741,6 +256,7 @@ ignoring nonexistent directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j
  /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/backward
  /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include
  /usr/local/include
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include
  /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed
  /usr/include
 End of search list.
@@ -748,15 +264,15 @@ GNU C++17 (Spack GCC) version 10.4.0 (x86_64-pc-linux-gnu)
 	compiled by GNU C version 10.4.0, GMP version 6.2.1, MPFR version 3.1.6-p2, MPC version 1.1.0, isl version none
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
 Compiler executable checksum: a4af5ecab056c6d88c58dbb96bd1c1d1
-COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
- as -v --64 -o CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o /tmp/cc7pJLlT.s
+COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
+ as -v --64 -o CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o /tmp/ccNlx4B3.s
 GNU assembler version 2.30 (x86_64-redhat-linux) using BFD version version 2.30-119.el8
 COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/
-LIBRARY_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64/:/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
-Linking CXX executable cmTC_db8d3
-/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_db8d3.dir/link.txt --verbose=1
-/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++  -fopenmp -v CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o -o cmTC_db8d3  -v 
+LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
+Linking CXX executable cmTC_ab8ee
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ab8ee.dir/link.txt --verbose=1
+/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++  -fopenmp -v CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o -o cmTC_ab8ee  -v 
 Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs
 COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++
 COLLECT_LTO_WRAPPER=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper
@@ -766,25 +282,23 @@ Thread model: posix
 Supported LTO compression algorithms: zlib zstd
 gcc version 10.4.0 (Spack GCC) 
 COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/
-LIBRARY_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64/:/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/
-Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/libgomp.spec
-COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_db8d3' '-v' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
- /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2 -plugin /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so -plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccyIRVRV.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_db8d3 /lib/../lib64/crt1.o /lib/../lib64/crti.o /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o -rpath /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64 -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../.. CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lgomp -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtend.o /lib/../lib64/crtn.o
-COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_db8d3' '-v' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
-gmake[2]: Leaving directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx'
-gmake[1]: Leaving directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx'
+LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/
+Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/libgomp.spec
+COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_ab8ee' '-v' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
+ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2 -plugin /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so -plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccoThaXw.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ab8ee /lib/../lib64/crt1.o /lib/../lib64/crti.o /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o -rpath /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../.. CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lgomp -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtend.o /lib/../lib64/crtn.o
+COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_ab8ee' '-v' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread'
+gmake[1]: Leaving directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp'
 
 
 
 Parsed CXX OpenMP implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx]
+  ignore line: [Change Dir: /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_db8d3/fast && gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx']
-  ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_db8d3.dir/build.make CMakeFiles/cmTC_db8d3.dir/build]
-  ignore line: [gmake[2]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx']
-  ignore line: [Building CXX object CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o]
-  ignore line: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++   -fopenmp -v -std=gnu++17 -o CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o -c /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx/OpenMPTryFlag.cpp]
+  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_ab8ee/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_ab8ee.dir/build.make CMakeFiles/cmTC_ab8ee.dir/build]
+  ignore line: [gmake[1]: Entering directory '/mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o]
+  ignore line: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++   -fopenmp -v -std=gnu++17 -o CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o -c /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/FindOpenMP/OpenMPTryFlag.cpp]
   ignore line: [Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs]
   ignore line: [COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++]
   ignore line: [Target: x86_64-pc-linux-gnu]
@@ -792,17 +306,14 @@ Parsed CXX OpenMP implicit link information from above output:
   ignore line: [Thread model: posix]
   ignore line: [Supported LTO compression algorithms: zlib zstd]
   ignore line: [gcc version 10.4.0 (Spack GCC) ]
-  ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread']
-  ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/cc1plus -quiet -v -D_GNU_SOURCE -D_REENTRANT /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/CMakeScratch/TryCompile-OA94Lx/OpenMPTryFlag.cpp -quiet -dumpbase OpenMPTryFlag.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o -std=gnu++17 -version -fopenmp -o /tmp/cc7pJLlT.s]
+  ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread']
+  ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/cc1plus -quiet -v -D_GNU_SOURCE -D_REENTRANT /mnt/home/zzhang1/aLENS/KMC/CMakeFiles/FindOpenMP/OpenMPTryFlag.cpp -quiet -dumpbase OpenMPTryFlag.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o -std=gnu++17 -version -fopenmp -o /tmp/ccNlx4B3.s]
   ignore line: [GNU C++17 (Spack GCC) version 10.4.0 (x86_64-pc-linux-gnu)]
   ignore line: [	compiled by GNU C version 10.4.0  GMP version 6.2.1  MPFR version 3.1.6-p2  MPC version 1.1.0  isl version none]
   ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
-  ignore line: [ignoring duplicate directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include"]
   ignore line: [ignoring nonexistent directory "/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../x86_64-pc-linux-gnu/include"]
   ignore line: [#include "..." search starts here:]
   ignore line: [#include <...> search starts here:]
-  ignore line: [ /mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/include]
-  ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include]
   ignore line: [ /mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/include]
   ignore line: [ /cm/shared/apps/slurm/current/include]
   ignore line: [ /mnt/home/zzhang1/local/baobzi/include]
@@ -811,6 +322,7 @@ Parsed CXX OpenMP implicit link information from above output:
   ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../include/c++/10.4.0/backward]
   ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include]
   ignore line: [ /usr/local/include]
+  ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/include]
   ignore line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/include-fixed]
   ignore line: [ /usr/include]
   ignore line: [End of search list.]
@@ -818,15 +330,15 @@ Parsed CXX OpenMP implicit link information from above output:
   ignore line: [	compiled by GNU C version 10.4.0  GMP version 6.2.1  MPFR version 3.1.6-p2  MPC version 1.1.0  isl version none]
   ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
   ignore line: [Compiler executable checksum: a4af5ecab056c6d88c58dbb96bd1c1d1]
-  ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread']
-  ignore line: [ as -v --64 -o CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o /tmp/cc7pJLlT.s]
+  ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread']
+  ignore line: [ as -v --64 -o CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o /tmp/ccNlx4B3.s]
   ignore line: [GNU assembler version 2.30 (x86_64-redhat-linux) using BFD version version 2.30-119.el8]
   ignore line: [COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/]
-  ignore line: [LIBRARY_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64/:/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread']
-  ignore line: [Linking CXX executable cmTC_db8d3]
-  ignore line: [/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_db8d3.dir/link.txt --verbose=1]
-  ignore line: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++  -fopenmp -v CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o -o cmTC_db8d3  -v ]
+  ignore line: [LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++17' '-o' 'CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread']
+  ignore line: [Linking CXX executable cmTC_ab8ee]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ab8ee.dir/link.txt --verbose=1]
+  ignore line: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++  -fopenmp -v CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o -o cmTC_ab8ee  -v ]
   ignore line: [Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/specs]
   ignore line: [COLLECT_GCC=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++]
   ignore line: [COLLECT_LTO_WRAPPER=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper]
@@ -836,15 +348,15 @@ Parsed CXX OpenMP implicit link information from above output:
   ignore line: [Supported LTO compression algorithms: zlib zstd]
   ignore line: [gcc version 10.4.0 (Spack GCC) ]
   ignore line: [COMPILER_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/]
-  ignore line: [LIBRARY_PATH=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64/:/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/]
-  ignore line: [Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64/libgomp.spec]
-  ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_db8d3' '-v' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread']
-  link line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2 -plugin /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so -plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccyIRVRV.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_db8d3 /lib/../lib64/crt1.o /lib/../lib64/crti.o /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o -rpath /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64 -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../.. CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lgomp -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtend.o /lib/../lib64/crtn.o]
+  ignore line: [LIBRARY_PATH=/cm/shared/apps/slurm/current/lib64/../lib64/:/mnt/home/zzhang1/local/baobzi/lib64/../lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib/:/cm/shared/apps/slurm/current/lib64/:/mnt/home/zzhang1/local/baobzi/lib64/:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../:/lib/:/usr/lib/]
+  ignore line: [Reading specs from /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64/libgomp.spec]
+  ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_ab8ee' '-v' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-pthread']
+  link line: [ /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2 -plugin /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so -plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccoThaXw.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ab8ee /lib/../lib64/crt1.o /lib/../lib64/crti.o /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtbegin.o -rpath /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64 -L/cm/shared/apps/slurm/current/lib64/../lib64 -L/mnt/home/zzhang1/local/baobzi/lib64/../lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib -L/cm/shared/apps/slurm/current/lib64 -L/mnt/home/zzhang1/local/baobzi/lib64 -L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../.. CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lgomp -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/crtend.o /lib/../lib64/crtn.o]
     arg [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/libexec/gcc/x86_64-pc-linux-gnu/10.4.0/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccyIRVRV.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccoThaXw.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lpthread] ==> ignore
@@ -857,25 +369,20 @@ Parsed CXX OpenMP implicit link information from above output:
     arg [-dynamic-linker] ==> ignore
     arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_db8d3] ==> ignore
+    arg [cmTC_ab8ee] ==> ignore
     arg [-rpath] ==> ignore
     arg [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib:/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64] ==> ignore
-    arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64]
-    arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64]
     arg [-L/cm/shared/apps/slurm/current/lib64/../lib64] ==> dir [/cm/shared/apps/slurm/current/lib64/../lib64]
     arg [-L/mnt/home/zzhang1/local/baobzi/lib64/../lib64] ==> dir [/mnt/home/zzhang1/local/baobzi/lib64/../lib64]
     arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0]
     arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64]
     arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
     arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
-    arg [-L/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib] ==> dir [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib]
-    arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
-    arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib]
     arg [-L/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib] ==> dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
     arg [-L/cm/shared/apps/slurm/current/lib64] ==> dir [/cm/shared/apps/slurm/current/lib64]
     arg [-L/mnt/home/zzhang1/local/baobzi/lib64] ==> dir [/mnt/home/zzhang1/local/baobzi/lib64]
     arg [-L/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../..] ==> dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../..]
-    arg [CMakeFiles/cmTC_db8d3.dir/OpenMPTryFlag.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_ab8ee.dir/OpenMPTryFlag.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgomp] ==> lib [gomp]
@@ -885,24 +392,19 @@ Parsed CXX OpenMP implicit link information from above output:
     arg [-lc] ==> lib [c]
     arg [-lgcc_s] ==> lib [gcc_s]
     arg [-lgcc] ==> lib [gcc]
-  collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/../lib64] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
-  collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/../lib64] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
   collapse library dir [/cm/shared/apps/slurm/current/lib64/../lib64] ==> [/cm/shared/apps/slurm/current/lib64]
   collapse library dir [/mnt/home/zzhang1/local/baobzi/lib64/../lib64] ==> [/mnt/home/zzhang1/local/baobzi/lib64]
   collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0]
   collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../../../lib64] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
   collapse library dir [/lib/../lib64] ==> [/lib64]
   collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
-  collapse library dir [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib] ==> [/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib]
-  collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64]
-  collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib]
   collapse library dir [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib] ==> [/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
   collapse library dir [/cm/shared/apps/slurm/current/lib64] ==> [/cm/shared/apps/slurm/current/lib64]
   collapse library dir [/mnt/home/zzhang1/local/baobzi/lib64] ==> [/mnt/home/zzhang1/local/baobzi/lib64]
   collapse library dir [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0/../../..] ==> [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib]
   implicit libs: [stdc++;m;gomp;gcc_s;gcc;pthread;c;gcc_s;gcc]
   implicit objs: []
-  implicit dirs: [/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64;/cm/shared/apps/slurm/current/lib64;/mnt/home/zzhang1/local/baobzi/lib64;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0;/lib64;/usr/lib64;/mnt/sw/nix/store/b4q5asj8flwlgmaijgj1r6wbmnls5x8k-python-3.9.15-view/lib;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib;/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib]
+  implicit dirs: [/cm/shared/apps/slurm/current/lib64;/mnt/home/zzhang1/local/baobzi/lib64;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib/gcc/x86_64-pc-linux-gnu/10.4.0;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64;/lib64;/usr/lib64;/mnt/sw/nix/store/hayjz1l94cb2ky37bhcv71aygjzq7fci-openblas-0.3.21/lib;/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib]
   implicit fwks: []
 
 

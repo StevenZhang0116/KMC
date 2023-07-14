@@ -350,7 +350,7 @@ class Cheb {
         */
         inline size_t approxFunc() {
             baobzi::Function<2,10,0,double> func_approx(&input, center, half_length, conApproxFunc(), {});
-            double spaceTaken = func_approx.memory_usage() / (1024 * 1024);
+            double spaceTaken = func_approx.memory_usage();
             savefunc = func_approx; 
             return spaceTaken;
         }
