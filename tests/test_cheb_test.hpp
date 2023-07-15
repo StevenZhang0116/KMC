@@ -35,7 +35,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::cout << "==== DEMO REVERSE CHECK SPRING TEST ====" << std::endl; 
     const double tol = 1e-2;
     const double D = 0.024;
-    const double alpha = 10 / (2 * 0.00411);
+    const double alpha = 1 / (2 * 0.00411);
 
     const double freelength = 0.05;
     const double M = alpha * D * D;
@@ -99,9 +99,9 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     bbcoll.createBaobziFamily(); 
     std::vector<std::vector<double>> tempkk = bbcoll.findExtremeVal(0, 1); 
     std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
-    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, integralMinMax, 1e-3);
+    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, integralMinMax, 1e-3, 0);
     bbcoll2.createBaobziFamily(tempkk); 
-    std::vector<std::vector<double>> tempkk2 = bbcoll2.findExtremeVal(1,1,testbound,1);
+    std::vector<std::vector<double>> tempkk2 = bbcoll2.findExtremeVal(1, 1, testbound, 1);
 
     // const auto st1 = get_wtime();
     // Cheb theBaobzi(hl, center, 1e-1, alpha, freelength, D, fn, 3, 0);

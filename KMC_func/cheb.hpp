@@ -23,7 +23,6 @@ class Cheb {
         double center[2]; 
         double param[10];
         baobzi_input_t input;
-        const char* oname; 
         int indicator; 
         int printOrNot; 
     private:
@@ -36,7 +35,7 @@ class Cheb {
          * @brief constructor of Baobzi object
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
-        double D, const char* output_name, const int runind, const int porn, const double errtol = 1e-3, 
+        double D, const int runind, const int porn, const double errtol = 1e-3, 
         const double upperbound = 0, const double e_fact = 0, const double fdep_length = 0, 
         const double M1 = 0, const double M2 = 0, const double theconstant = 0) {
             
@@ -95,7 +94,6 @@ class Cheb {
 
             // determines which function approximation is implemented (e.g. lookup, reverse lookup)
             indicator = runind; 
-            oname = output_name; 
         }
 
         /**
@@ -391,6 +389,15 @@ class Cheb {
             catch(...) {
                 return 0; 
             }
+        }
+
+        /**
+         * @brief save function to an external file that subject to be reloaded  
+         */
+        inline void saveFunctionObject(const char* folderName, const int objectIndex) {
+            std::string sL = std::string(folderName) + std::to_string(objectIndex);
+            const char* saveLocation = sL.c_str();  
+            savefunc.save(saveLocation); 
         }
 };
 

@@ -12,6 +12,7 @@
 #include <variant>
 #include <filesystem>
 #include <omp.h>
+#include <sys/stat.h>
 
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 // add baobzi dependence
@@ -19,6 +20,7 @@
 #include "auxil.hpp"
 #include "macros.hpp"
 #include "cheb.hpp"
+
 
 class Chebcoll {
     protected:
@@ -33,11 +35,13 @@ class Chebcoll {
         double talpha; 
         double tfreelength; 
         double tbbtol; 
-        int ri; 
-        const char* on; 
         int tpon; 
         double etl; 
         int bbcount; 
+        const char* tfoldername; 
+        int tifsave; 
+        // key
+        int workIndex; 
 
         std::vector<Cheb> allCheb; 
         std::vector<double> breakPtsCollChange; 
@@ -54,7 +58,7 @@ class Chebcoll {
 
         Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, 
         std::vector<double> integralMinMax = std::vector<double>(), const double errortolerence = 1e-3, 
-        const char* output_name = "func_approx.baobzi", const int printOrNot = 0) {
+        const int ifsave = 0, const char* defaultfoldername = "./mytests/", const int printornot = 0) {
             // initialize dimensionless 
             length_scale_ = D; 
             exp_fact_ = alpha * length_scale_ * length_scale_;
@@ -63,9 +67,12 @@ class Chebcoll {
             talpha = alpha; 
             tfreelength = freelength;
             tbbtol = bbtol; 
-            on = output_name; 
-            ri = runind; 
-            tpon = printOrNot; 
+            workIndex = runind; 
+            tpon = printornot; 
+            tifsave = ifsave; 
+            // generate folder name -- user input
+            tfoldername = defaultfoldername; 
+            // 
             speak("Tolerance of Bobazi Family", bbtol); 
             // only need to set up integral min/max value in the REVERSE LOOKUP 
             if (integralMinMax.size() > 0) {
@@ -101,7 +108,7 @@ class Chebcoll {
          * @brief create Baobzi family over the whole domain with one dimension normalized and other dimension linearly discretized
          * [the hint of how to normalize both dimensions are included in the comments, but not desirable] 
          * save all objects respectively in vectors (member variables) and will be used in evalSinglePt() function
-         * @param[in]: tempkk: optional, only used in reverse lookup to input prior knowledge of integral range (ri == 3)
+         * @param[in]: tempkk: optional, only used in reverse lookup to input prior knowledge of integral range (workIndex == 3)
          * @return void 
         */
 
@@ -111,13 +118,20 @@ class Chebcoll {
             double oneFixCenter; 
             double otherGrid; 
             double gridLoader = 1e-10; 
-            double smallbound; 
+            double smallBound; 
+            
+            // create folder to save Baobzi object files if needed
+            if (tifsave == 1) {
+                int result = mkdir(tfoldername, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+                if (result == 0) std::cout << "Folder created successfully." << std::endl;
+                else std::cout << "Failed to create the folder." << std::endl;
+            }
 
             std::vector<double> lengthVec; 
             std::vector<double> centerVec; 
             std::vector<double> gridVec;
             // normal lookup scanerio
-            if ((ri == 1) || (ri == 5)){
+            if ((workIndex == 1) || (workIndex == 5)){
                 std::cout << "==== Create Family of Positive Checking ====" << std::endl; 
                 upBound = getUpperBound();
                 the_upper_bound_ = upBound; 
@@ -135,7 +149,7 @@ class Chebcoll {
                 }
             }
             // reverse lookup scanerio
-            else if (ri == 3) {
+            else if (workIndex == 3) {
                 double roww = tempkk.size();
                 std::cout << "==== Create Family of Reverse Checking ====" << std::endl; 
                 upBound = getUpperBound();
@@ -147,18 +161,13 @@ class Chebcoll {
                     double rr = tempkk[i][1];
                     double ll = tempkk[i][0];
                     oneFixLength = (rr - ll) / 2;
-                    // speak("oneFixLength",oneFixLength); 
                     assert(oneFixLength <= 1); 
                     oneFixCenter = ll + oneFixLength; 
-                    // normalization (?)
-                    // oneFixLength *= length_scale_; 
-                    // oneFixCenter *= length_scale_; 
-
                     // match order
                     double tGrid = find_order(oneFixLength);
                     // randomly chosen ~0.01 seems to be a reasonable choice
-                    double smallbound = 0.01; 
-                    gridLoader = smallbound; 
+                    double smallBound = 0.001; 
+                    gridLoader = smallBound; 
 
                     if (tbbtol < gridLoader) {
                         tbbtol = gridLoader; 
@@ -167,12 +176,12 @@ class Chebcoll {
                     
                     // whether the grids are consistently unifrom
                     int evengridIndex = 1; 
-                    if (evengridIndex == 1) tGrid = smallbound; 
-                    else tGrid = std::max(tGrid, smallbound);
+                    if (evengridIndex == 1) tGrid = smallBound; 
+                    else tGrid = std::max(tGrid, smallBound);
                     
                     // should be integer, as division of 10's powers
                     double rrTimes = otherGrid / tGrid; 
-                    int kk = ceil(rrTimes);
+                    int kk = round(rrTimes);
                     if (kk > 1) kk = round10(kk); 
                     for (int j = 0; j < kk; j++) {
                         gridVec.push_back(tGrid);
@@ -187,7 +196,7 @@ class Chebcoll {
             }
 
             std::vector<double> iterVec;
-            if ((ri == 1) || (ri == 5)) {
+            if ((workIndex == 1) || (workIndex == 5)) {
                 // declare bound for the fixed parameter, usually distPerp (vertical distance)
                 double lbound = otherGrid; 
                 double ubound = upBound - otherGrid; 
@@ -196,13 +205,12 @@ class Chebcoll {
 
                 for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
                 bbcount = floor((ubound - lbound)/gridSize + 1); 
-                // iteratively create Baobzi object
                 speak("Baobzi Objects need to be created", bbcount); 
                 grid_size_magnitude_ = otherGrid; 
             }
-            else if (ri == 3){
+            else if (workIndex == 3){
                 iterVec = cumulativeSum(gridVec); 
-                grid_size_magnitude_ = smallbound; 
+                grid_size_magnitude_ = smallBound; 
             }
 
             // temporary variables
@@ -218,7 +226,7 @@ class Chebcoll {
             for (size_t iii = 0; iii < iterVec.size(); iii++) {
                 double thisCenter = iterVec[iii]; 
                 const auto st1 = get_wtime();
-                if (ri == 3) {
+                if (workIndex == 3) {
                     oneFixLength = lengthVec[iii];
                     oneFixCenter = centerVec[iii]; 
                     otherGrid = gridVec[iii]; 
@@ -234,15 +242,18 @@ class Chebcoll {
                     center[1] = 1; 
                 }
                 else {
-                    tri = ri; 
+                    tri = workIndex; 
                 }
 
-                if ((ri == 3)) {
+                if ((workIndex == 3)) {
                     std::cout << "hl: " << otherGrid << ";" << oneFixLength << std::endl;
                     std::cout << "center: " << thisCenter << ";" << oneFixCenter << std::endl;
                 }
 
-                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, on, tri, tpon, etl, the_upper_bound_);
+                /* Create Baobzi Object */
+                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, tri, tpon, etl, the_upper_bound_);
+                if (tifsave == 1) theBaobzi.saveFunctionObject(tfoldername, iii); 
+
                 size_t ssTaken = theBaobzi.approxFunc(); // taken space in Mb
                 theallCheb[iii] = theBaobzi; 
                 thebreakPtsCollChange[iii] = thisCenter - otherGrid; 
@@ -252,7 +263,7 @@ class Chebcoll {
                 const double dt1 = get_wtime_diff(&st1, &ft1);
                 totalTime += dt1; 
                 // only print log in reverse lookup
-                if ((iii % 100 == 0) && (ri == 3)) { 
+                if ((iii % 100 == 0) && (workIndex == 3)) { 
                     speak("Baobzi Created", iii); 
                     speak("Needed Time per object (s)", dt1); 
                 }
@@ -311,7 +322,7 @@ class Chebcoll {
             Cheb pickBaobzi = allCheb[pickPt]; 
             // check if integral is beyond the scope; only calculate after knowing which exact object is used
             double intOB = pickBaobzi.center[1] + pickBaobzi.half_length[1]; 
-            if ((ptCenter[1] > intOB) && (ri == 3)) {
+            if ((ptCenter[1] > intOB) && (workIndex == 3)) {
                 printf("Baobzi Family Warning: integral %g very large, clamp to integral UB %g \n", ptCenter[1], intOB);
                 ptCenter[1] = intOB - std::max(integral_min_, 1e-5);
             }       
@@ -336,7 +347,7 @@ class Chebcoll {
 
         inline std::vector<std::vector<double>> findExtremeVal(int recorddata = 0, int recorderror = 0, int ubound = 0, double prefactor = 1) {
             // TODO: calculate upper bound of reverse lookup internally in the class? 
-            if (ri == 3) assert(ubound > 0); 
+            if (workIndex == 3) assert(ubound > 0); 
 
             std::vector<std::vector<double>> intSpecSaver; 
             std::vector<double> errorTrueSaver;
@@ -351,8 +362,8 @@ class Chebcoll {
                 std::string strFreeLength = std::to_string(tfreelength);
                 std::string categoryName; 
                 // set up category name
-                if ((ri == 1) || (ri == 5)) categoryName = "CDF-"; 
-                if (ri == 3) categoryName = "ReverseCDF-"; 
+                if ((workIndex == 1) || (workIndex == 5)) categoryName = "CDF-"; 
+                if (workIndex == 3) categoryName = "ReverseCDF-"; 
                 std::string searchfilename = rootpath + categoryName + "D=" + strD + "-" + "alpha=" + strAlpha + "-" + "fl=" + strFreeLength + ".txt"; 
                 try {
                     std::filesystem::remove(searchfilename);
@@ -361,7 +372,7 @@ class Chebcoll {
                 myfile.open(searchfilename);
             }
 
-            if ((ri == 1) || (ri == 5)) {
+            if ((workIndex == 1) || (workIndex == 5)) {
                 // for calculation on global domain for energy dependent first-order CDF/PDF
                 for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
                     std::vector<double> gridResultSaver; 
@@ -396,7 +407,7 @@ class Chebcoll {
                 assert(cnt == bbcount); 
             }
             // for calculation on global domain for reverse lookup
-            else if (ri == 3) {
+            else if (workIndex == 3) {
                 double bdd = 0.01; 
                 for (double i = prefactor * bdd; i < ubound - 0.2; i += prefactor * bdd) {
                     double distPerp = i * length_scale_; 
