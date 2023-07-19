@@ -1,3 +1,13 @@
+/**
+ * @file auxil.hpp
+ * @author Zihan Zhang
+ * @brief Auxiliary functions that are used in construct Baobzi/Baobzi family object; 
+ *        the purposes for most functions are self-evident by naming
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef AUXIL_HPP_
 #define AUXIL_HPP_
 
@@ -7,6 +17,8 @@
 #include <random>
 #include <array> 
 #include <numeric>
+#include <string>
+#include <filesystem>
 
 
 #include <baobzi_template.hpp>
@@ -31,16 +43,29 @@ double total_sum(std::vector<double> const& xarray) {
     return std::reduce(xarray.begin(), xarray.end()); 
 }
 
-void speak(const char name[], const double var) {
+template <typename T>
+void speak(const char name[], const T& var) {
     std::cout << name << ": " << var << std::endl;
-    return; 
 }
 
-void speakvec(const char name[], std::vector<double> thevec) {
-    size_t n = thevec.size();
-    std::cout << name << ";"; 
-    for (size_t i = 0; i < n; i++) std::cout << thevec[i] << "; "; 
-    std::cout << std::endl; 
+template <typename T>
+void printElement(const T& element) {
+    std::cout << element << " ";
+}
+
+template <typename T>
+void printVector(const std::vector<T>& vec) {
+    for (const auto& element : vec) {
+        printElement(element);
+    }
+    std::cout << std::endl;
+}
+
+template <typename T>
+std::vector<T> getUniqueElements(const std::vector<T>& vec) {
+    std::set<T> uniqueSet(vec.begin(), vec.end());
+    std::vector<T> uniqueVec(uniqueSet.begin(), uniqueSet.end());
+    return uniqueVec;
 }
 
 double find_order(const double input) {
@@ -55,27 +80,17 @@ std::vector<double> createErr(const int a, const int b) {
     return errVec; 
 }
 int binarySearch(const std::vector<double>& numbers, int target, int start, int end) {
-    if (start > end) {
-        return -1;
-    }
+    if (start > end) return -1;
 
     int mid = start + (end - start) / 2;
 
-    if (numbers[mid] <= target && target <= numbers[mid + 1]) {
-        return mid;
-    } 
-    else if (numbers[mid] < target) {
-        return binarySearch(numbers, target, mid + 1, end);
-    } 
-    else {
-        return binarySearch(numbers, target, start, mid - 1);
-    }
+    if (numbers[mid] <= target && target <= numbers[mid + 1]) return mid;
+    else if (numbers[mid] < target) return binarySearch(numbers, target, mid + 1, end);
+    else return binarySearch(numbers, target, start, mid - 1);
 }
 
 int findIntervalIndex(const std::vector<double>& numbers, int target) {
-    if (target < numbers[0] || target > numbers[numbers.size() - 1]) {
-        return -1;
-    }
+    if (target < numbers[0] || target > numbers[numbers.size() - 1]) return -1;
 
     return binarySearch(numbers, target, 0, numbers.size() - 1);
 }
@@ -104,8 +119,7 @@ std::vector<double> findMinMaxVec(const std::vector<std::vector<double>> matrix)
     return res; 
 }
 
-int round10(int n)
-{
+int round10(int n) {
     int a = (n / 10) * 10;
     int b = a + 10;  
     return (n - a > b - n)? b : a;
@@ -119,17 +133,63 @@ std::vector<double> cumulativeSum(const std::vector<double>& input) {
         sum += element;
         cumulative.push_back(sum);
     }
-
     return cumulative;
 }
 
+std::vector<double> readDataFromFile(const std::string& filename) {
+    std::vector<double> data;
+    std::ifstream inputFile(filename);
+
+    if (inputFile.is_open()) {
+        std::string line;
+        while (std::getline(inputFile, line)) {
+            std::istringstream iss(line);
+            std::string token;
+            while (std::getline(iss, token, ',')) {
+                // speak("token", token); 
+                std::locale originalLocale(std::locale::classic());
+                std::locale::global(std::locale::classic());
+                double value = std::stod(token);
+                data.push_back(value);
+                std::locale::global(originalLocale);
+            }
+        }
+
+        inputFile.close();
+    } 
+    else std::cout << "Failed to open the file." << std::endl;
+    return data;
+}
+
+std::uintmax_t calculateFolderSize(const std::string& folderPath) {
+    std::uintmax_t totalSize = 0;
+
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(folderPath)) {
+        if (std::filesystem::is_regular_file(entry)) {
+            totalSize += std::filesystem::file_size(entry);
+        }
+    }
+    
+    return totalSize;
+}
+
+double round_up(double value, int decimal_places) {
+    const double multiplier = std::pow(10.0, decimal_places);
+    return std::ceil(value * multiplier) / multiplier;
+}
 
 
-
-
-
-
-
+void removeAllFilesInFolder(const std::string& folderPath) {
+    try {
+        for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+            if (std::filesystem::is_regular_file(entry)) {
+                std::filesystem::remove(entry.path());
+            }
+        }
+    } catch (const std::filesystem::filesystem_error& ex) {
+        std::cerr << "Error while removing files: " << ex.what() << std::endl;
+    }
+}
 
 
 

@@ -56,10 +56,12 @@ for file in glob.glob("*.txt"):
     cbar = plt.colorbar(label='error')
     cbar.ax.set_yscale('log')
     cbar.ax.set_ylabel('Error (log scale)')
-    cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,-1))
+    cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,1))
 
     plt.axis('equal')
     ax.set_title(f"{oname}", fontsize = 12)
+    # plt.xlim(0, 20)
+    # plt.ylim(0, 20)
     fig.savefig(f"{oname}-error-contour.jpeg", dpi=100)
     plt.clf()
 

@@ -1,3 +1,12 @@
+/**
+ * @file chebcoll.hpp
+ * @author Zihan Zhang
+ * @brief Create multiple Baobzi objects (family) on the global search domain
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef CHEBCOLL_HPP_
 #define CHEBCOLL_HPP_
 
@@ -40,7 +49,11 @@ class Chebcoll {
         int bbcount; 
         const char* tfoldername; 
         int tifsave; 
-        // key
+        // key -- work mode
+        // [1]: Normal Lookup (CDF)
+        // [3]: Reverse Lookup
+        // [5]: Normal Lookup (PDF)
+        // rests are still under developed
         int workIndex; 
 
         std::vector<Cheb> allCheb; 
@@ -56,9 +69,12 @@ class Chebcoll {
         Chebcoll() = default;
         ~Chebcoll() = default;
 
+        /**
+         * Baobzi Family (colleection of objects) constructor from scratch
+         */
         Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, 
-        std::vector<double> integralMinMax = std::vector<double>(), const double errortolerence = 1e-3, 
-        const int ifsave = 0, const char* defaultfoldername = "./mytests/", const int printornot = 0) {
+        std::vector<double> integralMinMax = std::vector<double>(), const int ifsave = 0, const double errortolerence = 1e-3, 
+        const char* defaultfoldername = "./mytests/", const int printornot = 0) {
             // initialize dimensionless 
             length_scale_ = D; 
             exp_fact_ = alpha * length_scale_ * length_scale_;
@@ -79,15 +95,96 @@ class Chebcoll {
                 assert(runind == 3); 
                 integral_min_ = integralMinMax[0];
                 integral_max_ = integralMinMax[1]; 
-                std::cout << "Setup integral max/min value in Constructor for Reverse Lookup: " << integral_min_ << "," << integral_max_ << std::endl; 
+                std::cout << "Setup integral max/min value in Constructor for Reverse Lookup: "; 
+                std::cout << integral_min_ << "," << integral_max_ << std::endl; 
             }
             etl = errortolerence; 
             speak("Tolerance of Approximating Integral to 0", etl); 
         }
 
         /**
+         * Read in already created Baobzi object into tbe constructor based on the given root
+         * The current folder path in demo test is KMC/build/mytests
+         * Only needed in reverse lookup, where the build up is time costly
+         */
+        Chebcoll(const int runind, std::string objpath = "./mytests/") {
+            // load work mode
+            workIndex = runind; 
+            // all filenames are integer-formatted, so the following operations are eligible
+            std::vector<int> saveNameIntForm; 
+            
+            for (const auto& entry : std::filesystem::directory_iterator(objpath)){
+                if (std::filesystem::is_regular_file(entry)) {
+                    std::string fileName = entry.path().filename().string();
+                    try {
+                        // will have error for [param] file, thus automatically ignored
+                        saveNameIntForm.push_back(std::stoi(fileName)); 
+                    }
+                    catch (const std::exception& ex) {
+                        std::cerr << "Error: " << ex.what() << "," << fileName << std::endl;
+                    }
+                }
+            }
+
+            speak("Num of Files in Folder", saveNameIntForm.size()); 
+            // sort vector -- dependent on how the Baobzi objects are sequentially created
+            std::sort(saveNameIntForm.begin(), saveNameIntForm.end()); 
+            // delete duplicated filenames due to scanning over Baobzi + its auxiliary file
+            std::vector<int> uniqNameIntForm = getUniqueElements(saveNameIntForm); 
+            // num of objects that need to be created
+            int totalNum = uniqNameIntForm.size(); 
+            speak("totalNum", totalNum); 
+            assert(totalNum > 0); 
+            // create temporary variables 
+            std::vector<Cheb> theallCheb(totalNum); 
+            std::vector<double> thebreakPtsCollChange(totalNum); 
+            std::vector<double> thebreakPtsCollUnchange(totalNum);
+            // load parameters
+            std::vector<double> readInParam = readDataFromFile(objpath + "param"); 
+            // follow the format in [recordParameter()]
+            exp_fact_ = readInParam[0]; 
+            rest_length_ = readInParam[1]; 
+            length_scale_ = readInParam[2]; 
+            the_upper_bound_ = readInParam[3]; 
+            grid_size_magnitude_ = readInParam[4]; 
+            integral_min_ = readInParam[5]; 
+            integral_max_ = readInParam[6]; 
+
+            const auto st1 = get_wtime();
+            for (size_t i = 0; i < totalNum; i++) {
+                int temp = uniqNameIntForm[i]; 
+                std::string resFileName = std::to_string(temp);
+                std::string fullFilePath = objpath + resFileName; 
+                std::string fileSuffix = "-Res"; 
+                std::string fullAuxFilePath = fullFilePath + fileSuffix; 
+                // readin auxiliary parameters
+                std::vector<double> readInData = readDataFromFile(fullAuxFilePath);
+                // following the save format defined in [cheb.hpp], function [saveFunctionObject]
+                double hl[2] = {readInData[1], readInData[3]};
+                double center[2] = {readInData[0], readInData[2]}; 
+                const int porn = 0; 
+                Cheb theCheb(hl, center, fullFilePath, porn); 
+                // load variables, similar to createBaobziFamily()
+                theallCheb[i] = theCheb; 
+                thebreakPtsCollChange[i] = readInData[0] - readInData[1];
+                thebreakPtsCollUnchange[i] = readInData[2] - readInData[3];
+            }
+            // save to member variable of class
+            allCheb = theallCheb; 
+            breakPtsCollChange = thebreakPtsCollChange; 
+            breakPtsCollUnchange = thebreakPtsCollUnchange;
+            // calculate reconstruction time
+            const auto ft1 = get_wtime();
+            const double dt1 = get_wtime_diff(&st1, &ft1);
+            speak("Total Reconstruction Time (s)", dt1); 
+
+            std::uintmax_t folderSize = calculateFolderSize(objpath);
+            speak("Total Memory Size in Reconstructed Folder (MB)", folderSize / (1024 * 1024)); 
+        }
+
+        /**
          * @brief calculate Boltzmann factor
-         * @return the value
+         * @return calculated value
          */
 
         inline double calcBoltzmann(double dist_cent) const {
@@ -107,7 +204,7 @@ class Chebcoll {
         /**
          * @brief create Baobzi family over the whole domain with one dimension normalized and other dimension linearly discretized
          * [the hint of how to normalize both dimensions are included in the comments, but not desirable] 
-         * save all objects respectively in vectors (member variables) and will be used in evalSinglePt() function
+         * save all objects respectively in vectors (member variables) and will be used in [evalSinglePt()] function
          * @param[in]: tempkk: optional, only used in reverse lookup to input prior knowledge of integral range (workIndex == 3)
          * @return void 
         */
@@ -123,8 +220,14 @@ class Chebcoll {
             // create folder to save Baobzi object files if needed
             if (tifsave == 1) {
                 int result = mkdir(tfoldername, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-                if (result == 0) std::cout << "Folder created successfully." << std::endl;
-                else std::cout << "Failed to create the folder." << std::endl;
+                if (result == 0) {
+                    std::cout << "Folder created successfully." << std::endl;
+                }
+                else {
+                    removeAllFilesInFolder(tfoldername);
+                    speak("Remove All Files in", tfoldername); 
+                }
+                
             }
 
             std::vector<double> lengthVec; 
@@ -166,7 +269,7 @@ class Chebcoll {
                     // match order
                     double tGrid = find_order(oneFixLength);
                     // randomly chosen ~0.01 seems to be a reasonable choice
-                    double smallBound = 0.001; 
+                    smallBound = 0.01; 
                     gridLoader = smallBound; 
 
                     if (tbbtol < gridLoader) {
@@ -252,10 +355,12 @@ class Chebcoll {
 
                 /* Create Baobzi Object */
                 Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, tri, tpon, etl, the_upper_bound_);
+                // taken space in Byte -- Function Approximated (at this point)!
+                size_t ssTaken = theBaobzi.approxFunc(); 
                 if (tifsave == 1) theBaobzi.saveFunctionObject(tfoldername, iii); 
-
-                size_t ssTaken = theBaobzi.approxFunc(); // taken space in Mb
                 theallCheb[iii] = theBaobzi; 
+                // important member variable that needed to be reconstructed when readin files
+                // load variables
                 thebreakPtsCollChange[iii] = thisCenter - otherGrid; 
                 thebreakPtsCollUnchange[iii] = oneFixCenter - oneFixLength; 
                 thechebSpaceTaken[iii] = ssTaken;
@@ -268,6 +373,8 @@ class Chebcoll {
                     speak("Needed Time per object (s)", dt1); 
                 }
             }
+            // record parameter list for reconstruction purpose
+            if (tifsave == 1) recordParameter(); 
             // transfer to MB
             speak("Total Baobzi Family Space (MiB)", total_sum(thechebSpaceTaken) / (1024 * 1024)); 
             speak("Total Time to Build Up Baobzi Family", totalTime); 
@@ -339,15 +446,23 @@ class Chebcoll {
 
         /**
          * @brief (up to choice) to record the data and relative error to true integral with respect to the s and r⊥ over the domain
-         * @param[in]: recorddata: whether to record data in all kinds of lookup
-         * @param[in]: recorderror: whether to record error in all kinds of lookup
-         * @param[in]: optional, only used in reverse lookup to set up grid bound
+         * @param[in]: recorddata [binary]: whether to record data in all kinds of lookup
+         * @param[in]: recorderror [binary]: whether to record error in all kinds of lookup
+         * @param[in]: ubound: optional, only used in reverse lookup to set up grid bound
+         * @param[in]: prefactor [positive int]: grid of recording data, =1 -> =grid of linearly discretized Baobzi object
+         * @param[in]: relOrAbs [binary]: whether to record relative error (0 <= err <= 1) or absolute error (with unit)
          * @return min/max integral value over each linearly discretized grid in the domain
          */
 
-        inline std::vector<std::vector<double>> findExtremeVal(int recorddata = 0, int recorderror = 0, int ubound = 0, double prefactor = 1) {
+        inline std::vector<std::vector<double>> scanGlobalDomain(int recorddata = 0, int recorderror = 0, 
+        int ubound = 0, double prefactor = 1, const int relOrAbs = 0) {
             // TODO: calculate upper bound of reverse lookup internally in the class? 
             if (workIndex == 3) assert(ubound > 0); 
+
+            // suffix of rel or abs error
+            std::string errSuffix; 
+            if (relOrAbs == 0) errSuffix = "abs-";
+            else errSuffix = "rel-"; 
 
             std::vector<std::vector<double>> intSpecSaver; 
             std::vector<double> errorTrueSaver;
@@ -356,15 +471,15 @@ class Chebcoll {
             // ostream setup
             if (recorddata == 1) {
                 std::cout << "==START RECORD DATA==" << std::endl;
-                std::string rootpath = "3d-data/";
-                std::string strD = std::to_string(length_scale_);
-                std::string strAlpha = std::to_string(talpha);
-                std::string strFreeLength = std::to_string(tfreelength);
+                std::string rootPath = "3d-data/";
+                std::string strD = std::to_string(round_up(length_scale_, 3));
+                std::string strAlpha = std::to_string(round_up(talpha, 3));
+                std::string strFreeLength = std::to_string(round_up(tfreelength, 3));
                 std::string categoryName; 
                 // set up category name
                 if ((workIndex == 1) || (workIndex == 5)) categoryName = "CDF-"; 
                 if (workIndex == 3) categoryName = "ReverseCDF-"; 
-                std::string searchfilename = rootpath + categoryName + "D=" + strD + "-" + "alpha=" + strAlpha + "-" + "fl=" + strFreeLength + ".txt"; 
+                std::string searchfilename = rootPath + categoryName + errSuffix + "D=" + strD + "-" + "alpha=" + strAlpha + "-" + "fl=" + strFreeLength + ".txt"; 
                 try {
                     std::filesystem::remove(searchfilename);
                 }
@@ -386,7 +501,10 @@ class Chebcoll {
                         }
                         if (recorderror == 1) {
                             double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
-                            double relerr = ABS(intres - realres); 
+                            // calculate relative or abselute error
+                            double relerr; 
+                            if (relOrAbs == 0) relerr = ABS(intres - realres); 
+                            else relerr = ABS(intres - realres) / ABS(realres); 
                             errorTrueSaver.push_back(relerr); 
                             // << relative error with real integral value
                             myfile << "," << relerr; 
@@ -408,15 +526,18 @@ class Chebcoll {
             }
             // for calculation on global domain for reverse lookup
             else if (workIndex == 3) {
-                double bdd = 0.01; 
-                for (double i = prefactor * bdd; i < ubound - 0.2; i += prefactor * bdd) {
+                for (double i = prefactor * grid_size_magnitude_; i < ubound - 0.2; i += prefactor * grid_size_magnitude_) {
                     double distPerp = i * length_scale_; 
                     std::vector<double> gridResultSaver; 
-                    for (double j = prefactor * bdd; j < ubound - 0.2; j += prefactor * bdd) {
+                    for (double j = prefactor * grid_size_magnitude_; j < ubound - 0.2; j += prefactor * grid_size_magnitude_) {
                         double val = integral(distPerp / length_scale_, 0, j, exp_fact_, rest_length_); 
                         double inval[] = {distPerp / length_scale_, val * length_scale_}; 
                         double revres = evalSinglePt(inval, 0); 
-                        double relerr = ABS(revres - j * length_scale_); 
+                        double trueval = j * length_scale_; 
+                        // calculate relative or absolute error
+                        double relerr; 
+                        if (relOrAbs == 0) relerr = ABS(revres - trueval); 
+                        else relerr = ABS(revres - trueval) / ABS(trueval); 
                         gridResultSaver.push_back(revres); 
                         if (recorddata == 1) {
                             myfile << i << "," << j << "," << revres; 
@@ -437,9 +558,11 @@ class Chebcoll {
             }
 
             if (recorderror == 1){
+                std::cout << errSuffix << std::endl; 
                 speak("Mean Error of Cheb Family to Real Value over Whole Domain", mean_error(errorTrueSaver));
                 std::cout << "==== END ====" << std::endl; 
-            }                
+            }    
+
             speak("cnt",cnt); 
 
             return intSpecSaver; 
@@ -456,6 +579,28 @@ class Chebcoll {
             integral_min_ = res[0];
             integral_max_ = res[1]; 
             return res;  
+        }
+
+        /**
+         * @brief record important parameters of pre-calculated Chebcoll object to an external file
+         */
+
+        inline void recordParameter() {
+            std::ofstream myfile;
+            std::string suffix = "param"; 
+            std::string paramFileName = std::string(tfoldername) + suffix; 
+            const char* saveLocation = paramFileName.c_str();
+            speak("saveLocation", saveLocation); 
+            int result = std::remove(saveLocation);
+            if (result == 0) std::cout << "Parameter File Detected and Deleted: " << saveLocation << std::endl; 
+            myfile.open(saveLocation);
+            // ---- saving format ----
+            myfile << exp_fact_ << "," << rest_length_ << "," << length_scale_ << "," << the_upper_bound_ << ","; 
+            myfile << grid_size_magnitude_ << "," << integral_min_ << "," << integral_max_ << std::endl; 
+            // ---- saving format ----
+            myfile.close(); 
+            std::cout << "Parameter List Finished Recording" << std::endl; 
+
         }
 };
 

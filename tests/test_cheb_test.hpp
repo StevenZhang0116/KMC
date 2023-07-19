@@ -1,3 +1,12 @@
+/**
+ * @file test_cheb_test.hpp
+ * @author Zihan Zhang
+ * @brief Baobzi/Baobzi Family Test
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #include "KMC_func/integrals.hpp"
 #include "KMC_func/lookup_table.hpp"
 #include "KMC_func/lut_filler_edep.hpp"
@@ -35,7 +44,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::cout << "==== DEMO REVERSE CHECK SPRING TEST ====" << std::endl; 
     const double tol = 1e-2;
     const double D = 0.024;
-    const double alpha = 1 / (2 * 0.00411);
+    const double alpha = 0.5 / (2 * 0.00411);
 
     const double freelength = 0.05;
     const double M = alpha * D * D;
@@ -72,7 +81,6 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
         intval.push_back(val); 
         // CHECK(LUT.ReverseLookup(distPerp, val * D) == Approx(sbound * D).epsilon(tol));
     }
-    std::cout << "==" << std::endl; 
     // speak("small", intval[0]); speak("large",intval[gridcnt]); 
     // speakvec(intval, gridcnt); 
     speak("intval[0]",intval[0]);
@@ -95,13 +103,34 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     speak("hlfc * D", intvaldiff * D);
     speak("midint * D", midint * D); 
 
-    Chebcoll bbcoll(alpha, freelength, D, 1);
-    bbcoll.createBaobziFamily(); 
-    std::vector<std::vector<double>> tempkk = bbcoll.findExtremeVal(0, 1); 
-    std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
-    Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, integralMinMax, 1e-3, 0);
-    bbcoll2.createBaobziFamily(tempkk); 
-    std::vector<std::vector<double>> tempkk2 = bbcoll2.findExtremeVal(1, 1, testbound, 1);
+
+    // demo code
+    int index = 0;  
+    // construct
+    if (index == 0){
+        // construct positive lookup Baobzi Family object
+        Chebcoll bbcoll(alpha, freelength, D, 1);
+        // approximate functions
+        bbcoll.createBaobziFamily(); 
+        // globally search domain to find range of integral in each grid
+        std::vector<std::vector<double>> tempkk = bbcoll.scanGlobalDomain(0, 1); 
+        std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
+        // construct reverse lookup Baobzi Family object
+        // use default output path -- can handle user input
+        Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, integralMinMax, 1, 1e-3);
+        // approximate functions
+        bbcoll2.createBaobziFamily(tempkk); 
+        // global search
+        std::vector<std::vector<double>> tempkk2 = bbcoll2.scanGlobalDomain(1, 1, testbound, 1, 1);
+        // using [.evalSinglePt(inval,0)] for single point evaluation; inval 2D coordinates
+    }
+    // reconstruct
+    else {
+        // reconstrct Baobzi Family object based on files in given path (currently using default path)
+        Chebcoll bbcoll2(3);
+        // global search
+        std::vector<std::vector<double>> tempkk2 = bbcoll2.scanGlobalDomain(1, 1, testbound, 1, 1);
+    }
 
     // const auto st1 = get_wtime();
     // Cheb theBaobzi(hl, center, 1e-1, alpha, freelength, D, fn, 3, 0);
@@ -157,9 +186,9 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 //     // Physical Parameters Setting
 //     constexpr double errTol = 1e-3;
 //     const double D = 0.024;
-//     const double alpha = 10 / (2 * 0.00411);
+//     const double alpha = 0.1 / (2 * 0.00411);
 //     // check to larger value (default = 0.05) to observe convexity/concavity of CDF in normal lookup
-//     const double freelength = 0.5; 
+//     const double freelength = 0.05; 
 //     const double M = alpha * D * D; 
 //     const double ell0 = freelength / D;
 
@@ -206,7 +235,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 //     const auto st4 = get_wtime();
 //     Chebcoll bbcoll(alpha, freelength, D, 1, 1e-4);
 //     bbcoll.createBaobziFamily(); 
-//     std::vector<std::vector<double>> tempkk = bbcoll.findExtremeVal(1,1); 
+//     std::vector<std::vector<double>> tempkk = bbcoll.scanGlobalDomain(1,1); 
 //     const auto ft4 = get_wtime();
 //     const double dt4 = get_wtime_diff(&st4, &ft4);
 

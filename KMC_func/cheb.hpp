@@ -1,3 +1,12 @@
+/**
+ * @file cheb.hpp
+ * @author Zihan Zhang
+ * @brief Create single Baobzi object
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef CHEB_HPP_
 #define CHEB_HPP_
 
@@ -25,14 +34,13 @@ class Cheb {
         baobzi_input_t input;
         int indicator; 
         int printOrNot; 
-    private:
-        baobzi::Function<2,10,0,double> savefunc;
+        baobzi::Function<2, 10, 0, double> saveFunc;
     public:
         Cheb() = default;
         ~Cheb() = default;
 
         /**
-         * @brief constructor of Baobzi object
+         * @brief constructor of Baobzi object from scratch
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
         double D, const int runind, const int porn, const double errtol = 1e-3, 
@@ -53,8 +61,11 @@ class Cheb {
                 speak("center 1", center[0]);
                 speak("center 2", center[1]);
             } 
-            // except tolerance, these parameters could be set as fixed and slight tuningWILL NOT 
-            // give significant effect to the result
+
+            // except tolerance, these parameters could be set as fixed and slight tuning
+            // WILL NOT give significant effect to the result; 
+            // since written as fixed, multiple places in [cheb.hpp] should be 
+            // changed altogether, otherwise errors are triggered. 
             input.dim = 2; 
             input.output_dim = 1; 
             input.order = 10;
@@ -65,7 +76,7 @@ class Cheb {
             input.max_depth = 40; 
 
             // load external parameters to pass into Baobzi object
-            // cross-used in multiple subfunctions in conApproxFunc()
+            // cross-used in multiple subfunctions in [conApproxFunc()]
             // 
             // param[0] = M: exponential constant factor -> exp_fact_
             // param[1] = ell0: protein rest length -> rest_length_
@@ -94,6 +105,36 @@ class Cheb {
 
             // determines which function approximation is implemented (e.g. lookup, reverse lookup)
             indicator = runind; 
+        }
+
+
+        /**
+         * @brief reconstructed constructor of Baobzi object using precalculated approximated function
+         * and other presaved parameters
+         */
+        Cheb(double (&hl)[2], double (&cen)[2], std::string fullFilePath, const int porn) {
+            // define function object -- the dimensions should match with the fixed parameters 
+            // declared above, otherwise runtime_error is generated
+            baobzi::Function<2, 10, 0, double> readInFunc; 
+            // load Baobzi function object
+            try{
+                baobzi::Function<2, 10, 0, double> tempFunc(fullFilePath.c_str());
+                readInFunc = tempFunc; 
+            }
+            catch (const std::runtime_error& ex) {
+                std::cout << "Caught std::runtime_error: " << ex.what() << std::endl;
+            }
+            // save to member variable
+            saveFunc = readInFunc; 
+            double spaceTaken = saveFunc.memory_usage();
+            // speak("ReadIn Function Space", spaceTaken); 
+
+            memcpy(&half_length, &hl, sizeof(hl)); 
+            // half length, <= 1, to satisfy Baobzi requirement
+            assert(half_length[0] <= 1); 
+            assert(half_length[1] <= 1); 
+            memcpy(&center, &cen, sizeof(cen)); 
+            printOrNot = porn; 
         }
 
         /**
@@ -347,9 +388,9 @@ class Cheb {
          * @return null
         */
         inline size_t approxFunc() {
-            baobzi::Function<2,10,0,double> func_approx(&input, center, half_length, conApproxFunc(), {});
+            baobzi::Function<2, 10, 0, double> func_approx(&input, center, half_length, conApproxFunc(), {});
             double spaceTaken = func_approx.memory_usage();
-            savefunc = func_approx; 
+            saveFunc = func_approx; 
             return spaceTaken;
         }
 
@@ -357,24 +398,25 @@ class Cheb {
          * @brief evaluate function value at given input coordinates; notice that segmentation error would be generated if `inval[]`
          *        (after transformation, like *D or /D, not input here) is not in the predetermined domain of `half_length` and 
          *        `center`, so normalization of fitting is needed. 
-         * 
+         * @param inval: 2D coordinates of evaluated point
          * @return apprxoximated value
         */
         inline double evalFunc(double inval[]) {
             if (printOrNot == 1) std::cout << "Evaluate Point at (" << inval[0] << "," << inval[1] << ")" << std::endl; 
             double res; 
-            savefunc(inval, &res); 
+            saveFunc(inval, &res); 
             return res; 
         }
 
         /** 
          * @brief check whether the given 2D coordinate is included in the domain
+         * @param checkErrorIndex: whether to print log
          * 
          * @return binary value
          */
-        inline int checkInclude(double (&pt)[2], const int errorIndex) {
+        inline int checkInclude(double (&pt)[2], const int checkErrorIndex) {
             try {
-                if (errorIndex == 1) {
+                if (checkErrorIndex == 1) {
                     std::cout << "==========" << std::endl; 
                     std::cout << center[0] << "," << half_length[0] << "," << pt[0] << std::endl; 
                     std::cout << center[1] << "," << half_length[1] << "," << pt[1] << std::endl; 
@@ -392,12 +434,33 @@ class Cheb {
         }
 
         /**
-         * @brief save function to an external file that subject to be reloaded  
+         * @brief save function(s) and auxiliary parameters to external file(s) that subject to be reloaded
+         * using Cheb constructor  
+         * @param folderName, objectIndex: construct the output filename
          */
         inline void saveFunctionObject(const char* folderName, const int objectIndex) {
+            // save Baobzi object
             std::string sL = std::string(folderName) + std::to_string(objectIndex);
             const char* saveLocation = sL.c_str();  
-            savefunc.save(saveLocation); 
+            int result = std::remove(saveLocation);
+            if (result == 0) std::cout << "Baobzi Filename Detected and Deleted: " << saveLocation << std::endl; 
+            double spaceTaken = saveFunc.memory_usage();
+            saveFunc.save(saveLocation); 
+            // save auxiliary information that related to tis Baobzi object
+            std::ofstream myfile; 
+            std::string fileSuffix = "-Res"; 
+            std::string sLAux = sL + fileSuffix; 
+            const char* saveLocation2 = sLAux.c_str(); 
+            int result2 = std::remove(saveLocation2);
+            if (result2 == 0) std::cout << "Baobzi Auxiliary File Detected and Deleted: " << saveLocation2 << std::endl; 
+            myfile.open(saveLocation2);
+            // ---- saving format ----
+            // [center of 1D] -- [half length of 1D]
+            // [center of 2D] -- [half length of 2Ds]
+            myfile << center[0] << "," << half_length[0] << std::endl; 
+            myfile << center[1] << "," << half_length[1] << std::endl; 
+            // ---- saving format ----
+            myfile.close(); 
         }
 };
 
