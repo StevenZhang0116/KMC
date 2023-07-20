@@ -44,7 +44,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::cout << "==== DEMO REVERSE CHECK SPRING TEST ====" << std::endl; 
     const double tol = 1e-2;
     const double D = 0.024;
-    const double alpha = 0.5 / (2 * 0.00411);
+    const double alpha = 0.1 / (2 * 0.00411);
 
     const double freelength = 0.05;
     const double M = alpha * D * D;
@@ -109,7 +109,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     // construct
     if (index == 0){
         // construct positive lookup Baobzi Family object
-        Chebcoll bbcoll(alpha, freelength, D, 1);
+        Chebcoll bbcoll(alpha, freelength, D, 1, 1e-4, 1e-3);
         // approximate functions
         bbcoll.createBaobziFamily(); 
         // globally search domain to find range of integral in each grid
@@ -117,11 +117,11 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
         std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
         // construct reverse lookup Baobzi Family object
         // use default output path -- can handle user input
-        Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, integralMinMax, 1, 1e-3);
+        Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, 1e-3, integralMinMax, 0);
         // approximate functions
         bbcoll2.createBaobziFamily(tempkk); 
         // global search
-        std::vector<std::vector<double>> tempkk2 = bbcoll2.scanGlobalDomain(1, 1, testbound, 1, 1);
+        std::vector<std::vector<double>> tempkk2 = bbcoll2.scanGlobalDomain(1, 1, testbound, 1, 0);
         // using [.evalSinglePt(inval,0)] for single point evaluation; inval 2D coordinates
     }
     // reconstruct
@@ -232,13 +232,13 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 
 //     const char* fn = "func_approx.baobzi"; 
 
-//     const auto st4 = get_wtime();
 //     Chebcoll bbcoll(alpha, freelength, D, 1, 1e-4);
+//     const auto st4 = get_wtime();
 //     bbcoll.createBaobziFamily(); 
-//     std::vector<std::vector<double>> tempkk = bbcoll.scanGlobalDomain(1,1); 
 //     const auto ft4 = get_wtime();
 //     const double dt4 = get_wtime_diff(&st4, &ft4);
-
+//     std::vector<std::vector<double>> tempkk = bbcoll.scanGlobalDomain(1,1); 
+    
 //     // Baobzi function approximator
 //     // Cheb theBaobzi(hl,center,bbtol,alpha,freelength,D,fn,runind);
 //     // theBaobzi.approxFunc();

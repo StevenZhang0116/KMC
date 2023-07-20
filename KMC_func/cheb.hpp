@@ -140,11 +140,11 @@ class Cheb {
         /**
          *  @brief approximate functions (subject to choose at different scanerios)
          * for whole list of explaining the integral functions, refer KMC_func/integrals.hpp
+         * provides API for users to add their own energy/torque/angle-dependent functions.
          *          
          *  @return integral value
          */
         inline std::function<void(const double*, double*, const void*)> conApproxFunc() {
-
             // x[0] = r⊥/lm: perpendicular distance above rod
             // x[1] = s: upper limit of integral
             /* Normal (Energy Dependent) Integral CDF - 1 */
@@ -297,12 +297,14 @@ class Cheb {
                     const double errtol = ((double*)data)[5]; 
 
                     double error = 0;
-                    double shift = 1e-30; 
-
+                    double shift = 1e-10; 
+                    // define search range
                     double lower_bound = 0.0 + shift; 
-                    double upper_bound = 20; 
-                    boost::uintmax_t max_iter = 1000; // Maximum number of iterations
-                    boost::math::tools::eps_tolerance<double> tolerance(30); // Desired tolerance
+                    double upper_bound = ub * D; 
+                    // maximum number of iterations
+                    boost::uintmax_t max_iter = 1000; 
+                    // desired tolerance
+                    boost::math::tools::eps_tolerance<double> tolerance(30); 
 
                     auto integrand = [&](double s) {
                         const double exponent = sqrt(s * s + x[0] * x[0]) - ell0;
@@ -314,12 +316,12 @@ class Cheb {
                         // if under certain tolerance, consider integral value (x[1]) as 0. 
                         if (ABS(x[1]) <= errtol) {
                             residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                                integrand, 0, caluplimit / D, 10, 1e-6, &error); 
+                                integrand, 0, caluplimit / D, 15, 1e-6, &error); 
                         }
 
                         else {
                             residue = D * boost::math::quadrature::gauss_kronrod<double, 21>::integrate(
-                                integrand, 0, caluplimit / D, 10, 1e-6, &error) - x[1]; 
+                                integrand, 0, caluplimit / D, 15, 1e-6, &error) - x[1]; 
                         }
                         
                         return residue;
@@ -330,13 +332,14 @@ class Cheb {
                         *y = res.first;
                     } 
                     catch(...) {
-                        int did = 1;  
+                        int did = 1;   
                         if (did == 0) *y = 0; 
                         else if (did == 1) {
                             /* will significant decrease the performance */
-                            for (double i = lower_bound; i < upper_bound; i += 0.0001) {
+                            double grid = 1e-4; 
+                            for (double i = lower_bound; i < upper_bound; i += grid) {
                                 double res = solve_func(i); 
-                                if (ABS(res) < errtol) {
+                                if (ABS(res) < 1e-5) {
                                     *y = i; 
                                     break; 
                                 }

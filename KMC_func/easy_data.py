@@ -1,3 +1,4 @@
+# run this file in KMC_func directory
 import numpy as np 
 import matplotlib.pyplot as plt 
 import pandas as pd 
@@ -51,31 +52,32 @@ for file in glob.glob("*.txt"):
     # plt.clf()
 
     # error plot
-    fig, ax = plt.subplots()
-    plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm(vmin=min(df["error"]), vmax=max(df["error"])))
-    cbar = plt.colorbar(label='error')
-    cbar.ax.set_yscale('log')
-    cbar.ax.set_ylabel('Error (log scale)')
-    cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,1))
+    # fig, ax = plt.subplots()
+    # plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm(vmin=min(df["error"]), vmax=max(df["error"])))
+    # cbar = plt.colorbar(label='error')
+    # cbar.ax.set_yscale('log')
+    # cbar.ax.set_ylabel('Error (log scale)')
+    # cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,1))
 
-    plt.axis('equal')
-    ax.set_title(f"{oname}", fontsize = 12)
-    # plt.xlim(0, 20)
-    # plt.ylim(0, 20)
-    fig.savefig(f"{oname}-error-contour.jpeg", dpi=100)
-    plt.clf()
+    # plt.axis('equal')
+    # ax.set_title(f"{oname}", fontsize = 12)
+    # # plt.xlim(0, 20)
+    # # plt.ylim(0, 20)
+    # fig.savefig(f"{oname}-error-contour.jpeg", dpi=100)
+    # plt.clf()
 
     # boundary plot
     # fig, ax = plt.subplots()
-    # threshold = 0.01
-    # # filter everything smaller than threshold to 0
-    # df["val"] = df["val"].apply(lambda x: 0 if x < threshold else x)
-    # # scatter
+    ax = fig.add_subplot(111, projection='3d')
+    threshold = 0.01
+    # filter everything smaller than threshold to 0
+    df["val"] = df["val"].apply(lambda x: 0 if x < threshold else x)
+    # scatter
     # plot = ax.scatter(df["x"], df["y"], c = df["val"], cmap = 'viridis')
-    # colorbar = plt.colorbar(plot)
-    # ax.axis('equal')
-    # fig.savefig(f"{oname}-boundary-result.jpeg", dpi=100)
-    # plt.clf()
+    scatter = ax.scatter(df["x"], df["y"], df["val"], c=df["val"], cmap='viridis', marker='o');
+    cbar = plt.colorbar(scatter)
+    fig.savefig(f"{oname}-boundary-result.jpeg", dpi=100)
+    plt.clf()
 
     print(oname)
 
