@@ -348,7 +348,7 @@ class Chebcoll {
                     tri = tworkIndex; 
                 }
 
-                if ((tworkIndex == 3) && (tpon == 1)) {
+                if ((tworkIndex == 3)) {
                     std::cout << "hl: " << otherGrid << ";" << oneFixLength << std::endl;
                     std::cout << "center: " << thisCenter << ";" << oneFixCenter << std::endl;
                 }

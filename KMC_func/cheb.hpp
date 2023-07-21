@@ -336,10 +336,10 @@ class Cheb {
                         if (did == 0) *y = 0; 
                         else if (did == 1) {
                             /* will significant decrease the performance */
-                            double grid = 1e-4; 
-                            for (double i = lower_bound; i < upper_bound; i += grid) {
+                            double grid = errtol; 
+                            for (double i = lower_bound; i < upper_bound; i += grid / 2) {
                                 double res = solve_func(i); 
-                                if (ABS(res) < 1e-5) {
+                                if (ABS(res) < errtol) {
                                     *y = i; 
                                     break; 
                                 }
