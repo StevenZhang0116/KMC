@@ -7,7 +7,7 @@ import seaborn as sns
 from matplotlib import colors
 from matplotlib.ticker import PercentFormatter
 
-dimension_index = 2
+dimension_index = 1
 
 if dimension_index == 1: 
     fig = plt.figure()

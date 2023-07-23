@@ -450,6 +450,7 @@ class Chebcoll {
          * @param[in]: recorderror [binary]: whether to record error in all kinds of lookup
          * @param[in]: ubound: optional, only used in reverse lookup to set up grid bound
          * @param[in]: prefactor [positive int]: grid of recording data, =1 -> =grid of linearly discretized Baobzi object
+         *             <1 -> finer grid in evaluation
          * @param[in]: relOrAbs [binary]: whether to record relative error (0 <= err <= 1) or absolute error (with unit)
          * @return min/max integral value over each linearly discretized grid in the domain
          */
@@ -491,22 +492,24 @@ class Chebcoll {
                 // for calculation on global domain for energy dependent first-order CDF/PDF
                 for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
                     std::vector<double> gridResultSaver; 
-                    for (double j = 0; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ / prefactor){
+                    for (double j = 0; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ * prefactor){
                         double iter[2] = {i,j}; 
                         double intres = evalSinglePt(iter, 0); 
                         gridResultSaver.push_back(intres); 
+                        double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
+
+                        // calculate relative or abselute error
+                        double relerr; 
+                        if (relOrAbs == 0) relerr = ABS(intres - realres); 
+                        else relerr = ABS(intres - realres) / ABS(realres); 
+
                         if (recorddata == 1){ 
                             // [vertical distance] << [scan length] << [lookup table result]
                             myfile << i << "," << j / length_scale_ << "," << intres; 
                         }
                         if (recorderror == 1) {
-                            double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
-                            // calculate relative or abselute error
-                            double relerr; 
-                            if (relOrAbs == 0) relerr = ABS(intres - realres); 
-                            else relerr = ABS(intres - realres) / ABS(realres); 
                             errorTrueSaver.push_back(relerr); 
-                            // << relative error with real integral value
+                            // [error] 
                             myfile << "," << relerr; 
                         }
                         myfile << std::endl;
@@ -524,28 +527,35 @@ class Chebcoll {
                 }
                 assert(cnt == bbcount); 
             }
+
             // for calculation on global domain for reverse lookup
             else if (tworkIndex == 3) {
-                for (double i = prefactor * grid_size_magnitude_; i < ubound - 0.2; i += prefactor * grid_size_magnitude_) {
+                for (double i = prefactor * grid_size_magnitude_; i < ubound - grid_size_magnitude_; i += prefactor * grid_size_magnitude_) {
                     double distPerp = i * length_scale_; 
                     std::vector<double> gridResultSaver; 
-                    for (double j = prefactor * grid_size_magnitude_; j < ubound - 0.2; j += prefactor * grid_size_magnitude_) {
-                        double val = integral(distPerp / length_scale_, 0, j, exp_fact_, rest_length_); 
-                        double inval[] = {distPerp / length_scale_, val * length_scale_}; 
+                    for (double j = prefactor * grid_size_magnitude_; j < ubound - grid_size_magnitude_; j += prefactor * grid_size_magnitude_) {
+                        double val = length_scale_ * integral(distPerp / length_scale_, 0, j, exp_fact_, rest_length_); 
+                        double inval[] = {distPerp / length_scale_, val}; 
                         double revres = evalSinglePt(inval, 0); 
                         double trueval = j * length_scale_; 
+
                         // calculate relative or absolute error
                         double relerr; 
                         if (relOrAbs == 0) relerr = ABS(revres - trueval); 
                         else relerr = ABS(revres - trueval) / ABS(trueval); 
                         gridResultSaver.push_back(revres); 
+
                         if (recorddata == 1) {
+                            // [vertical distance] << [scan length (dimensional) -- true value] << [reconstructed value (dimensionless) -- calculated value]
                             myfile << i << "," << j << "," << revres; 
                         }  
                         if (recorderror == 1) {
                             errorTrueSaver.push_back(relerr);
+                            // [error]
                             myfile << "," << relerr; 
                         }
+                        // [integral ("correct" value)]
+                        myfile << "," << val; 
                         myfile << std::endl; 
                     }
                     cnt++; 

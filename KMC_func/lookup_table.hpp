@@ -206,6 +206,17 @@ class LookupTable {
         }
     }
 
+    /*! \brief Return the approximated Required Space for Current LookUP Table objeect
+     *
+     * \return Space in Byte
+     */
+    std::size_t memoryCost() const {
+        std::size_t memoryCost1 = table_.size() * sizeof(double) + sizeof(std::vector<double>);
+        std::size_t memoryCost2 = perp_grid_.size() * sizeof(double) + sizeof(std::vector<double>);
+        std::size_t memoryCost3 = para_grid_.size() * sizeof(double) + sizeof(std::vector<double>);
+        return memoryCost1 + memoryCost2 + memoryCost3; 
+    }
+
     /*********************
      *  Look Up
      *********************/

@@ -302,7 +302,7 @@ class Cheb {
                     double lower_bound = 0.0 + shift; 
                     double upper_bound = ub * D; 
                     // maximum number of iterations
-                    boost::uintmax_t max_iter = 1000; 
+                    boost::uintmax_t max_iter = 10000; 
                     // desired tolerance
                     boost::math::tools::eps_tolerance<double> tolerance(30); 
 
@@ -311,6 +311,7 @@ class Cheb {
                         return exp(-M * exponent * exponent);
                     };
 
+                    // calculate residue towards the actual integral value (as input)
                     auto solve_func = [&](double caluplimit) { 
                         double residue; 
                         // if under certain tolerance, consider integral value (x[1]) as 0. 
@@ -337,9 +338,9 @@ class Cheb {
                         else if (did == 1) {
                             /* will significant decrease the performance */
                             double grid = errtol; 
-                            for (double i = lower_bound; i < upper_bound; i += grid / 2) {
+                            for (double i = lower_bound; i < upper_bound; i += 1e-5) {
                                 double res = solve_func(i); 
-                                if (ABS(res) < errtol) {
+                                if (ABS(res) < 1e-5) {
                                     *y = i; 
                                     break; 
                                 }
@@ -405,10 +406,12 @@ class Cheb {
          * @return apprxoximated value
         */
         inline double evalFunc(double inval[]) {
-            if (printOrNot == 1) std::cout << "Evaluate Point at (" << inval[0] << "," << inval[1] << ")" << std::endl; 
+            if (printOrNot == 1) std::cout << "Evaluate Point at (" << inval[0] << "," << inval[1] << ")" << std::endl;
+            // result 
             double res; 
             saveFunc(inval, &res); 
-            return res; 
+            // to avoid unreasonable approximation (both in normal and reverse lookup)
+            return ABS(res); 
         }
 
         /** 

@@ -52,9 +52,12 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 
     static constexpr double small_ = 1e-5; 
 
-    LUTFillerEdep lut_filler(256, 256);
+    LUTFillerEdep lut_filler(512, 512);
     lut_filler.Init(alpha, freelength, D);
     LookupTable LUT(&lut_filler);
+
+    size_t lutCost = LUT.memoryCost();
+    speak("lutCost", lutCost); 
 
     double distPerp = 0;
     distPerp = 4 * D;
@@ -136,35 +139,35 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     // Cheb theBaobzi(hl, center, 1e-1, alpha, freelength, D, fn, 3, 0);
     // theBaobzi.approxFunc();
 
-    // int cnt = 0; 
-    // for (double i = 0; i < testbound - 0.5; i += 0.1) {
-    //     distPerp = i * D; 
-    //     for (double sbound = startbound; sbound < testbound - 0.5; sbound += boundgrid) {
-    //         // speak("sbound", sbound); 
-    //         double val = integral(distPerp / D, 0, sbound, M, ell0); 
-    //         // speak("val*D",val * D); 
-    //         double inval[] = {distPerp / D, val * D}; 
-    //         // speakvec(inval,2);
-    //         double a0 = LUT.ReverseLookup(distPerp, val * D); 
-    //         // double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
-    //         double a2 = bbcoll2.evalSinglePt(inval, 0); 
-    //         // speak("Single Baobzi", a1); 
-    //         double bberr0 = ABS(a0 - sbound * D);
-    //         // double bberr = ABS(a1 - sbound * D);
-    //         double bberr2 = ABS(a2 - sbound * D); 
-    //         // std::cout << a2 << "," << std::endl; 
-    //         // speak("Single Baobzi Error", bberr); 
-    //         // speak("Baobzi Error", bberr); 
-    //         rlerr2.push_back(bberr0); 
-    //         // baobzierr.push_back(bberr); 
-    //         baobzierr2.push_back(bberr2); 
-    //         cnt ++; 
-    //         // myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
-    //         // CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
-    //     }
-    // }
+    int cnt = 0; 
+    for (double i = 0.01; i < testbound - 0.01; i += 0.01) {
+        distPerp = i * D; 
+        for (double sbound = 0.01; sbound < testbound - 0.01; sbound += 0.01) {
+            // speak("sbound", sbound); 
+            double val = integral(distPerp / D, 0, sbound, M, ell0); 
+            // speak("val*D",val * D); 
+            double inval[] = {distPerp / D, val * D}; 
+            // speakvec(inval,2);
+            double a0 = LUT.ReverseLookup(distPerp, val * D); 
+            // double a1 = theBaobzi.evalFunc(inval); // calculate the Baobzi's upper limit of integral
+            // double a2 = bbcoll2.evalSinglePt(inval, 0); 
+            // speak("Single Baobzi", a1); 
+            double bberr0 = ABS(a0 - sbound * D);
+            // double bberr = ABS(a1 - sbound * D);
+            // double bberr2 = ABS(a2 - sbound * D); 
+            // std::cout << a2 << "," << std::endl; 
+            // speak("Single Baobzi Error", bberr); 
+            // speak("Baobzi Error", bberr); 
+            rlerr2.push_back(bberr0); 
+            // baobzierr.push_back(bberr); 
+            // baobzierr2.push_back(bberr2); 
+            cnt ++; 
+            // myfile << a1 << "," << val << "," << strPerp << "," << strAlpha << std::endl;
+            // CHECK(a1 == Approx(sbound * D).epsilon(tol)); 
+        }
+    }
 
-    // speak("Average Error for Reverse LookUP", mean_error(rlerr2));
+    speak("Average Error for Reverse LookUP", mean_error(rlerr2));
     // // speak("Average Error for Chebyshev", mean_error(baobzierr)); 
     // speak("Average Error for Chebyshev 2", mean_error(baobzierr2)); 
     // // speak("Elapsed Time(s) for Chebyshev", dt1);
@@ -186,9 +189,9 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 //     // Physical Parameters Setting
 //     constexpr double errTol = 1e-3;
 //     const double D = 0.024;
-//     const double alpha = 0.1 / (2 * 0.00411);
+//     const double alpha = 10 / (2 * 0.00411);
 //     // check to larger value (default = 0.05) to observe convexity/concavity of CDF in normal lookup
-//     const double freelength = 0.05; 
+//     const double freelength = 0.5; 
 //     const double M = alpha * D * D; 
 //     const double ell0 = freelength / D;
 

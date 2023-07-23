@@ -22,6 +22,7 @@ double target_distribution(double x, double y, double mean_x, double mean_y, dou
 }
 
 // Define the proposal uniform distribution
+// the value should be large or equal to the maximum of target_distribution
 double proposal_distribution(double x, double y, double x_min, double x_max, double y_min, double y_max) {
     return 1.0; // Uniform density within the specified rectangle
 }

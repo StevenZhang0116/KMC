@@ -20,7 +20,7 @@ for filename in os.listdir(parentroot):
 
 os.chdir(parentroot)
 
-colnames = ["x","y","val","error"]
+colnames = ["x","y","val","error","integral"]
 
 fig = plt.figure()
 # fig.set_size_inches(18.5, 10.5, forward=True)
@@ -53,7 +53,7 @@ for file in glob.glob("*.txt"):
 
     # error plot
     # fig, ax = plt.subplots()
-    # plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm(vmin=min(df["error"]), vmax=max(df["error"])))
+    # plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm())
     # cbar = plt.colorbar(label='error')
     # cbar.ax.set_yscale('log')
     # cbar.ax.set_ylabel('Error (log scale)')
@@ -61,22 +61,40 @@ for file in glob.glob("*.txt"):
 
     # plt.axis('equal')
     # ax.set_title(f"{oname}", fontsize = 12)
-    # # plt.xlim(0, 20)
-    # # plt.ylim(0, 20)
+    # ax.set_xlabel("r_{perp} - Perpendicular Distance", fontsize=12)
+    # ax.set_ylabel("s - Scan Length",fontsize=12)
     # fig.savefig(f"{oname}-error-contour.jpeg", dpi=100)
     # plt.clf()
 
-    # boundary plot
+    # # boundary plot
     # fig, ax = plt.subplots()
-    ax = fig.add_subplot(111, projection='3d')
-    threshold = 0.01
-    # filter everything smaller than threshold to 0
-    df["val"] = df["val"].apply(lambda x: 0 if x < threshold else x)
-    # scatter
-    # plot = ax.scatter(df["x"], df["y"], c = df["val"], cmap = 'viridis')
-    scatter = ax.scatter(df["x"], df["y"], df["val"], c=df["val"], cmap='viridis', marker='o');
-    cbar = plt.colorbar(scatter)
-    fig.savefig(f"{oname}-boundary-result.jpeg", dpi=100)
+    # threshold = 0.00
+    # # filter everything smaller than threshold to 0
+    # df["val"] = df["val"].apply(lambda x: 0 if x < threshold else x)
+    # # scatter
+    # scatter = ax.scatter(df["x"], df["y"], c = df["val"], cmap = 'viridis')
+    # # scatter = ax.scatter(df["x"], df["y"], df["val"], c=df["val"], cmap='viridis', marker='o');
+    # cbar = plt.colorbar(scatter)
+    # fig.savefig(f"{oname}-boundary-result.jpeg", dpi=100)
+    # plt.clf()
+
+    # # simple plot
+    # fig, ax = plt.subplots()
+    # scatter = ax.scatter(df["x"], df["y"], c = df["val"], cmap = 'viridis')
+    # fig.savefig(f"{oname}-res-distribution-result.jpeg", dpi=100)
+
+    # integral plot
+    fig, ax = plt.subplots()
+    plt.scatter(df["x"], df["y"], c = df["integral"], cmap = "jet")
+    cbar = plt.colorbar(label='error')
+    cbar.ax.set_ylabel('Error')
+    cbar.mappable.set_clim(vmin=0, vmax=np.max(df["integral"]))
+
+    plt.axis('equal')
+    ax.set_title(f"{oname}", fontsize = 12)
+    ax.set_xlabel("r_{perp} - Perpendicular Distance", fontsize=12)
+    ax.set_ylabel("s - Scan Length",fontsize=12)
+    fig.savefig(f"{oname}-integral-contour.jpeg", dpi=100)
     plt.clf()
 
     print(oname)
