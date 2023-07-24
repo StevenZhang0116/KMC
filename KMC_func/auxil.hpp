@@ -95,6 +95,7 @@ int findIntervalIndex(const std::vector<double>& numbers, int target) {
     return binarySearch(numbers, target, 0, numbers.size() - 1);
 }
 
+// find the minimum [0] and maximum [1] of a 2D matrix 
 std::vector<double> findMinMaxVec(const std::vector<std::vector<double>> matrix) {
     double largestValue = 0;
     double smallestValue = 0; 

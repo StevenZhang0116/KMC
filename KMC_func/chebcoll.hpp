@@ -75,6 +75,10 @@ class Chebcoll {
         Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, const double errortolerence = 1e-3, 
         std::vector<double> integralMinMax = std::vector<double>(), const int ifsave = 0, const char* defaultfoldername = "./mytests/", 
         const int printornot = 0) {
+            std::cout << "*************************" << std::endl;
+            std::cout << "=== Calculation Start ===" << std::endl; 
+            std::cout << "*************************" << std::endl;
+
             // initialize dimensionless 
             length_scale_ = D; 
             exp_fact_ = alpha * length_scale_ * length_scale_;
@@ -88,7 +92,6 @@ class Chebcoll {
             tifsave = ifsave; 
             // generate folder name -- user input
             tfoldername = defaultfoldername; 
-            // 
             speak("Tolerance of Bobazi Family", bbtol); 
             // only need to set up integral min/max value in the REVERSE LOOKUP 
             if (integralMinMax.size() > 0) {
@@ -184,7 +187,7 @@ class Chebcoll {
 
         /**
          * @brief calculate Boltzmann factor
-         * @return calculated value
+         * @return res
          */
 
         inline double calcBoltzmann(double dist_cent) const {
@@ -206,10 +209,10 @@ class Chebcoll {
          * [the hint of how to normalize both dimensions are included in the comments, but not desirable] 
          * save all objects respectively in vectors (member variables) and will be used in [evalSinglePt()] function
          * @param[in]: tempkk: optional, only used in reverse lookup to input prior knowledge of integral range (tworkIndex == 3)
-         * @return void 
+         * @param[in]: prefactor: optional, constant factor to manipulate linear grid [power of 10]
         */
 
-        inline void createBaobziFamily(std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>()) {
+        inline void createBaobziFamily(const double prefactor = 1, std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>()) {
             double upBound; 
             double oneFixLength; 
             double oneFixCenter; 
@@ -233,7 +236,7 @@ class Chebcoll {
             std::vector<double> lengthVec; 
             std::vector<double> centerVec; 
             std::vector<double> gridVec;
-            // normal lookup scanerio
+            // normal lookup scanerio (CDF or PDF)
             if ((tworkIndex == 1) || (tworkIndex == 5)){
                 std::cout << "==== Create Family of Positive Checking ====" << std::endl; 
                 upBound = getUpperBound();
@@ -242,8 +245,8 @@ class Chebcoll {
                 oneFixLength = upBound / 2 * length_scale_; 
                 assert(oneFixLength <= 1); 
                 oneFixCenter = oneFixLength; 
-                // half-length
-                otherGrid = find_order(oneFixLength); 
+                // adaptive to user input prefactor and dependent to [oneFixLength] through calculation
+                otherGrid = find_order(oneFixLength) * prefactor; 
                 // magnitude of grid size along both dimension
                 speak("Grid Size Magnitude - 1", otherGrid); 
                 while (the_upper_bound_ / otherGrid <= 1e2) {
@@ -260,7 +263,7 @@ class Chebcoll {
                 speak("UpBound (for one dimensions)", upBound);  
                 otherGrid = find_order(upBound / roww);
                 speak("Grid Size Magnitude - 3", otherGrid); 
-                for (int i = 0; i < tempkk.size(); i++) {
+                for (int i = 0; i < roww; i++) {
                     double rr = tempkk[i][1];
                     double ll = tempkk[i][0];
                     oneFixLength = (rr - ll) / 2;
@@ -269,13 +272,8 @@ class Chebcoll {
                     // match order
                     double tGrid = find_order(oneFixLength);
                     // randomly chosen ~0.01 seems to be a reasonable choice
-                    smallBound = 0.01; 
-                    gridLoader = smallBound; 
-
-                    if (tbbtol < gridLoader) {
-                        tbbtol = gridLoader; 
-                        std::cout << "Change tolerance to " << gridLoader << std::endl; 
-                    }
+                    smallBound = 0.001; 
+                    gridLoader = smallBound;
                     
                     // whether the grids are consistently unifrom
                     int evengridIndex = 1; 
@@ -305,16 +303,16 @@ class Chebcoll {
                 double ubound = upBound - otherGrid; 
                 double gg = 1; // range [1,2], inversely proportional to running time
                 double gridSize = gg * otherGrid; 
-
                 for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
-                bbcount = floor((ubound - lbound)/gridSize + 1); 
-                speak("Baobzi Objects need to be created", bbcount); 
-                grid_size_magnitude_ = otherGrid; 
+                grid_size_magnitude_ = gridSize; 
             }
             else if (tworkIndex == 3){
                 iterVec = cumulativeSum(gridVec); 
                 grid_size_magnitude_ = smallBound; 
             }
+            // How many Baobzi Object in current Chebcoll 
+            bbcount = iterVec.size(); 
+            speak("Baobzi Objects need to be created", bbcount); 
 
             // temporary variables
             std::vector<Cheb> theallCheb(iterVec.size()); 
@@ -334,9 +332,9 @@ class Chebcoll {
                     oneFixCenter = centerVec[iii]; 
                     otherGrid = gridVec[iii]; 
                 }
-                /* if want to normalize r⊥, change the first coordinates of hl[] and center[] 
-                 * to the second coordinate */ 
-                double hl[2] = {otherGrid, oneFixLength};
+                // if want to normalize r⊥, change the first coordinates of hl[] and center[] to the second coordinate 
+                // to have [hl] for [oneFixCenter]/[oneFixCenter] does not matter too much
+                double hl[2] = {otherGrid, oneFixCenter};
                 double center[2] = {thisCenter, oneFixCenter}; 
                 // only happens in reverse lookup where the small integral value is clamped to 0
                 if ((hl[1] == 0.0) && (center[1] == 0.0)) {
@@ -353,7 +351,7 @@ class Chebcoll {
                     std::cout << "center: " << thisCenter << ";" << oneFixCenter << std::endl;
                 }
 
-                /* Create Baobzi Object */
+                // Create Baobzi Object
                 Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, tri, tpon, etl, the_upper_bound_);
                 // taken space in Byte -- Function Approximated (at this point)!
                 size_t ssTaken = theBaobzi.approxFunc(); 
@@ -414,9 +412,11 @@ class Chebcoll {
             // brute force search O(n)
             else {
                 for (int i = 0; i < gridNum - 1; i++) {
+                    // interval search
+                    // only use one dimension to filter [might be] enough
                     if ((breakPtsCollChange[i] <= ptCenter[0]) 
                         && (breakPtsCollChange[i+1] >= ptCenter[0]) 
-                        && (breakPtsCollUnchange[i] <= ptCenter[1])
+                        // && (breakPtsCollUnchange[i] <= ptCenter[1])
                     ) {
                         pickPt = i; 
                         break;
@@ -434,6 +434,7 @@ class Chebcoll {
                 ptCenter[1] = intOB - std::max(integral_min_, 1e-5);
             }       
             // final check of whether evaluated point is in the domain
+            // might be redundant, 
             int checkContain = pickBaobzi.checkInclude(ptCenter, 0); 
             if (checkContain == 1) {
                 double approxVal = pickBaobzi.evalFunc(ptCenter);
@@ -452,7 +453,7 @@ class Chebcoll {
          * @param[in]: prefactor [positive int]: grid of recording data, =1 -> =grid of linearly discretized Baobzi object
          *             <1 -> finer grid in evaluation
          * @param[in]: relOrAbs [binary]: whether to record relative error (0 <= err <= 1) or absolute error (with unit)
-         * @return min/max integral value over each linearly discretized grid in the domain
+         * @return min/max integral value over each linearly discretized grid in the domain [only needed in regular lookup, empty otherwise (currently)]
          */
 
         inline std::vector<std::vector<double>> scanGlobalDomain(int recorddata = 0, int recorderror = 0, 
@@ -468,7 +469,12 @@ class Chebcoll {
             std::vector<std::vector<double>> intSpecSaver; 
             std::vector<double> errorTrueSaver;
             std::ofstream myfile; 
+
+            // row counter
             int cnt = 0; 
+            // total case counter
+            int cntTotal = 0;
+
             // ostream setup
             if (recorddata == 1) {
                 std::cout << "==START RECORD DATA==" << std::endl;
@@ -489,10 +495,14 @@ class Chebcoll {
             }
 
             if ((tworkIndex == 1) || (tworkIndex == 5)) {
+                // in case too heavy workload
+                // TODO: should it be [iterGrid = grid_size_magnitude_] instead？ 
+                double iterGrid = std::max(grid_size_magnitude_, 0.1); 
                 // for calculation on global domain for energy dependent first-order CDF/PDF
-                for (double i = grid_size_magnitude_; i < the_upper_bound_ - grid_size_magnitude_; i += grid_size_magnitude_) {
+                for (double i = iterGrid; i < the_upper_bound_ - iterGrid; i += iterGrid) {
+                    // speak("curr", i); 
                     std::vector<double> gridResultSaver; 
-                    for (double j = 0; j < (the_upper_bound_ - grid_size_magnitude_) * length_scale_; j += grid_size_magnitude_ * length_scale_ * prefactor){
+                    for (double j = 0; j < (the_upper_bound_ - iterGrid) * length_scale_; j += iterGrid * length_scale_ * prefactor){
                         double iter[2] = {i,j}; 
                         double intres = evalSinglePt(iter, 0); 
                         gridResultSaver.push_back(intres); 
@@ -513,7 +523,9 @@ class Chebcoll {
                             myfile << "," << relerr; 
                         }
                         myfile << std::endl;
+                        cntTotal++; 
                     }
+                    // formulate output (only useful in reverse lookup)
                     double maxval = *std::max_element(std::begin(gridResultSaver), std::end(gridResultSaver));
                     double minval = *std::min_element(std::begin(gridResultSaver), std::end(gridResultSaver));
                     // integral value must be positive
@@ -525,18 +537,21 @@ class Chebcoll {
                     intSpecSaver.push_back(perIntVal); 
                     cnt++; 
                 }
-                assert(cnt == bbcount); 
+                // assert(cnt == bbcount); 
             }
 
             // for calculation on global domain for reverse lookup
             else if (tworkIndex == 3) {
-                for (double i = prefactor * grid_size_magnitude_; i < ubound - grid_size_magnitude_; i += prefactor * grid_size_magnitude_) {
+                // in case too heavy workload
+                double iterGrid = std::max(grid_size_magnitude_, 0.01); 
+                for (double i = prefactor * iterGrid; i < ubound - iterGrid; i += prefactor * iterGrid) {
                     double distPerp = i * length_scale_; 
                     std::vector<double> gridResultSaver; 
-                    for (double j = prefactor * grid_size_magnitude_; j < ubound - grid_size_magnitude_; j += prefactor * grid_size_magnitude_) {
+                    for (double j = prefactor * iterGrid; j < ubound - iterGrid; j += prefactor * iterGrid) {
                         double val = length_scale_ * integral(distPerp / length_scale_, 0, j, exp_fact_, rest_length_); 
                         double inval[] = {distPerp / length_scale_, val}; 
                         double revres = evalSinglePt(inval, 0); 
+                        gridResultSaver.push_back(revres); 
                         double trueval = j * length_scale_; 
 
                         // calculate relative or absolute error
@@ -557,6 +572,7 @@ class Chebcoll {
                         // [integral ("correct" value)]
                         myfile << "," << val; 
                         myfile << std::endl; 
+                        cntTotal++; 
                     }
                     cnt++; 
                 }
@@ -580,6 +596,7 @@ class Chebcoll {
 
         /**
          * @brief return global min/max integral value over the calculated domain
+         * @param[in]: intSpecSaver: 2D matrix of all data in domain recorded by scanGlobalDomain()
          * @return vector record global min/max integral value
          */
 

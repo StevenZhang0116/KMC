@@ -41,12 +41,18 @@ class Cheb {
 
         /**
          * @brief constructor of Baobzi object from scratch
+         * @param[in]: hl: half length of search domain (2D)
+         * @param[in]: cen: center of search domain (2D)
+         * @param[in]: tol: maximum desired relative error between your function and the approximant
+         * @param[in]: runind: which approximation function to be executed (in conApproxFunc())
+         * @param[in]: porn: whether to have output log
+         * -- other params' descriptions are included in inline remarks
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
         double D, const int runind, const int porn, const double errtol = 1e-3, 
         const double upperbound = 0, const double e_fact = 0, const double fdep_length = 0, 
         const double M1 = 0, const double M2 = 0, const double theconstant = 0) {
-            
+            // copy parameters
             memcpy(&half_length, &hl, sizeof(hl)); 
             // half length, <= 1, to satisfy Baobzi requirement
             assert(half_length[0] <= 1); 
@@ -82,7 +88,7 @@ class Cheb {
             // param[1] = ell0: protein rest length -> rest_length_
             // param[2] = D; dimensional diameter of rod crosslink is binding to  -> length_scale_
             // param[3] = upperbound; the cutoff radius for r⊥ and s
-            // param[4] = constant; some arbitrarily defined constant
+            // param[4] = theconstant; some arbitrarily defined constant for approximation
             // param[5] = errtol; error tolerance (threshold) in integral value apprximation
             // param[6] = e_fact; energy(load) sensitivity to unbinding
             // param[7] = fdep_length; characteristic length for force dependent unbinding
@@ -121,13 +127,13 @@ class Cheb {
                 baobzi::Function<2, 10, 0, double> tempFunc(fullFilePath.c_str());
                 readInFunc = tempFunc; 
             }
+            // unmatched dimension of Function object
             catch (const std::runtime_error& ex) {
                 std::cout << "Caught std::runtime_error: " << ex.what() << std::endl;
             }
             // save to member variable
             saveFunc = readInFunc; 
             double spaceTaken = saveFunc.memory_usage();
-            // speak("ReadIn Function Space", spaceTaken); 
 
             memcpy(&half_length, &hl, sizeof(hl)); 
             // half length, <= 1, to satisfy Baobzi requirement
@@ -139,9 +145,9 @@ class Cheb {
 
         /**
          *  @brief approximate functions (subject to choose at different scanerios)
-         * for whole list of explaining the integral functions, refer KMC_func/integrals.hpp
-         * provides API for users to add their own energy/torque/angle-dependent functions.
-         *          
+         * -- input given in Cheb constructor
+         * -- for whole list of explaining the integral functions, refer KMC_func/integrals.hpp
+         * -- provides API for users to add their own energy/torque/angle-dependent functions.
          *  @return integral value
          */
         inline std::function<void(const double*, double*, const void*)> conApproxFunc() {
@@ -337,10 +343,9 @@ class Cheb {
                         if (did == 0) *y = 0; 
                         else if (did == 1) {
                             /* will significant decrease the performance */
-                            double grid = errtol; 
                             for (double i = lower_bound; i < upper_bound; i += 1e-5) {
                                 double res = solve_func(i); 
-                                if (ABS(res) < 1e-5) {
+                                if (ABS(res) < errtol) {
                                     *y = i; 
                                     break; 
                                 }
@@ -388,8 +393,7 @@ class Cheb {
         
         /** 
          * @brief approximate function and save it to private parameter for further loading (time efficiency)
-         * 
-         * @return null
+         * @return space taken (in bytes) of this constructed function
         */
         inline size_t approxFunc() {
             baobzi::Function<2, 10, 0, double> func_approx(&input, center, half_length, conApproxFunc(), {});
@@ -399,10 +403,11 @@ class Cheb {
         }
 
         /**
-         * @brief evaluate function value at given input coordinates; notice that segmentation error would be generated if `inval[]`
-         *        (after transformation, like *D or /D, not input here) is not in the predetermined domain of `half_length` and 
-         *        `center`, so normalization of fitting is needed. 
-         * @param inval: 2D coordinates of evaluated point
+         * @brief evaluate function value at given input coordinates
+         * -- notice that segmentation error would be generated if [inval[]] (after transformation, 
+         * like *D or /D, not input here) is not in the predetermined domain of [half_length] and 
+         * [center], so normalization of fitting is needed. 
+         * @param[in]: inval: 2D coordinates of evaluated point
          * @return apprxoximated value
         */
         inline double evalFunc(double inval[]) {
@@ -416,9 +421,9 @@ class Cheb {
 
         /** 
          * @brief check whether the given 2D coordinate is included in the domain
-         * @param checkErrorIndex: whether to print log
-         * 
-         * @return binary value
+         * @param[in]: pt: input data (possibly dimensional or dimensionless based on construction) 
+         * @param[in]: checkErrorIndex: whether to print log
+         * @return binary indicator
          */
         inline int checkInclude(double (&pt)[2], const int checkErrorIndex) {
             try {
@@ -442,7 +447,9 @@ class Cheb {
         /**
          * @brief save function(s) and auxiliary parameters to external file(s) that subject to be reloaded
          * using Cheb constructor  
-         * @param folderName, objectIndex: construct the output filename
+         * @param[in]: folderName: output folder
+         * @param[in]: objectIndex: iterative index to count current Baobzi object inside the whole family
+         * @return void
          */
         inline void saveFunctionObject(const char* folderName, const int objectIndex) {
             // save Baobzi object
