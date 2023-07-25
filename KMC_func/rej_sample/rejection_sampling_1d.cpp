@@ -18,8 +18,8 @@
 // Define the target normal distribution with a constant added
 // TODO: what if I make constant nonzero? which other part of the code I should change? 
 double target_distribution(double x) {
-    double mean = 3.0;
-    double variance = 3.0;
+    double mean = 0.0;
+    double variance = 1.0;
     double constant = 0.0; 
     return exp(-0.5 * ((x - mean) / variance) * ((x - mean) / variance)) / (variance * sqrt(2 * M_PI)) + constant;
 }
@@ -43,7 +43,7 @@ double integrate_target(double a, double b, int num_points) {
 }
 
 int main() {
-    int num_samples = 1000000;
+    int num_samples = 10000;
     std::default_random_engine generator;
     std::uniform_real_distribution<double> uniform_distribution(0.0, 1.0);
 

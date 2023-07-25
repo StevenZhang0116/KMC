@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -O3 -w
-TARGETS = rejection_sampling_1d rejection_sampling_2d
+TARGETS = rejection_sampling_1d rejection_sampling_2d mh_1d
 
 SRC_DIR = .
 BUILD_DIR = build

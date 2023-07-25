@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/test_kmc.dir/test_main.cpp.o -o test_kmc 
+/mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/bin/c++ -march=native -O3 -g CMakeFiles/test_kmc.dir/test_main.cpp.o -o test_kmc  /mnt/sw/nix/store/ym0r2w4dnzd0fg0pnlipazv3ww9a3j6w-gcc-10.4.0/lib64/libgomp.so /lib64/libpthread.so 

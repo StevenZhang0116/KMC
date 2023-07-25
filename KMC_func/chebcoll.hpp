@@ -209,16 +209,25 @@ class Chebcoll {
          * [the hint of how to normalize both dimensions are included in the comments, but not desirable] 
          * save all objects respectively in vectors (member variables) and will be used in [evalSinglePt()] function
          * @param[in]: tempkk: optional, only used in reverse lookup to input prior knowledge of integral range (tworkIndex == 3)
-         * @param[in]: prefactor: optional, constant factor to manipulate linear grid [power of 10]
+         * @param[in]: prefactor: optional, constant factor to manipulate linear grid [factor of 10]
+         * -- under current tests, [0.05,1] is a reasonable range 
+         * @param[in]: positiveLookupGrid: optional, grid size used in creating positive lookup; used to compare with the reverse lookup
+         * @return[out]: 1: required space (in MB) of this BF object
+         * @return[out]: 2: required build time (in s) of this BF object
+         * @return[out]: 3: grid size used in creating positive lookup
         */
 
-        inline void createBaobziFamily(const double prefactor = 1, std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>()) {
+        inline std::tuple<double, double, double> createBaobziFamily(const double prefactor = 1, 
+            std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>(), double positiveLookupGrid = 0) {
+
             double upBound; 
             double oneFixLength; 
             double oneFixCenter; 
             double otherGrid; 
-            double gridLoader = 1e-10; 
             double smallBound; 
+
+            // check if the grid size comparator is properly loaded in reverse lookup
+            if (tworkIndex == 3) assert(positiveLookupGrid >= 0); 
             
             // create folder to save Baobzi object files if needed
             if (tifsave == 1) {
@@ -247,6 +256,8 @@ class Chebcoll {
                 oneFixCenter = oneFixLength; 
                 // adaptive to user input prefactor and dependent to [oneFixLength] through calculation
                 otherGrid = find_order(oneFixLength) * prefactor; 
+                // load upper grid that being used in positive lookup
+                positiveLookupGrid = otherGrid; 
                 // magnitude of grid size along both dimension
                 speak("Grid Size Magnitude - 1", otherGrid); 
                 while (the_upper_bound_ / otherGrid <= 1e2) {
@@ -272,8 +283,10 @@ class Chebcoll {
                     // match order
                     double tGrid = find_order(oneFixLength);
                     // randomly chosen ~0.01 seems to be a reasonable choice
-                    smallBound = 0.001; 
-                    gridLoader = smallBound;
+                    smallBound = 0.01 * prefactor; 
+                    // speak("positiveLookupGrid",positiveLookupGrid);
+                    // the grid of corresponding positive lookup should be <= than the setting of this reverse lookup
+                    assert(positiveLookupGrid >= smallBound);
                     
                     // whether the grids are consistently unifrom
                     int evengridIndex = 1; 
@@ -374,7 +387,8 @@ class Chebcoll {
             // record parameter list for reconstruction purpose
             if (tifsave == 1) recordParameter(); 
             // transfer to MB
-            speak("Total Baobzi Family Space (MiB)", total_sum(thechebSpaceTaken) / (1024 * 1024)); 
+            double requiredSpace = total_sum(thechebSpaceTaken) / (1024 * 1024); 
+            speak("Total Baobzi Family Space (MiB)", requiredSpace); 
             speak("Total Time to Build Up Baobzi Family", totalTime); 
 
             // save temporary variables to member variable of class
@@ -382,6 +396,9 @@ class Chebcoll {
             breakPtsCollChange = thebreakPtsCollChange; 
             breakPtsCollUnchange = thebreakPtsCollUnchange;
             chebSpaceTaken = thechebSpaceTaken; 
+
+            return std::make_tuple(requiredSpace, totalTime, positiveLookupGrid); 
+
         }
 
         /**
@@ -452,11 +469,12 @@ class Chebcoll {
          * @param[in]: ubound: optional, only used in reverse lookup to set up grid bound
          * @param[in]: prefactor [positive int]: grid of recording data, =1 -> =grid of linearly discretized Baobzi object
          *             <1 -> finer grid in evaluation
-         * @param[in]: relOrAbs [binary]: whether to record relative error (0 <= err <= 1) or absolute error (with unit)
-         * @return min/max integral value over each linearly discretized grid in the domain [only needed in regular lookup, empty otherwise (currently)]
+         * @param[in]: relOrAbs [binary]: whether to record relative error (0 <= [err] <= 1) or absolute error (with unit)
+         * @return: 1: min/max integral value over each linearly discretized grid in the domain [only needed in regular lookup, empty otherwise (currently)]
+         * @return: 2: average error over the calculated domain using unifrom grids (0 if [recorderror] = 0)
          */
 
-        inline std::vector<std::vector<double>> scanGlobalDomain(int recorddata = 0, int recorderror = 0, 
+        inline std::pair<std::vector<std::vector<double>>, double> scanGlobalDomain(int recorddata = 0, int recorderror = 0, 
         int ubound = 0, double prefactor = 1, const int relOrAbs = 0) {
             // TODO: calculate upper bound of reverse lookup internally in the class? 
             if (tworkIndex == 3) assert(ubound > 0); 
@@ -474,6 +492,8 @@ class Chebcoll {
             int cnt = 0; 
             // total case counter
             int cntTotal = 0;
+            // total error loader
+            double totalError = 0; 
 
             // ostream setup
             if (recorddata == 1) {
@@ -584,14 +604,15 @@ class Chebcoll {
             }
 
             if (recorderror == 1){
+                totalError = mean_error(errorTrueSaver); 
                 std::cout << errSuffix << std::endl; 
-                speak("Mean Error of Cheb Family to Real Value over Whole Domain", mean_error(errorTrueSaver));
+                speak("Mean Error of Cheb Family to Real Value over Whole Domain", totalError);
                 std::cout << "==== END ====" << std::endl; 
             }    
 
             speak("cnt",cnt); 
 
-            return intSpecSaver; 
+            return std::make_pair(intSpecSaver, totalError); 
         }
 
         /**
@@ -630,7 +651,6 @@ class Chebcoll {
 
         }
 };
-
 
 
 

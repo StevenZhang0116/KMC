@@ -6,19 +6,21 @@ import numpy as np
 import seaborn as sns
 from matplotlib import colors
 from matplotlib.ticker import PercentFormatter
+from pandas.plotting import autocorrelation_plot
 
 dimension_index = 1
 
 if dimension_index == 1: 
     fig = plt.figure()
     colnames = ["data",""]
-    prefix = "rej_sample_data_1d"
+    # prefix = "rej_sample_data_1d"
+    prefix = "mh_sample_data_1d"
     df = pd.read_csv(f"{prefix}.txt", sep=",", on_bad_lines='skip', names=colnames, header=None)
     samples = df["data"]
 
     def target_distribution(x):
-        mean = 3.0
-        variance = 3.0
+        mean = 0.0
+        variance = 1.0
         constant = 0.0
         return np.exp(-0.5 * ((x - mean) / variance) * ((x - mean) / variance)) / (variance * np.sqrt(2 * np.pi)) + constant
 
@@ -30,8 +32,13 @@ if dimension_index == 1:
 
     # try to plot approximated 1D normal distribution
     sns.histplot(samples, kde=True, stat="density")
-
     fig.savefig(f"{prefix}.jpeg", dpi=100)
+
+    # independence check
+    fig2 = plt.figure()
+    pd.plotting.autocorrelation_plot(pd.Series(samples))
+    fig2.savefig(f"independence_check.jpeg", dpi=100)
+
 
 elif dimension_index == 2:
     fig = plt.figure()
