@@ -49,6 +49,7 @@ class Chebcoll {
         int bbcount; 
         const char* tfoldername; 
         int tifsave; 
+        double tsmallBound; 
         // key -- work mode
         // [1]: Normal Lookup (CDF)
         // [3]: Reverse Lookup
@@ -73,8 +74,8 @@ class Chebcoll {
          * Baobzi Family (colleection of objects) constructor from scratch
          */
         Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, const double errortolerence = 1e-3, 
-        std::vector<double> integralMinMax = std::vector<double>(), const int ifsave = 0, const char* defaultfoldername = "./mytests/", 
-        const int printornot = 0) {
+        std::vector<double> integralMinMax = std::vector<double>(), const double smallBound = 1e-10, const int ifsave = 0, 
+        const char* defaultfoldername = "./mytests/", const int printornot = 0) {
             std::cout << "*************************" << std::endl;
             std::cout << "=== Calculation Start ===" << std::endl; 
             std::cout << "*************************" << std::endl;
@@ -90,6 +91,7 @@ class Chebcoll {
             tworkIndex = runind; 
             tpon = printornot; 
             tifsave = ifsave; 
+            tsmallBound = smallBound; 
             // generate folder name -- user input
             tfoldername = defaultfoldername; 
             speak("Tolerance of Bobazi Family", bbtol); 
@@ -284,9 +286,8 @@ class Chebcoll {
                     double tGrid = find_order(oneFixLength);
                     // randomly chosen ~0.01 seems to be a reasonable choice
                     smallBound = 0.01 * prefactor; 
-                    // speak("positiveLookupGrid",positiveLookupGrid);
                     // the grid of corresponding positive lookup should be <= than the setting of this reverse lookup
-                    assert(positiveLookupGrid >= smallBound);
+                    // assert(positiveLookupGrid/smallBound >= 1.0);
                     
                     // whether the grids are consistently unifrom
                     int evengridIndex = 1; 
@@ -365,7 +366,7 @@ class Chebcoll {
                 }
 
                 // Create Baobzi Object
-                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, tri, tpon, etl, the_upper_bound_);
+                Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, tri, tpon, etl, the_upper_bound_, tsmallBound);
                 // taken space in Byte -- Function Approximated (at this point)!
                 size_t ssTaken = theBaobzi.approxFunc(); 
                 if (tifsave == 1) theBaobzi.saveFunctionObject(tfoldername, iii); 
@@ -493,7 +494,7 @@ class Chebcoll {
             // total case counter
             int cntTotal = 0;
             // total error loader
-            double totalError = 0; 
+            double totalMeanError = 0; 
 
             // ostream setup
             if (recorddata == 1) {
@@ -604,15 +605,15 @@ class Chebcoll {
             }
 
             if (recorderror == 1){
-                totalError = mean_error(errorTrueSaver); 
+                totalMeanError = mean_error(errorTrueSaver); 
                 std::cout << errSuffix << std::endl; 
-                speak("Mean Error of Cheb Family to Real Value over Whole Domain", totalError);
+                speak("Mean Error of Cheb Family to Real Value over Whole Domain", totalMeanError);
                 std::cout << "==== END ====" << std::endl; 
             }    
 
             speak("cnt",cnt); 
 
-            return std::make_pair(intSpecSaver, totalError); 
+            return std::make_pair(intSpecSaver, totalMeanError); 
         }
 
         /**

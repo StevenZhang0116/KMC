@@ -44,7 +44,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::cout << "==== DEMO REVERSE CHECK SPRING TEST ====" << std::endl; 
     const double tol = 1e-2;
     const double D = 0.024;
-    const double alpha = 0.1 / (2 * 0.00411);
+    const double alpha = 5 / (2 * 0.00411);
 
     const double freelength = 0.05;
     const double M = alpha * D * D;
@@ -107,10 +107,10 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     // speak("midint * D", midint * D); 
 
     std::ofstream myfile;
-    myfile.open("savedata.txt");
+    myfile.open("savedata2.txt");
 
-    std::vector<double> prefactorVec = {1e0,0.5*1e0,0.25*1e0,1e-1,0.5*1e-1};
-    std::vector<double> errorVec = {1e-1,1e-2,1e-3,1e-4};
+    std::vector<double> prefactorVec = {1e-1};
+    std::vector<double> errorVec = {1e-3,1e-4,1e-5,1e-6,1e-7,1e-8,1e-9,1e-10};
     for (int i = 0; i < prefactorVec.size(); i++){
     for (int j = 0; j < errorVec.size(); j++) {
     // demo code
@@ -129,7 +129,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
         std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
         // construct reverse lookup Baobzi Family object
         // use default output path -- can handle user input
-        Chebcoll bbcoll2(alpha, freelength, D, 3, errorVec[j], 1e-3, integralMinMax, 0);
+        Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, 1e-3, integralMinMax, errorVec[j], 0);
         // approximate functions
         // unpack parameters
         double requiredSpace2; double requiredTime2; double positiveLookupGrid2;
@@ -140,7 +140,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
         double averageError = scanLoader2.second; 
         myfile << prefactorVec[i] << "," << errorVec[j] << "," << averageError << "," << requiredSpace2 << "," << requiredTime2 << std::endl;
         // using [.evalSinglePt(inval,0)] for single point evaluation; inval 2D coordinates
-        
+
     }
     // reconstruct
     else {

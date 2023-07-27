@@ -50,8 +50,8 @@ class Cheb {
          */
         Cheb(double (&hl)[2], double (&cen)[2], double tol, double alpha, double freelength, 
         double D, const int runind, const int porn, const double errtol = 1e-3, 
-        const double upperbound = 0, const double e_fact = 0, const double fdep_length = 0, 
-        const double M1 = 0, const double M2 = 0, const double theconstant = 0) {
+        const double upperbound = 40, const double smallbound = 1e-10, const double e_fact = 0, 
+        const double fdep_length = 0, const double M1 = 0, const double M2 = 0, const double theconstant = 0) {
             // copy parameters
             memcpy(&half_length, &hl, sizeof(hl)); 
             // half length, <= 1, to satisfy Baobzi requirement
@@ -106,6 +106,7 @@ class Cheb {
             param[7] = fdep_length; 
             param[8] = M1; 
             param[9] = M2; 
+            param[10] = smallbound; 
 
             input.data = &param; 
 
@@ -301,11 +302,11 @@ class Cheb {
                     const double D = ((double*)data)[2];
                     const double ub = ((double*)data)[3];
                     const double errtol = ((double*)data)[5]; 
+                    const double sb = ((double*)data)[10];
 
                     double error = 0;
-                    double shift = 1e-10; 
                     // define search range
-                    double lower_bound = 0.0 + shift; 
+                    double lower_bound = sb; 
                     double upper_bound = ub * D; 
                     // maximum number of iterations
                     boost::uintmax_t max_iter = 10000; 

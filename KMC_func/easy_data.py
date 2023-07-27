@@ -9,6 +9,7 @@ import matplotlib.colors as colors
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.colors as colors
 import matplotlib.tri as tri
+import math
 
 parentroot = "../build/3d-data"
 
@@ -38,24 +39,47 @@ for file in glob.glob("*.txt"):
     df = pd.read_csv(file, sep=",", on_bad_lines='skip', names=colnames, header=None)
     # print(df)
 
-    # plot 3D graph
-    ax = plt.axes(projection='3d')
-    scatter = ax.scatter(df["x"], df["y"], df["val"], c=df["val"], marker='o',vmin=min(df["val"]),vmax=max(df["val"]),cmap='jet');
-    cbar = fig.colorbar(scatter)
+    # # plot 3D graph
+    # ax = plt.axes(projection='3d')
+    # scatter = ax.scatter(df["x"], df["y"], df["val"], c=df["val"], marker='o',vmin=min(df["val"]),vmax=max(df["val"]),cmap='jet');
+    # cbar = fig.colorbar(scatter)
 
-    ax.set_xticks(np.round(np.linspace(min(df["x"]), max(df["x"]), 10)))
-    ax.set_yticks(np.round(np.linspace(min(df["y"]), max(df["y"]), 10)))
-    ax.set_zticks(np.round(np.linspace(min(df["val"]), max(df["val"]), 10), 2))
+    # ax.set_xticks(np.round(np.linspace(min(df["x"]), max(df["x"]), 10)))
+    # ax.set_yticks(np.round(np.linspace(min(df["y"]), max(df["y"]), 10)))
+    # ax.set_zticks(np.round(np.linspace(min(df["val"]), max(df["val"]), 10), 2))
 
-    ax.set_xlabel("Vertical Distance", fontsize = 12)
-    ax.set_ylabel("Scan Length", fontsize = 12)
-    ax.set_zlabel("Lookup Table Result", fontsize = 12)
-    # ax.set_title(f"{oname}", fontsize = 12)
+    # ax.set_xlabel("Vertical Distance", fontsize = 12)
+    # ax.set_ylabel("Scan Length", fontsize = 12)
+    # ax.set_zlabel("Lookup Table Result", fontsize = 12)
+    # # ax.set_title(f"{oname}", fontsize = 12)
 
-    fig.savefig(f"{oname}-3D-result.jpeg", dpi=100)
-    plt.clf()
+    # fig.savefig(f"{oname}-3D-result.jpeg", dpi=100)
+    # plt.clf()
 
-    # error plot
+    # bin graph
+    fig, ax = plt.subplots()
+    data_x = df["error"]
+    data_y = df["integral"]
+    max_y = np.max(data_y)
+    print(np.max(data_x))
+    max_y_int = math.ceil(max_y / 0.01)
+    intervals_x = [10**i for i in range(-15, 1)] 
+    intervals_y = [0.01*i for i in range(0, max_y_int+1)]
+    counts, x_edges, y_edges = np.histogram2d(data_x, data_y, bins=[intervals_x, intervals_y])
+
+    # Plot the 2D histogram as a grid
+    plt.pcolormesh(x_edges, y_edges, counts.T, cmap='viridis', norm=colors.LogNorm())
+    plt.xscale('log')
+    # plt.yscale('log')
+    plt.colorbar(label='Count')
+    plt.xlabel('Intervals in X (Power of 10)')
+    plt.ylabel('Intervals in Y (Power of 10)')
+    plt.title('2D Histogram of Data')
+
+    fig.savefig(f"{oname}-histogram.jpeg",dpi=100)
+
+
+    # # error plot
     # fig, ax = plt.subplots()
     # plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm())
     # cbar = plt.colorbar(label='error')
@@ -67,7 +91,7 @@ for file in glob.glob("*.txt"):
     # ax.set_title(f"{oname}", fontsize = 12)
     # ax.set_xlabel("r_{perp} - Perpendicular Distance", fontsize=12)
     # ax.set_ylabel("s - Scan Length",fontsize=12)
-    # fig.savefig(f"{oname}-error-contour.jpeg", dpi=100)
+    # fig.savefig(f"{oname}-error-contour-finest-grid.jpeg", dpi=100)
     # plt.clf()
 
     # # boundary plot

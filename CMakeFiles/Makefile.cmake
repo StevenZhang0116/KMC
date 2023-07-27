@@ -13,7 +13,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/cmake.verify_globs"
   "CMakeLists.txt"
   "KMC_func/CMakeLists.txt"
-  "tests/CMakeLists.txt"
   "/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCXXInformation.cmake"
   "/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeCommonLanguageInclude.cmake"
   "/mnt/sw/nix/store/cwpsf71wdq4vfy4s9lpdcahvahkwvm42-cmake-3.25.1/share/cmake-3.25/Modules/CMakeGenericSystem.cmake"
@@ -46,10 +45,8 @@ set(CMAKE_MAKEFILE_OUTPUTS
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "KMC_func/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "tests/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "tests/CMakeFiles/test_kmc.dir/DependInfo.cmake"
   )
