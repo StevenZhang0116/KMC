@@ -64,7 +64,6 @@ class Chebcoll {
     
     private:
         static constexpr double small_ = 1e-6;
-        const double buffer_distance_ = 1e-2; 
     
     public:
         Chebcoll() = default;
@@ -202,7 +201,7 @@ class Chebcoll {
          * @return UB
          */
 
-        double getUpperBound() const {
+        inline double getUpperBound() const {
             return sqrt(-log(small_) / exp_fact_) + rest_length_;
         }
 
