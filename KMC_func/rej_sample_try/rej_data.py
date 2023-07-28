@@ -14,15 +14,15 @@ if dimension_index == 1:
     fig = plt.figure()
     colnames = ["data",""]
     # prefix = "rej_sample_data_1d"
-    prefix = "mh_sample_data_1d"
+    prefix = "rej_sample_data_1d"
     df = pd.read_csv(f"{prefix}.txt", sep=",", on_bad_lines='skip', names=colnames, header=None)
     samples = df["data"]
 
     def target_distribution(x):
         mean = 0.0
         variance = 1.0
-        constant = 0.0
-        return np.exp(-0.5 * ((x - mean) / variance) * ((x - mean) / variance)) / (variance * np.sqrt(2 * np.pi)) + constant
+        constant = 0.5
+        return np.exp(-0.5 * ((x - mean) / variance) * ((x - mean) / variance)) / (variance * np.sqrt(2 * np.pi)) * constant
 
     num = 10000
     xkk = np.linspace(-10, 15, num)

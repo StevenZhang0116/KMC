@@ -21,6 +21,8 @@ int main() {
     const double M = alpha * D * D;
     const double ell0 = freelength / D;
 
+    double threshold = 0.1; 
+
     // handle output
     std::ofstream myfile; std::ofstream myfile2; 
     std::string strD = std::to_string(D);
@@ -36,7 +38,9 @@ int main() {
     catch (...) {}
     myfile.open(searchfilename); myfile2.open(searchfilename2);
 
-    RejSample rej1(alpha, freelength, D);
+    //
+    RejSample rej1(alpha, freelength, D, threshold);
+    //
     double bdd = rej1.getUpperBound();
     double r_perp = 10 * D;
     for (double s = 0; s < bdd; s += 0.01) {
@@ -44,9 +48,13 @@ int main() {
         myfile << s << "," << res << std::endl;  
     }
 
-    std::vector<double> sampledData = rej1.doSampling(1e6, r_perp);
+    std::vector<double> sampledData;  
+    double normalizationFactor;
+    int requiredNum;
+    std::tie(sampledData, normalizationFactor, requiredNum) = rej1.doSampling(1e5, r_perp);
+    std::cout << requiredNum << std::endl; 
     
     for (double sample : sampledData) {
-        myfile2 << sample << std::endl;
+        myfile2 << sample << "," << normalizationFactor << std::endl;
     }
 }

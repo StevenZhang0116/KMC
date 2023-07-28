@@ -20,8 +20,8 @@
 double target_distribution(double x) {
     double mean = 0.0;
     double variance = 1.0;
-    double constant = 0.0; 
-    return exp(-0.5 * ((x - mean) / variance) * ((x - mean) / variance)) / (variance * sqrt(2 * M_PI)) + constant;
+    double constant = 0.5; 
+    return exp(-0.5 * ((x - mean) / variance) * ((x - mean) / variance)) / (variance * sqrt(2 * M_PI)) * constant;
 }
 
 // Define the proposal uniform distribution
@@ -53,6 +53,7 @@ int main() {
     double a = -10.0; // Lower bound of the uniform distribution
     double b = 15.0;  // Upper bound of the uniform distribution
     double normalization_constant = integrate_target(a, b, 10000);
+    std::cout << normalization_constant << std::endl;
 
     // Rejection sampling with uniform proposal distribution
     while (samples.size() < num_samples) {

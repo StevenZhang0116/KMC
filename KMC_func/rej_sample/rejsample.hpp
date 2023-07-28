@@ -25,6 +25,7 @@ class RejSample {
         double length_scale_; 
 
     public: 
+        double filterThres; 
 
     private:
         static constexpr double small_ = 1e-6;
@@ -33,10 +34,11 @@ class RejSample {
         RejSample() = default;
         ~RejSample() = default;
 
-        RejSample(double alpha, double freelength, double D) {
+        RejSample(double alpha, double freelength, double D, double thres) {
             length_scale_ = D; 
             exp_fact_ = alpha * length_scale_ * length_scale_;
             rest_length_ = freelength / length_scale_;
+            filterThres = thres; 
         }
 
         inline double getUpperBound() const {
@@ -71,7 +73,7 @@ class RejSample {
             return std::make_pair(integral, maxpt);
         }
 
-        inline std::vector<double> doSampling(const int num_samples, const double r_perp) {
+        inline std::tuple<std::vector<double>, double, int> doSampling(const int num_samples, const double r_perp) {
             std::default_random_engine generator;
             std::uniform_real_distribution<double> uniform_distribution(0.0, 1.0);
 
@@ -81,19 +83,20 @@ class RejSample {
             double a = 0;
             double b = ub; 
             auto res = evaluate_target(r_perp, a, b, 1e7);
+            double integralVal = res.first; 
 
-            double thres = 0.1;
-            double constIntegral = thres * (b - a);
-
+            int totalNum = 0; 
 
             while (samples.size() < num_samples) {
                 double x = a + (b - a) * uniform_distribution(generator);
-                double acceptance_prob = (approxPDF(r_perp, x) * constIntegral)  / (constFunction(thres) * res.first);
+                double acceptance_prob = approxPDF(r_perp, x)  / constFunction(filterThres) * (1 / integralVal);
+                totalNum += 1; 
                 if (uniform_distribution(generator) < acceptance_prob) {
                     samples.push_back(x);
                 }
             }
-            return samples; 
+
+            return std::tie(samples, integralVal, totalNum); 
         }
 
 };
