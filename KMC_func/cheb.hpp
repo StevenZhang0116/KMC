@@ -134,8 +134,7 @@ class Cheb {
             }
             // save to member variable
             saveFunc = readInFunc; 
-            double spaceTaken = saveFunc.memory_usage();
-
+            
             memcpy(&half_length, &hl, sizeof(hl)); 
             // half length, <= 1, to satisfy Baobzi requirement
             assert(half_length[0] <= 1); 

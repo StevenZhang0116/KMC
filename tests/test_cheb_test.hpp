@@ -44,7 +44,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     std::cout << "==== DEMO REVERSE CHECK SPRING TEST ====" << std::endl; 
     const double tol = 1e-2;
     const double D = 0.024;
-    const double alpha = 1 / (2 * 0.00411);
+    const double alpha = 0.1 / (2 * 0.00411);
 
     const double freelength = 0.05;
     const double M = alpha * D * D;
@@ -106,39 +106,26 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     // speak("hlfc * D", intvaldiff * D);
     // speak("midint * D", midint * D); 
 
-    std::ofstream myfile;
-    myfile.open("savedata2.txt");
-
-    std::vector<double> prefactorVec = {1e-1};
-    std::vector<double> errorVec = {1e-3,1e-4,1e-5,1e-6,1e-7,1e-8,1e-9,1e-10};
-    for (int i = 0; i < prefactorVec.size(); i++){
-    for (int j = 0; j < errorVec.size(); j++) {
     // demo code
-    int index = 0;  
+    int index = 1;  
     // construct
     if (index == 0){
         // construct positive lookup Baobzi Family object
-        Chebcoll bbcoll(alpha, freelength, D, 1, 1e-4, 1e-3);
-        // unpack parameters
-        double requiredSpace; double requiredTime; double positiveLookupGrid; 
+        Chebcoll bbcoll(0, alpha, freelength, D, 1);
         // approximate functions
-        std::tie(requiredSpace, requiredTime, positiveLookupGrid) = bbcoll.createBaobziFamily(1); 
+        bbcoll.createBaobziFamily(1); 
         // globally search domain to find range of integral in each grid
         auto scanLoader = bbcoll.scanGlobalDomain(0, 1);
         std::vector<std::vector<double>> tempkk = scanLoader.first;
         std::vector<double> integralMinMax = bbcoll.intMinMax(tempkk); 
         // construct reverse lookup Baobzi Family object
         // use default output path -- can handle user input
-        Chebcoll bbcoll2(alpha, freelength, D, 3, 1e-1, 1e-3, integralMinMax, errorVec[j], 0);
+        Chebcoll bbcoll2(1, alpha, freelength, D, 3, 1e-1, 1e-3, integralMinMax);
         // approximate functions
         // unpack parameters
-        double requiredSpace2; double requiredTime2; double positiveLookupGrid2;
-        std::tie(requiredSpace2, requiredTime2, positiveLookupGrid2) = bbcoll2.createBaobziFamily(prefactorVec[i], tempkk, positiveLookupGrid); 
+        bbcoll2.createBaobziFamily(1, tempkk); 
         // global search
-        auto scanLoader2 = bbcoll2.scanGlobalDomain(1, 1, testbound, 1, 0);
-        std::vector<std::vector<double>> tempkk2 = scanLoader2.first; 
-        double averageError = scanLoader2.second; 
-        myfile << prefactorVec[i] << "," << errorVec[j] << "," << averageError << "," << requiredSpace2 << "," << requiredTime2 << std::endl;
+        bbcoll2.scanGlobalDomain(1, 1, testbound, 1, 0);
         // using [.evalSinglePt(inval,0)] for single point evaluation; inval 2D coordinates
 
     }
@@ -147,13 +134,8 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
         // reconstrct Baobzi Family object based on files in given path (currently using default path)
         Chebcoll bbcoll2(3);
         // global search
-        auto scanLoader = bbcoll2.scanGlobalDomain(1, 1, testbound, 1, 1);
-        std::vector<std::vector<double>> tempkk2 = scanLoader.first;
+        bbcoll2.scanGlobalDomain(1, 1, testbound, 1, 0);
     }
-
-    }
-    }
-    myfile.close();
 
     // const auto st1 = get_wtime();
     // Cheb theBaobzi(hl, center, 1e-1, alpha, freelength, D, fn, 3, 0);
@@ -209,9 +191,9 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 //     // Physical Parameters Setting
 //     constexpr double errTol = 1e-3;
 //     const double D = 0.024;
-//     const double alpha = 10 / (2 * 0.00411);
+//     const double alpha = 0.1 / (2 * 0.00411);
 //     // check to larger value (default = 0.05) to observe convexity/concavity of CDF in normal lookup
-//     const double freelength = 0.5; 
+//     const double freelength = 0.05; 
 //     const double M = alpha * D * D; 
 //     const double ell0 = freelength / D;
 
@@ -258,17 +240,18 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 
 //     const char* fn = "func_approx.baobzi"; 
 
-//     Chebcoll bbcoll(alpha, freelength, D, 1, 1e-4);
-//     const auto st4 = get_wtime();
-//     auto familyGenerator = bbcoll.createBaobziFamily(1); 
-//     // unpack space and time
-//     double requiredSpace = familyGenerator.first;
-//     double requiredTime = familyGenerator.second; 
-//     const auto ft4 = get_wtime();
-//     const double dt4 = get_wtime_diff(&st4, &ft4);
-//     auto scanLoader = bbcoll.scanGlobalDomain(1,1);
-//     std::vector<std::vector<double>> tempkk = scanLoader.first; 
-//     double totalError = scanLoader.second; 
+//     // Chebcoll bbcoll(1, alpha, freelength, D, 1);
+//     // const auto st4 = get_wtime();
+//     // bbcoll.createBaobziFamily(1); 
+//     // // unpack space and time
+//     // const auto ft4 = get_wtime();
+//     // const double dt4 = get_wtime_diff(&st4, &ft4);
+//     // auto scanLoader = bbcoll.scanGlobalDomain(1,1);
+
+//     Chebcoll bbcoll2(1);
+//     auto scanLoader = bbcoll2.scanGlobalDomain(1, 1);
+//     std::vector<std::vector<double>> tempkk2 = scanLoader.first;
+
     
 //     // Baobzi function approximator
 //     // Cheb theBaobzi(hl,center,bbtol,alpha,freelength,D,fn,runind);
@@ -276,52 +259,52 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
 
 //     // myfile << gridPrefactor[i] << "," << tolerVec[j] << "," << totalError << "," << requiredSpace << "," << requiredTime << "," << std::endl; 
 
-//     // LOOKUP TABLE TEST
-//     std::cout << "------ Comparison Test ------" << std::endl; 
-//     double colldt1 = 0; 
-//     // ("distPerp = 0.2 > D+ell0, single peaked")
-//     for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
-//         const auto st1 = get_wtime();
-//         double a1 = LUT.Lookup(distPerp, sbound * D);
-//         const auto ft1 = get_wtime();
-//         const double dt1 = get_wtime_diff(&st1, &ft1); colldt1 += dt1; 
-//         double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);
-//         // CHECK(a1 == Approx(a2).epsilon(errTol));
-//         ludiff.push_back(ABS(a1 - a2)); 
-//     }
+//     // // LOOKUP TABLE TEST
+//     // std::cout << "------ Comparison Test ------" << std::endl; 
+//     // double colldt1 = 0; 
+//     // // ("distPerp = 0.2 > D+ell0, single peaked")
+//     // for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
+//     //     const auto st1 = get_wtime();
+//     //     double a1 = LUT.Lookup(distPerp, sbound * D);
+//     //     const auto ft1 = get_wtime();
+//     //     const double dt1 = get_wtime_diff(&st1, &ft1); colldt1 += dt1; 
+//     //     double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);
+//     //     // CHECK(a1 == Approx(a2).epsilon(errTol));
+//     //     ludiff.push_back(ABS(a1 - a2)); 
+//     // }
     
 
-//     // // BAOBZI TEST
-//     std::cout << "------ Baobzi Family Test ------" << std::endl; 
-//     speak("testbound",testbound); 
-//     double colldt2 = 0; 
-//     for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
-//         // speak("sbound",sbound);
-//         // Baobzi test
-//         /* if want to normalize r⊥, *D on the first coordinate */ 
-//         double inval[] = {distPerp / D, sbound * D};
-//         const auto st2 = get_wtime();
-//         double a1 = bbcoll.evalSinglePt(inval); 
-//         const auto ft2 = get_wtime();
-//         const double dt2 = get_wtime_diff(&st2, &ft2); colldt2 += dt2; 
-//         // double a1 = theBaobzi.evalFunc(inval);  // baobzi result
-//         double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);  // integral for comparison
-//         // myfile << a1 << "," << sbound << "," << strPerp << "," << strAlpha << std::endl;
-//         // CHECK(a1 == Approx(a2).epsilon(errTol));
-//         // speak("Baobzi Error", ABS(a1 - a2)); 
-//         bbdiff.push_back(ABS(a1 - a2)); 
-//         // bbresl.push_back(a1); 
-//         // bbparm.push_back(sbound); 
-//     }
+//     // // // BAOBZI TEST
+//     // std::cout << "------ Baobzi Family Test ------" << std::endl; 
+//     // speak("testbound",testbound); 
+//     // double colldt2 = 0; 
+//     // for (double sbound = startbound; sbound < testbound; sbound += boundgrid) {
+//     //     // speak("sbound",sbound);
+//     //     // Baobzi test
+//     //     /* if want to normalize r⊥, *D on the first coordinate */ 
+//     //     double inval[] = {distPerp / D, sbound * D};
+//     //     const auto st2 = get_wtime();
+//     //     double a1 = bbcoll.evalSinglePt(inval); 
+//     //     const auto ft2 = get_wtime();
+//     //     const double dt2 = get_wtime_diff(&st2, &ft2); colldt2 += dt2; 
+//     //     // double a1 = theBaobzi.evalFunc(inval);  // baobzi result
+//     //     double a2 = D * integral(distPerp / D, 0, sbound, M, ell0);  // integral for comparison
+//     //     // myfile << a1 << "," << sbound << "," << strPerp << "," << strAlpha << std::endl;
+//     //     // CHECK(a1 == Approx(a2).epsilon(errTol));
+//     //     // speak("Baobzi Error", ABS(a1 - a2)); 
+//     //     bbdiff.push_back(ABS(a1 - a2)); 
+//     //     // bbresl.push_back(a1); 
+//     //     // bbparm.push_back(sbound); 
+//     // }
     
-//     speak("Average Error for Lookup", mean_error(ludiff));
-//     speak("Average Error for Chebyshev", mean_error(bbdiff)); 
-//     speak("Time (s) to Create LookUP Table", dt3);
-//     speak("TIme (s) to Create Baobzi Family", dt4); 
-//     speak("Creation Time Ratio", dt4/dt3); 
-//     speak("Elapsed Time(s) for Lookup", colldt1);
-//     speak("Elapsed Time(s) for Chebyshev", colldt2);
-//     speak("Evaluation Time Ratio", colldt2/colldt1);
+//     // speak("Average Error for Lookup", mean_error(ludiff));
+//     // speak("Average Error for Chebyshev", mean_error(bbdiff)); 
+//     // speak("Time (s) to Create LookUP Table", dt3);
+//     // speak("TIme (s) to Create Baobzi Family", dt4); 
+//     // speak("Creation Time Ratio", dt4/dt3); 
+//     // speak("Elapsed Time(s) for Lookup", colldt1);
+//     // speak("Elapsed Time(s) for Chebyshev", colldt2);
+//     // speak("Evaluation Time Ratio", colldt2/colldt1);
 
 //     // myfile.close(); 
 

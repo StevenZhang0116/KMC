@@ -137,6 +137,8 @@ std::vector<double> cumulativeSum(const std::vector<double>& input) {
     return cumulative;
 }
 
+// need previous operation to handle exception data correctly
+// otherwise [stod::error] will be generated
 std::vector<double> readDataFromFile(const std::string& filename) {
     std::vector<double> data;
     std::ifstream inputFile(filename);

@@ -57,34 +57,34 @@ for file in glob.glob("*.txt"):
     # plt.clf()
 
     # # bin graph
-    fig, ax = plt.subplots()
-    data_x = df["error"]
-    data_y = df["integral"]
-    max_y = np.max(data_y)
-    # print(np.max(data_x))
-    ysize = 0.001
-    max_y_int = math.ceil(max_y / ysize)
-    intervals_x = [10**i for i in np.arange(-15, 2.5, 0.01)] 
-    intervals_y = [ysize*i for i in range(0, max_y_int+1)]
-    counts, x_edges, y_edges = np.histogram2d(data_x, data_y, bins=[intervals_x, intervals_y])
-    plt.pcolormesh(x_edges, y_edges, counts.T/np.sum(counts), cmap='viridis', norm=colors.LogNorm())
-    plt.xscale('log')
-    # plt.yscale('log')
-    cbar = plt.colorbar(label='Proportion of Counts')
-    cbar.mappable.set_clim(vmin=pow(10,-6), vmax=pow(10,-1))
-    plt.xlabel('Relative Error')
-    plt.ylabel('Integral (CDF Value)')
-    plt.title('2D Histogram of Relative Error vs. Binding Probability')
-    fig.savefig(f"{oname}-histogram.jpeg",dpi=100)
+    # fig, ax = plt.subplots()
+    # data_x = df["error"]
+    # data_y = df["integral"]
+    # max_y = np.max(data_y)
+    # # print(np.max(data_x))
+    # ysize = 0.001
+    # max_y_int = math.ceil(max_y / ysize)
+    # intervals_x = [10**i for i in np.arange(-15, 2.5, 0.01)] 
+    # intervals_y = [ysize*i for i in range(0, max_y_int+1)]
+    # counts, x_edges, y_edges = np.histogram2d(data_x, data_y, bins=[intervals_x, intervals_y])
+    # plt.pcolormesh(x_edges, y_edges, counts.T/np.sum(counts), cmap='viridis', norm=colors.LogNorm())
+    # plt.xscale('log')
+    # # plt.yscale('log')
+    # cbar = plt.colorbar(label='Proportion of Counts')
+    # cbar.mappable.set_clim(vmin=pow(10,-6), vmax=pow(10,-1))
+    # plt.xlabel('Relative Error')
+    # plt.ylabel('Integral (CDF Value)')
+    # plt.title('2D Histogram of Relative Error vs. Binding Probability')
+    # fig.savefig(f"{oname}-histogram.jpeg",dpi=100)
 
 
     # # error plot
-    # fig, ax = plt.subplots()
-    # plt.scatter(df["x"], df["y"], c = df["error"] * df["integral"], cmap = "jet", norm=colors.LogNorm())
-    # cbar = plt.colorbar(label='error')
-    # cbar.ax.set_yscale('log')
-    # cbar.ax.set_ylabel('Relative Error * Probability (CDF) (log scale)')
-    # cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,1))
+    fig, ax = plt.subplots()
+    plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm())
+    cbar = plt.colorbar(label='error')
+    cbar.ax.set_yscale('log')
+    cbar.ax.set_ylabel('Relative Error * Probability (CDF) (log scale)')
+    cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,1))
 
     # plt.axis('equal')
     # ax.set_title(f"{oname}", fontsize = 12)
@@ -135,7 +135,10 @@ for file in glob.glob("*.txt"):
     # cbar.ax.set_yscale('log')
     # ax.set_xlabel("Prefactor of Linear Grid")
     # ax.set_ylabel("Tolerance of BF Object")
-    # fig.savefig(f"{oname}-othertests2.jpeg", dpi=100)
+
+
+
+    fig.savefig(f"{oname}-othertests2.jpeg", dpi=100)
 
     print(oname)
 

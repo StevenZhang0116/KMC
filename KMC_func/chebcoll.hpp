@@ -22,6 +22,7 @@
 #include <filesystem>
 #include <omp.h>
 #include <sys/stat.h>
+#include <iomanip> 
 
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 // add baobzi dependence
@@ -72,13 +73,12 @@ class Chebcoll {
         /**
          * Baobzi Family (colleection of objects) constructor from scratch
          */
-        Chebcoll(double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, const double errortolerence = 1e-3, 
-        std::vector<double> integralMinMax = std::vector<double>(), const double smallBound = 1e-10, const int ifsave = 0, 
+        Chebcoll(const int ifsave, double alpha, double freelength, double D, const int runind, double bbtol = 1e-4, const double errortolerence = 1e-3, 
+        std::vector<double> integralMinMax = std::vector<double>(), const double smallBound = 1e-10,
         const char* defaultfoldername = "./mytests/", const int printornot = 0) {
-            std::cout << "*************************" << std::endl;
-            std::cout << "=== Calculation Start ===" << std::endl; 
-            std::cout << "*************************" << std::endl;
-
+            std::cout << "************************************" << std::endl;
+            std::cout << "=== Calculation (from scratch) Start ===" << std::endl; 
+            std::cout << "************************************" << std::endl;
             // initialize dimensionless 
             length_scale_ = D; 
             exp_fact_ = alpha * length_scale_ * length_scale_;
@@ -112,6 +112,9 @@ class Chebcoll {
          * Only needed in reverse lookup, where the build up is time costly
          */
         Chebcoll(const int runind, std::string objpath = "./mytests/") {
+            std::cout << "*******************************************" << std::endl;
+            std::cout << "=== Calculation (from reconstruction) Start ===" << std::endl; 
+            std::cout << "*******************************************" << std::endl;
             // load work mode
             tworkIndex = runind; 
             // all filenames are integer-formatted, so the following operations are eligible
@@ -145,6 +148,7 @@ class Chebcoll {
             std::vector<double> thebreakPtsCollUnchange(totalNum);
             // load parameters
             std::vector<double> readInParam = readDataFromFile(objpath + "param"); 
+            
             // follow the format in [recordParameter()]
             exp_fact_ = readInParam[0]; 
             rest_length_ = readInParam[1]; 
@@ -212,23 +216,18 @@ class Chebcoll {
          * @param[in]: tempkk: optional, only used in reverse lookup to input prior knowledge of integral range (tworkIndex == 3)
          * @param[in]: prefactor: optional, constant factor to manipulate linear grid [factor of 10]
          * -- under current tests, [0.05,1] is a reasonable range 
-         * @param[in]: positiveLookupGrid: optional, grid size used in creating positive lookup; used to compare with the reverse lookup
          * @return[out]: 1: required space (in MB) of this BF object
          * @return[out]: 2: required build time (in s) of this BF object
          * @return[out]: 3: grid size used in creating positive lookup
         */
 
-        inline std::tuple<double, double, double> createBaobziFamily(const double prefactor = 1, 
-            std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>(), double positiveLookupGrid = 0) {
+        inline std::pair<double, double> createBaobziFamily(const double prefactor = 1, std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>()) {
 
             double upBound; 
             double oneFixLength; 
             double oneFixCenter; 
             double otherGrid; 
             double smallBound; 
-
-            // check if the grid size comparator is properly loaded in reverse lookup
-            if (tworkIndex == 3) assert(positiveLookupGrid >= 0); 
             
             // create folder to save Baobzi object files if needed
             if (tifsave == 1) {
@@ -240,7 +239,6 @@ class Chebcoll {
                     removeAllFilesInFolder(tfoldername);
                     speak("Remove All Files in", tfoldername); 
                 }
-                
             }
 
             std::vector<double> lengthVec; 
@@ -257,8 +255,7 @@ class Chebcoll {
                 oneFixCenter = oneFixLength; 
                 // adaptive to user input prefactor and dependent to [oneFixLength] through calculation
                 otherGrid = find_order(oneFixLength) * prefactor; 
-                // load upper grid that being used in positive lookup
-                positiveLookupGrid = otherGrid; 
+
                 // magnitude of grid size along both dimension
                 speak("Grid Size Magnitude - 1", otherGrid); 
                 while (the_upper_bound_ / otherGrid <= 1e2) {
@@ -285,8 +282,6 @@ class Chebcoll {
                     double tGrid = find_order(oneFixLength);
                     // randomly chosen ~0.01 seems to be a reasonable choice
                     smallBound = 0.01 * prefactor; 
-                    // the grid of corresponding positive lookup should be <= than the setting of this reverse lookup
-                    // assert(positiveLookupGrid/smallBound >= 1.0);
                     
                     // whether the grids are consistently unifrom
                     int evengridIndex = 1; 
@@ -359,16 +354,14 @@ class Chebcoll {
                     tri = tworkIndex; 
                 }
 
-                if ((tworkIndex == 3)) {
-                    std::cout << "hl: " << otherGrid << ";" << oneFixLength << std::endl;
-                    std::cout << "center: " << thisCenter << ";" << oneFixCenter << std::endl;
-                }
-
                 // Create Baobzi Object
                 Cheb theBaobzi(hl, center, tbbtol, talpha, tfreelength, length_scale_, tri, tpon, etl, the_upper_bound_, tsmallBound);
                 // taken space in Byte -- Function Approximated (at this point)!
                 size_t ssTaken = theBaobzi.approxFunc(); 
-                if (tifsave == 1) theBaobzi.saveFunctionObject(tfoldername, iii); 
+                // save Baobzi object to an external file
+                if (tifsave == 1) {
+                    theBaobzi.saveFunctionObject(tfoldername, iii); 
+                }
                 theallCheb[iii] = theBaobzi; 
                 // important member variable that needed to be reconstructed when readin files
                 // load variables
@@ -397,7 +390,7 @@ class Chebcoll {
             breakPtsCollUnchange = thebreakPtsCollUnchange;
             chebSpaceTaken = thechebSpaceTaken; 
 
-            return std::make_tuple(requiredSpace, totalTime, positiveLookupGrid); 
+            return std::make_pair(requiredSpace, totalTime); 
 
         }
 
@@ -432,8 +425,8 @@ class Chebcoll {
                     // interval search
                     // only use one dimension to filter [might be] enough
                     if ((breakPtsCollChange[i] <= ptCenter[0]) 
-                        && (breakPtsCollChange[i+1] >= ptCenter[0]) 
-                        // && (breakPtsCollUnchange[i] <= ptCenter[1])
+                        && (breakPtsCollChange[i + 1] >= ptCenter[0]) 
+                        && (breakPtsCollUnchange[i] <= ptCenter[1])
                     ) {
                         pickPt = i; 
                         break;
@@ -523,7 +516,7 @@ class Chebcoll {
                     // speak("curr", i); 
                     std::vector<double> gridResultSaver; 
                     for (double j = 0; j < (the_upper_bound_ - iterGrid) * length_scale_; j += iterGrid * length_scale_ * prefactor){
-                        double iter[2] = {i,j}; 
+                        double iter[2] = {i, j}; 
                         double intres = evalSinglePt(iter, 0); 
                         gridResultSaver.push_back(intres); 
                         double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
@@ -642,6 +635,11 @@ class Chebcoll {
             int result = std::remove(saveLocation);
             if (result == 0) std::cout << "Parameter File Detected and Deleted: " << saveLocation << std::endl; 
             myfile.open(saveLocation);
+            // default value registeration
+            if ((integral_min_ < 1e-30) || (integral_min_ > 1e30)) integral_min_ = 0; 
+            if ((integral_max_ < 1e-30) || (integral_max_ > 1e30)) integral_max_ = 0; 
+
+            myfile << std::setprecision(20);
             // ---- saving format ----
             myfile << exp_fact_ << "," << rest_length_ << "," << length_scale_ << "," << the_upper_bound_ << ","; 
             myfile << grid_size_magnitude_ << "," << integral_min_ << "," << integral_max_ << std::endl; 
