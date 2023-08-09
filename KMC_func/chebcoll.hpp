@@ -218,7 +218,6 @@ class Chebcoll {
          * -- under current tests, [0.05,1] is a reasonable range 
          * @return[out]: 1: required space (in MB) of this BF object
          * @return[out]: 2: required build time (in s) of this BF object
-         * @return[out]: 3: grid size used in creating positive lookup
         */
 
         inline std::pair<double, double> createBaobziFamily(const double prefactor = 1, std::vector<std::vector<double>> tempkk = std::vector<std::vector<double>>()) {
@@ -309,6 +308,12 @@ class Chebcoll {
                 // declare bound for the fixed parameter, usually distPerp (vertical distance)
                 double lbound = otherGrid; 
                 double ubound = upBound - otherGrid; 
+                /* if want to normalize r⊥, set: 
+                "" 
+                ubound = lbound + 1e-10; 
+                ""
+                */
+
                 double gg = 1; // range [1,2], inversely proportional to running time
                 double gridSize = gg * otherGrid; 
                 for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
@@ -331,8 +336,9 @@ class Chebcoll {
             int tri; 
             double totalTime; 
             /* if want to normalize r⊥, change upper bound of iii to 1 (instead of iterVec.size()) */
+
             // #pragma omp parallel for
-            for (size_t iii = 0; iii < iterVec.size(); iii++) {
+            for (size_t iii = 0; iii < iterVec.size();  iii++) {
                 double thisCenter = iterVec[iii]; 
                 const auto st1 = get_wtime();
                 if (tworkIndex == 3) {
@@ -340,8 +346,13 @@ class Chebcoll {
                     oneFixCenter = centerVec[iii]; 
                     otherGrid = gridVec[iii]; 
                 }
-                // if want to normalize r⊥, change the first coordinates of hl[] and center[] to the second coordinate 
-                // to have [hl] for [oneFixCenter]/[oneFixCenter] does not matter too much
+                /* if want to normalize r⊥, set: 
+                ""
+                thisCenter = oneFixCenter;
+                otherGrid = oneFixCenter; 
+                ""
+                */
+
                 double hl[2] = {otherGrid, oneFixCenter};
                 double center[2] = {thisCenter, oneFixCenter}; 
                 // only happens in reverse lookup where the small integral value is clamped to 0
@@ -426,13 +437,14 @@ class Chebcoll {
                     // only use one dimension to filter [might be] enough
                     if ((breakPtsCollChange[i] <= ptCenter[0]) 
                         && (breakPtsCollChange[i + 1] >= ptCenter[0]) 
-                        && (breakPtsCollUnchange[i] <= ptCenter[1])
+                        // && (breakPtsCollUnchange[i] <= ptCenter[1])
                     ) {
                         pickPt = i; 
                         break;
                     }
                     pickPt = gridNum - 1; 
                 }
+                
             }    
             
             // desired Baobzi object after searching for calculation
@@ -512,13 +524,15 @@ class Chebcoll {
                 // TODO: should it be [iterGrid = grid_size_magnitude_] instead？ 
                 double iterGrid = std::max(grid_size_magnitude_, 0.1); 
                 // for calculation on global domain for energy dependent first-order CDF/PDF
-                for (double i = iterGrid; i < the_upper_bound_ - iterGrid; i += iterGrid) {
+                /* if want to normalize r⊥, * length_scale_ for low bound, up bound, and grid size in for loop declaration */
+                for (double i = iterGrid; i < (the_upper_bound_ - iterGrid); i += iterGrid) {
                     // speak("curr", i); 
                     std::vector<double> gridResultSaver; 
                     for (double j = 0; j < (the_upper_bound_ - iterGrid) * length_scale_; j += iterGrid * length_scale_ * prefactor){
                         double iter[2] = {i, j}; 
                         double intres = evalSinglePt(iter, 0); 
                         gridResultSaver.push_back(intres); 
+                        /* if want to normalize r⊥, / length_scale_ after i */
                         double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
 
                         // calculate relative or abselute error
@@ -528,6 +542,7 @@ class Chebcoll {
 
                         if (recorddata == 1){ 
                             // [vertical distance] << [scan length] << [lookup table result]
+                            /* if want to normalize r⊥, / length_scale_ after i */
                             myfile << i << "," << j / length_scale_ << "," << intres; 
                         }
                         if (recorderror == 1) {

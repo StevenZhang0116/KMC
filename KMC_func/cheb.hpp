@@ -34,7 +34,7 @@ class Cheb {
         baobzi_input_t input;
         int indicator; 
         int printOrNot; 
-        baobzi::Function<2, 10, 0, double> saveFunc;
+        baobzi::Function<2, 6, 0, double> saveFunc;
     public:
         Cheb() = default;
         ~Cheb() = default;
@@ -74,7 +74,7 @@ class Cheb {
             // changed altogether, otherwise errors are triggered. 
             input.dim = 2; 
             input.output_dim = 1; 
-            input.order = 10;
+            input.order = 6;
             input.tol = tol; 
             input.minimum_leaf_fraction = 0.0;
             input.split_multi_eval = 1;
@@ -122,10 +122,10 @@ class Cheb {
         Cheb(double (&hl)[2], double (&cen)[2], std::string fullFilePath, const int porn) {
             // define function object -- the dimensions should match with the fixed parameters 
             // declared above, otherwise runtime_error is generated
-            baobzi::Function<2, 10, 0, double> readInFunc; 
+            baobzi::Function<2, 6, 0, double> readInFunc; 
             // load Baobzi function object
             try{
-                baobzi::Function<2, 10, 0, double> tempFunc(fullFilePath.c_str());
+                baobzi::Function<2, 6, 0, double> tempFunc(fullFilePath.c_str());
                 readInFunc = tempFunc; 
             }
             // unmatched dimension of Function object
@@ -396,7 +396,7 @@ class Cheb {
          * @return space taken (in bytes) of this constructed function
         */
         inline size_t approxFunc() {
-            baobzi::Function<2, 10, 0, double> func_approx(&input, center, half_length, conApproxFunc(), {});
+            baobzi::Function<2, 6, 0, double> func_approx(&input, center, half_length, conApproxFunc(), {});
             double spaceTaken = func_approx.memory_usage();
             saveFunc = func_approx; 
             return spaceTaken;

@@ -44,9 +44,9 @@ for file in glob.glob("*.txt"):
     # scatter = ax.scatter(df["x"], df["y"], df["val"], c=df["val"], marker='o',vmin=min(df["val"]),vmax=max(df["val"]),cmap='jet');
     # cbar = fig.colorbar(scatter)
 
-    # ax.set_xticks(np.round(np.linspace(min(df["x"]), max(df["x"]), 10)))
-    # ax.set_yticks(np.round(np.linspace(min(df["y"]), max(df["y"]), 10)))
-    # ax.set_zticks(np.round(np.linspace(min(df["val"]), max(df["val"]), 10), 2))
+    # # ax.set_xticks(np.round(np.linspace(min(df["x"]), max(df["x"]), 10)))
+    # # ax.set_yticks(np.round(np.linspace(min(df["y"]), max(df["y"]), 10)))
+    # # ax.set_zticks(np.round(np.linspace(min(df["val"]), max(df["val"]), 10), 2))
 
     # ax.set_xlabel("Vertical Distance", fontsize = 12)
     # ax.set_ylabel("Scan Length", fontsize = 12)
@@ -64,7 +64,7 @@ for file in glob.glob("*.txt"):
     # # print(np.max(data_x))
     # ysize = 0.001
     # max_y_int = math.ceil(max_y / ysize)
-    # intervals_x = [10**i for i in np.arange(-15, 2.5, 0.01)] 
+    # intervals_x = [10**i for i in np.arange(-15, 2.5, 0.001)] 
     # intervals_y = [ysize*i for i in range(0, max_y_int+1)]
     # counts, x_edges, y_edges = np.histogram2d(data_x, data_y, bins=[intervals_x, intervals_y])
     # plt.pcolormesh(x_edges, y_edges, counts.T/np.sum(counts), cmap='viridis', norm=colors.LogNorm())
@@ -83,15 +83,15 @@ for file in glob.glob("*.txt"):
     plt.scatter(df["x"], df["y"], c = df["error"], cmap = "jet", norm=colors.LogNorm())
     cbar = plt.colorbar(label='error')
     cbar.ax.set_yscale('log')
-    cbar.ax.set_ylabel('Relative Error * Probability (CDF) (log scale)')
-    cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,1))
+    cbar.ax.set_ylabel('Relative Error (log scale)')
+    # cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,1))
 
-    # plt.axis('equal')
-    # ax.set_title(f"{oname}", fontsize = 12)
-    # ax.set_xlabel("r_{perp} - Perpendicular Distance", fontsize=12)
-    # ax.set_ylabel("s - Scan Length",fontsize=12)
-    # fig.savefig(f"{oname}-error-contour-finest-grid.jpeg", dpi=100)
-    # plt.clf()
+    plt.axis('equal')
+    ax.set_title(f"{oname}", fontsize = 12)
+    ax.set_xlabel("r_{perp} - Perpendicular Distance", fontsize=12)
+    ax.set_ylabel("s - Scan Length",fontsize=12)
+    fig.savefig(f"{oname}-error-contour-finest-grid.jpeg", dpi=100)
+    plt.clf()
 
     # # boundary plot
     # fig, ax = plt.subplots()
@@ -136,9 +136,7 @@ for file in glob.glob("*.txt"):
     # ax.set_xlabel("Prefactor of Linear Grid")
     # ax.set_ylabel("Tolerance of BF Object")
 
-
-
-    fig.savefig(f"{oname}-othertests2.jpeg", dpi=100)
+    # fig.savefig(f"{oname}-othertests2.jpeg", dpi=100)
 
     print(oname)
 

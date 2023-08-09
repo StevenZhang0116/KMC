@@ -1,0 +1,10 @@
+
+Currently Loaded Modules:
+  1) modules/2.1.1-20230405 (S)   3) openblas/threaded-0.3.21 (S)
+  2) slurm                  (S)   4) openmpi/4.0.7
+
+  Where:
+   S:  Module is Sticky, requires --force to unload or purge
+
+ 
+
