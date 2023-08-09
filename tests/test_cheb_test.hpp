@@ -243,11 +243,14 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     // unpack space and time
     const auto ft4 = get_wtime();
     const double dt4 = get_wtime_diff(&st4, &ft4);
-    auto scanLoader = bbcoll.scanGlobalDomain(1, 1);
+    const auto st4_2 = get_wtime(); 
+    auto scanLoader = bbcoll.scanGlobalDomain(0, 1);
+    const auto ft4_2 = get_wtime();
+    const auto dt42 = get_wtime_diff(&st4_2, &ft4_2);
     double err = scanLoader.second; 
     
     #pragma omp critical
-    myfile << alpha << "," << freelength << "," << err << "," << dt4 << std::endl;   
+    myfile << alpha << "," << freelength << "," << err << "," << dt4 << "," << dt42 << std::endl;   
 
     }
     }

@@ -17,7 +17,7 @@ os.chdir(parentroot)
 file = "savedata_order6.txt"
 # file2 = "savedata.txt"
 colnames = ["id","alpha","freelength","err","time","space"]
-colnames2 = ["alpha","freelength","err","time"]
+colnames2 = ["alpha","freelength","err","time","evatime"]
 
 df = pd.read_csv(file, sep=",", on_bad_lines='skip', names=colnames2, header=None)
 # df2 = pd.read_csv(file2, sep=",", on_bad_lines='skip', names=colnames2, header=None)
@@ -28,7 +28,7 @@ plt.scatter(df["alpha"], df["freelength"], c = df["err"], cmap = "jet", norm=col
 cbar = plt.colorbar(label='error')
 # cbar.ax.set_yscale('log')
 # cbar.ax.set_ylabel('Absolute Error Ratio (log scale)')
-# cbar.mappable.set_clim(vmin=pow(10,-15), vmax=pow(10,1))
+# cbar.mappable.set_clim(vmin=pow(10,-12), vmax=pow(10,-1))
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
@@ -39,10 +39,22 @@ plt.clf()
 fig, ax = plt.subplots()
 plt.scatter(df["alpha"], df["freelength"], c = df["time"], cmap = "jet", norm=colors.LogNorm())
 cbar = plt.colorbar(label='error')
-cbar.ax.set_ylabel('Build Time Ratio (log scale)')
+cbar.ax.set_ylabel('Build Time (log scale)')
 # cbar.mappable.set_clim(vmin=pow(10,-4), vmax=pow(10,1))
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-6-time.jpeg", dpi=100)
+fig.savefig("data-order-6-build-time.jpeg", dpi=100)
+plt.clf()
+
+# figure 3
+fig, ax = plt.subplots()
+plt.scatter(df["alpha"], df["freelength"], c = df["evatime"], cmap = "jet", norm=colors.LogNorm())
+cbar = plt.colorbar(label='error')
+cbar.ax.set_ylabel('Evaluation Time (log scale)')
+# cbar.mappable.set_clim(vmin=pow(10,-4), vmax=pow(10,1))
+ax.set_xlabel("alpha (mu m^(-2))")
+ax.set_ylabel("freelength (mu m)")
+
+fig.savefig("data-order-6-eva-time.jpeg", dpi=100)
 plt.clf()
