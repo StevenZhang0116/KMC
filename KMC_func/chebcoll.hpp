@@ -64,7 +64,12 @@ class Chebcoll {
         std::vector<double> chebSpaceTaken; 
     
     private:
-        static constexpr double small_ = 1e-6;
+        static constexpr double SMALL_ = 1e-6;
+        // declaration of function approximation
+        const int NORMAL_CDF = 1;
+        const int NORMAL_REVERSECDF = 3;
+        const int CONST_ZERO = 4; 
+        const int NORMAL_PDF = 5; 
     
     public:
         Chebcoll() = default;
@@ -96,7 +101,7 @@ class Chebcoll {
             speak("Tolerance of Bobazi Family", bbtol); 
             // only need to set up integral min/max value in the REVERSE LOOKUP 
             if (integralMinMax.size() > 0) {
-                assert(runind == 3); 
+                assert(runind == NORMAL_REVERSECDF); 
                 integral_min_ = integralMinMax[0];
                 integral_max_ = integralMinMax[1]; 
                 std::cout << "Setup integral max/min value in Constructor for Reverse Lookup: "; 
@@ -206,14 +211,14 @@ class Chebcoll {
          */
 
         inline double getUpperBound() const {
-            return sqrt(-log(small_) / exp_fact_) + rest_length_;
+            return sqrt(-log(SMALL_) / exp_fact_) + rest_length_;
         }
 
         /**
          * @brief create Baobzi family over the whole domain with one dimension normalized and other dimension linearly discretized
          * [the hint of how to normalize both dimensions are included in the comments, but not desirable] 
          * save all objects respectively in vectors (member variables) and will be used in [evalSinglePt()] function
-         * @param[in]: tempkk: optional, only used in reverse lookup to input prior knowledge of integral range (tworkIndex == 3)
+         * @param[in]: tempkk: optional, only used in reverse lookup to input prior knowledge of integral range (tworkIndex == NORMAL_REVERSECDF)
          * @param[in]: prefactor: optional, constant factor to manipulate linear grid [factor of 10]
          * -- under current tests, [0.05,1] is a reasonable range 
          * @return[out]: 1: required space (in MB) of this BF object
@@ -245,7 +250,7 @@ class Chebcoll {
             std::vector<double> gridVec;
             // normal lookup scanerio (CDF or PDF)
             // TODO: ENUM CLASS
-            if ((tworkIndex == 1) || (tworkIndex == 5)){
+            if ((tworkIndex == NORMAL_CDF) || (tworkIndex == NORMAL_PDF)){
                 std::cout << "==== Create Family of Positive Checking ====" << std::endl; 
                 upBound = getUpperBound();
                 the_upper_bound_ = upBound; 
@@ -264,7 +269,7 @@ class Chebcoll {
                 }
             }
             // reverse lookup scanerio
-            else if (tworkIndex == 3) {
+            else if (tworkIndex == NORMAL_REVERSECDF) {
                 double roww = tempkk.size();
                 std::cout << "==== Create Family of Reverse Checking ====" << std::endl; 
                 upBound = getUpperBound();
@@ -305,7 +310,7 @@ class Chebcoll {
             }
 
             std::vector<double> iterVec;
-            if ((tworkIndex == 1) || (tworkIndex == 5)) {
+            if ((tworkIndex == NORMAL_CDF) || (tworkIndex == NORMAL_PDF)) {
                 // declare bound for the fixed parameter, usually distPerp (vertical distance)
                 double lbound = otherGrid; 
                 double ubound = upBound - otherGrid; 
@@ -321,7 +326,7 @@ class Chebcoll {
                 for (double iter = lbound; iter < ubound; iter += gridSize) iterVec.push_back(iter); 
                 grid_size_magnitude_ = gridSize; 
             }
-            else if (tworkIndex == 3){
+            else if (tworkIndex == NORMAL_REVERSECDF){
                 iterVec = cumulativeSum(gridVec); 
                 grid_size_magnitude_ = smallBound; 
             }
@@ -342,7 +347,7 @@ class Chebcoll {
             for (size_t iii = 0; iii < iterVec.size();  iii++) {
                 double thisCenter = iterVec[iii]; 
                 const auto st1 = get_wtime();
-                if (tworkIndex == 3) {
+                if (tworkIndex == NORMAL_REVERSECDF) {
                     oneFixLength = lengthVec[iii];
                     oneFixCenter = centerVec[iii]; 
                     otherGrid = gridVec[iii]; 
@@ -361,7 +366,8 @@ class Chebcoll {
                 double center[2] = {thisCenter, oneFixCenter}; 
                 // only happens in reverse lookup where the small integral value is clamped to 0
                 if ((hl[1] == 0.0) && (center[1] == 0.0)) {
-                    tri = 4; 
+                    tri = CONST_ZERO;
+                    // change domain specification 
                     hl[1] = 1; 
                     center[1] = 1; 
                 }
@@ -387,7 +393,7 @@ class Chebcoll {
                 const double dt1 = get_wtime_diff(&st1, &ft1);
                 totalTime += dt1; 
                 // only print log in reverse lookup
-                if ((iii % 100 == 0) && (tworkIndex == 3)) { 
+                if ((iii % 100 == 0) && (tworkIndex == NORMAL_REVERSECDF)) { 
                     speak("Baobzi Created", iii); 
                     speak("Needed Time per object (s)", dt1); 
                 }
@@ -461,7 +467,7 @@ class Chebcoll {
             Cheb pickBaobzi = allCheb[pickPt]; 
             // check if integral is beyond the scope; only calculate after knowing which exact object is used
             double intOB = pickBaobzi.center[1] + pickBaobzi.half_length[1]; 
-            if ((ptCenter[1] > intOB) && (tworkIndex == 3)) {
+            if ((ptCenter[1] > intOB) && (tworkIndex == NORMAL_REVERSECDF)) {
                 printf("Baobzi Family Warning: integral %g very large, clamp to integral UB %g \n", ptCenter[1], intOB);
                 ptCenter[1] = intOB - std::max(integral_min_, 1e-5);
             }       
@@ -493,7 +499,7 @@ class Chebcoll {
         inline std::tuple<std::vector<std::vector<double>>, double, double> scanGlobalDomain(int recorddata = 0, int recorderror = 0, 
         int ubound = 0, double prefactor = 1, const int relOrAbs = 0) {
             // TODO: calculate upper bound of reverse lookup internally in the class? 
-            if (tworkIndex == 3) assert(ubound > 0); 
+            if (tworkIndex == NORMAL_REVERSECDF) assert(ubound > 0); 
 
             // suffix of rel or abs error
             std::string errSuffix; 
@@ -522,8 +528,9 @@ class Chebcoll {
                 std::string strFreeLength = std::to_string(round_up(tfreelength, 3));
                 std::string categoryName; 
                 // set up category name
-                if ((tworkIndex == 1) || (tworkIndex == 5)) categoryName = "CDF-"; 
-                if (tworkIndex == 3) categoryName = "ReverseCDF-"; 
+                if (tworkIndex == NORMAL_CDF) categoryName = "CDF-"; 
+                else if (tworkIndex == NORMAL_REVERSECDF) categoryName = "ReverseCDF-"; 
+                else if (tworkIndex == NORMAL_PDF) categoryName = "PDF-"; 
                 std::string searchfilename = rootPath + categoryName + errSuffix + "D=" + strD + "-" + "alpha=" + strAlpha + "-" + "fl=" + strFreeLength + ".txt"; 
                 try {
                     std::filesystem::remove(searchfilename);
@@ -532,7 +539,7 @@ class Chebcoll {
                 myfile.open(searchfilename);
             }
 
-            if ((tworkIndex == 1) || (tworkIndex == 5)) {
+            if ((tworkIndex == NORMAL_CDF) || (tworkIndex == NORMAL_PDF)) {
                 // in case too heavy workload
                 // TODO: should it be [iterGrid = grid_size_magnitude_] instead？ 
                 double iterGrid = std::max(grid_size_magnitude_, 0.1); 
@@ -594,7 +601,7 @@ class Chebcoll {
             }
 
             // for calculation on global domain for reverse lookup
-            else if (tworkIndex == 3) {
+            else if (tworkIndex == NORMAL_REVERSECDF) {
                 // in case too heavy workload
                 double iterGrid = std::max(grid_size_magnitude_, 0.01); 
                 for (double i = prefactor * iterGrid; i < ubound - iterGrid; i += prefactor * iterGrid) {
