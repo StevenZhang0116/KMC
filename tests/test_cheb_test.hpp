@@ -198,7 +198,7 @@
 TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     std::cout << "==== DEMO (ALL KIND) SPRING TEST ====" << std::endl; 
     std::ofstream myfile;
-    myfile.open("./savedata_order6.txt");
+    myfile.open("./savedata_order8_2d.txt");
 
     std::vector<double> alphalist = linspace(0.1,10,250);
     std::vector<double> freelengthlist = linspace(0.05,0.5,250);
@@ -238,19 +238,16 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
 
 
     Chebcoll bbcoll(0, alpha, freelength, D, 1, 1e-4);
-    const auto st4 = get_wtime();
-    bbcoll.createBaobziFamily(1); 
+    auto loader = bbcoll.createBaobziFamily(1); 
+    double buildTime = loader.second; 
     // unpack space and time
-    const auto ft4 = get_wtime();
-    const double dt4 = get_wtime_diff(&st4, &ft4);
-    const auto st4_2 = get_wtime(); 
-    auto scanLoader = bbcoll.scanGlobalDomain(0, 1);
-    const auto ft4_2 = get_wtime();
-    const auto dt42 = get_wtime_diff(&st4_2, &ft4_2);
-    double err = scanLoader.second; 
+    std::vector<std::vector<double>> intSpecSaver;
+    double err;
+    double timePerSample; 
+    std::tie(intSpecSaver, err, timePerSample) = bbcoll.scanGlobalDomain(0, 1);
     
     #pragma omp critical
-    myfile << alpha << "," << freelength << "," << err << "," << dt4 << "," << dt42 << std::endl;   
+    myfile << alpha << "," << freelength << "," << err << "," << buildTime << "," << timePerSample << std::endl;   
 
     }
     }

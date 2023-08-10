@@ -244,6 +244,7 @@ class Chebcoll {
             std::vector<double> centerVec; 
             std::vector<double> gridVec;
             // normal lookup scanerio (CDF or PDF)
+            // TODO: ENUM CLASS
             if ((tworkIndex == 1) || (tworkIndex == 5)){
                 std::cout << "==== Create Family of Positive Checking ====" << std::endl; 
                 upBound = getUpperBound();
@@ -313,6 +314,7 @@ class Chebcoll {
                 ubound = lbound + 1e-10; 
                 ""
                 */
+               ubound = lbound + 1e-10; 
 
                 double gg = 1; // range [1,2], inversely proportional to running time
                 double gridSize = gg * otherGrid; 
@@ -327,16 +329,15 @@ class Chebcoll {
             bbcount = iterVec.size(); 
             speak("Baobzi Objects need to be created", bbcount); 
 
+
             // temporary variables
-            std::vector<Cheb> theallCheb(iterVec.size()); 
-            std::vector<double> thebreakPtsCollChange(iterVec.size()); 
-            std::vector<double> thebreakPtsCollUnchange(iterVec.size()); 
-            std::vector<double> thechebSpaceTaken(iterVec.size()); 
+            std::vector<Cheb> theallCheb(bbcount); 
+            std::vector<double> thebreakPtsCollChange(bbcount); 
+            std::vector<double> thebreakPtsCollUnchange(bbcount); 
+            std::vector<double> thechebSpaceTaken(bbcount); 
 
             int tri; 
             double totalTime; 
-            /* if want to normalize r⊥, change upper bound of iii to 1 (instead of iterVec.size()) */
-
             // #pragma omp parallel for
             for (size_t iii = 0; iii < iterVec.size();  iii++) {
                 double thisCenter = iterVec[iii]; 
@@ -352,6 +353,9 @@ class Chebcoll {
                 otherGrid = oneFixCenter; 
                 ""
                 */
+
+                thisCenter = oneFixCenter;
+                otherGrid = oneFixCenter; 
 
                 double hl[2] = {otherGrid, oneFixCenter};
                 double center[2] = {thisCenter, oneFixCenter}; 
@@ -416,36 +420,42 @@ class Chebcoll {
             // std::cout << ptCenter[0] << "," << ptCenter[1] << std::endl;
             // edge case detection
             if (ptCenter[0] > the_upper_bound_) {
-                // printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
+                printf("Baobzi Family Warning: dist_perp %g very large, clamp to grid UB %g \n", ptCenter[0], the_upper_bound_);
                 ptCenter[0] = the_upper_bound_ - grid_size_magnitude_; 
                 bs = 0;  
             }
 
             int gridNum = breakPtsCollChange.size();
             int pickPt = 0; 
-            // binary search O(log n)
-            if (bs == 1) {
-                int kk = findIntervalIndex(breakPtsCollChange, ptCenter[0]); 
-                if (breakPtsCollUnchange[kk] <= ptCenter[1]) {
-                    pickPt = kk;
-                } 
-            }
-            // brute force search O(n)
-            else {
-                for (int i = 0; i < gridNum - 1; i++) {
-                    // interval search
-                    // only use one dimension to filter [might be] enough
-                    if ((breakPtsCollChange[i] <= ptCenter[0]) 
-                        && (breakPtsCollChange[i + 1] >= ptCenter[0]) 
-                        // && (breakPtsCollUnchange[i] <= ptCenter[1])
-                    ) {
-                        pickPt = i; 
-                        break;
-                    }
-                    pickPt = gridNum - 1; 
+
+            /* if want to normalize r⊥, change ifsearch = 0 */
+            // we know which Baobzi object to use (since only 1) so no need to search for
+            int ifsearch = 0; 
+
+            if (ifsearch == 1){
+                // binary search O(log n)
+                if (bs == 1) {
+                    int kk = findIntervalIndex(breakPtsCollChange, ptCenter[0]); 
+                    if (breakPtsCollUnchange[kk] <= ptCenter[1]) {
+                        pickPt = kk;
+                    } 
                 }
-                
-            }    
+                // brute force search O(n)
+                else {
+                    for (int i = 0; i < gridNum - 1; i++) {
+                        // interval search
+                        // only use one dimension to filter [might be] enough
+                        if ((breakPtsCollChange[i] <= ptCenter[0]) 
+                            && (breakPtsCollChange[i + 1] >= ptCenter[0]) 
+                            // && (breakPtsCollUnchange[i] <= ptCenter[1])
+                        ) {
+                            pickPt = i; 
+                            break;
+                        }
+                        pickPt = gridNum - 1; 
+                    }
+                }    
+            }
             
             // desired Baobzi object after searching for calculation
             Cheb pickBaobzi = allCheb[pickPt]; 
@@ -477,9 +487,10 @@ class Chebcoll {
          * @param[in]: relOrAbs [binary]: whether to record relative error (0 <= [err] <= 1) or absolute error (with unit)
          * @return: 1: min/max integral value over each linearly discretized grid in the domain [only needed in regular lookup, empty otherwise (currently)]
          * @return: 2: average error over the calculated domain using unifrom grids (0 if [recorderror] = 0)
+         * @return: 3: average evaluation time of uiformly distributed samples in the domain 
          */
 
-        inline std::pair<std::vector<std::vector<double>>, double> scanGlobalDomain(int recorddata = 0, int recorderror = 0, 
+        inline std::tuple<std::vector<std::vector<double>>, double, double> scanGlobalDomain(int recorddata = 0, int recorderror = 0, 
         int ubound = 0, double prefactor = 1, const int relOrAbs = 0) {
             // TODO: calculate upper bound of reverse lookup internally in the class? 
             if (tworkIndex == 3) assert(ubound > 0); 
@@ -497,6 +508,8 @@ class Chebcoll {
             int cnt = 0; 
             // total case counter
             int cntTotal = 0;
+            // total evaluation time
+            double evalTime = 0; 
             // total error loader
             double totalMeanError = 0; 
 
@@ -525,15 +538,25 @@ class Chebcoll {
                 double iterGrid = std::max(grid_size_magnitude_, 0.1); 
                 // for calculation on global domain for energy dependent first-order CDF/PDF
                 /* if want to normalize r⊥, * length_scale_ for low bound, up bound, and grid size in for loop declaration */
-                for (double i = iterGrid; i < (the_upper_bound_ - iterGrid); i += iterGrid) {
+                for (double i = iterGrid * length_scale_; i < (the_upper_bound_ - iterGrid) * length_scale_; i += iterGrid * length_scale_) {
                     // speak("curr", i); 
                     std::vector<double> gridResultSaver; 
                     for (double j = 0; j < (the_upper_bound_ - iterGrid) * length_scale_; j += iterGrid * length_scale_ * prefactor){
                         double iter[2] = {i, j}; 
+
+                        // count time
+                        const auto st = get_wtime();
+                        // point evaluation
                         double intres = evalSinglePt(iter, 0); 
+                        const auto ft = get_wtime();
+                        // time difference of evaluation
+                        const double dt = get_wtime_diff(&st, &ft);
+                        // increment
+                        evalTime += dt; 
+
                         gridResultSaver.push_back(intres); 
                         /* if want to normalize r⊥, / length_scale_ after i */
-                        double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
+                        double realres = length_scale_ * integral(i / length_scale_, 0, j / length_scale_, exp_fact_, rest_length_);
 
                         // calculate relative or abselute error
                         double relerr; 
@@ -543,14 +566,16 @@ class Chebcoll {
                         if (recorddata == 1){ 
                             // [vertical distance] << [scan length] << [lookup table result]
                             /* if want to normalize r⊥, / length_scale_ after i */
-                            myfile << i << "," << j / length_scale_ << "," << intres; 
+                            myfile << i / length_scale_ << "," << j / length_scale_ << "," << intres; 
                         }
+                        errorTrueSaver.push_back(relerr); 
                         if (recorderror == 1) {
-                            errorTrueSaver.push_back(relerr); 
                             // [error] 
                             myfile << "," << relerr; 
                         }
-                        myfile << std::endl;
+                        if ((recorddata == 1) || (recorderror == 1)) {
+                            myfile << std::endl; 
+                        }
                         cntTotal++; 
                     }
                     // formulate output (only useful in reverse lookup)
@@ -578,7 +603,13 @@ class Chebcoll {
                     for (double j = prefactor * iterGrid; j < ubound - iterGrid; j += prefactor * iterGrid) {
                         double val = length_scale_ * integral(distPerp / length_scale_, 0, j, exp_fact_, rest_length_); 
                         double inval[] = {distPerp / length_scale_, val}; 
+
+                        const auto st = get_wtime();
                         double revres = evalSinglePt(inval, 0); 
+                        const auto ft = get_wtime();
+                        const double dt = get_wtime_diff(&st, &ft);
+                        evalTime += dt; 
+
                         gridResultSaver.push_back(revres); 
                         double trueval = j * length_scale_; 
 
@@ -592,14 +623,16 @@ class Chebcoll {
                             // [vertical distance] << [scan length (dimensional) -- true value] << [reconstructed value (dimensionless) -- calculated value]
                             myfile << i << "," << j << "," << revres; 
                         }  
+                        errorTrueSaver.push_back(relerr);
                         if (recorderror == 1) {
-                            errorTrueSaver.push_back(relerr);
                             // [error]
                             myfile << "," << relerr; 
                         }
-                        // [integral ("correct" value)]
-                        myfile << "," << val; 
-                        myfile << std::endl; 
+                        if ((recorddata == 1) || (recorderror == 1)){
+                            // [integral ("correct" value)]
+                            myfile << "," << val; 
+                            myfile << std::endl; 
+                        }
                         cntTotal++; 
                     }
                     cnt++; 
@@ -618,9 +651,8 @@ class Chebcoll {
                 std::cout << "==== END ====" << std::endl; 
             }    
 
-            speak("cnt",cnt); 
-
-            return std::make_pair(intSpecSaver, totalMeanError); 
+            double evalTimePerSample = evalTime / cntTotal; 
+            return std::make_tuple(intSpecSaver, totalMeanError, evalTimePerSample); 
         }
 
         /**

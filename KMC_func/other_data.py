@@ -14,7 +14,7 @@ import math
 parentroot = "../build/"
 os.chdir(parentroot)
 
-file = "savedata_order6.txt"
+file = "savedata_order10_2d.txt"
 # file2 = "savedata.txt"
 colnames = ["id","alpha","freelength","err","time","space"]
 colnames2 = ["alpha","freelength","err","time","evatime"]
@@ -32,7 +32,7 @@ cbar = plt.colorbar(label='error')
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-6-error.jpeg", dpi=100)
+fig.savefig("data-order-10-2d-error.jpeg", dpi=100)
 plt.clf()
 
 # figure 2
@@ -44,17 +44,17 @@ cbar.ax.set_ylabel('Build Time (log scale)')
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-6-build-time.jpeg", dpi=100)
+fig.savefig("data-order-10-2d-build-time.jpeg", dpi=100)
 plt.clf()
 
 # figure 3
 fig, ax = plt.subplots()
 plt.scatter(df["alpha"], df["freelength"], c = df["evatime"], cmap = "jet", norm=colors.LogNorm())
 cbar = plt.colorbar(label='error')
-cbar.ax.set_ylabel('Evaluation Time (log scale)')
+cbar.ax.set_ylabel('Evaluation Time per Sample (log scale)')
 # cbar.mappable.set_clim(vmin=pow(10,-4), vmax=pow(10,1))
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-6-eva-time.jpeg", dpi=100)
+fig.savefig("data-order-10-2d-eva-time.jpeg", dpi=100)
 plt.clf()
