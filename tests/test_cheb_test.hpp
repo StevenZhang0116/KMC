@@ -198,7 +198,7 @@
 TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     std::cout << "==== DEMO (ALL KIND) SPRING TEST ====" << std::endl; 
     std::ofstream myfile;
-    myfile.open("./savedata_order8_2d.txt");
+    myfile.open("./savedata_order10_2d_tol_1e-6.txt");
 
     std::vector<double> alphalist = linspace(0.1,10,250);
     std::vector<double> freelengthlist = linspace(0.05,0.5,250);
@@ -237,7 +237,7 @@ TEST_CASE("Lookup table test (all kind) spring ", "[lookup_soft]") {
     std::vector<double> bbparm; // parameter storer
 
 
-    Chebcoll bbcoll(0, alpha, freelength, D, 1, 1e-4);
+    Chebcoll bbcoll(0, alpha, freelength, D, 1, 1e-6);
     auto loader = bbcoll.createBaobziFamily(1); 
     double buildTime = loader.second; 
     // unpack space and time

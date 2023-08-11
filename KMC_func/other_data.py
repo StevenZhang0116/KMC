@@ -14,7 +14,7 @@ import math
 parentroot = "../build/"
 os.chdir(parentroot)
 
-file = "savedata_order10_2d.txt"
+file = "savedata_order8_2d.txt"
 # file2 = "savedata.txt"
 colnames = ["id","alpha","freelength","err","time","space"]
 colnames2 = ["alpha","freelength","err","time","evatime"]
@@ -32,7 +32,7 @@ cbar = plt.colorbar(label='error')
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-10-2d-error.jpeg", dpi=100)
+fig.savefig("data-order-8-2d-error.jpeg", dpi=100)
 plt.clf()
 
 # figure 2
@@ -44,7 +44,7 @@ cbar.ax.set_ylabel('Build Time (log scale)')
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-10-2d-build-time.jpeg", dpi=100)
+fig.savefig("data-order-8-2d-build-time.jpeg", dpi=100)
 plt.clf()
 
 # figure 3
@@ -56,5 +56,5 @@ cbar.ax.set_ylabel('Evaluation Time per Sample (log scale)')
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-10-2d-eva-time.jpeg", dpi=100)
+fig.savefig("data-order-8-2d-eva-time.jpeg", dpi=100)
 plt.clf()
