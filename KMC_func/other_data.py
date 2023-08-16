@@ -14,7 +14,8 @@ import math
 parentroot = "../build/"
 os.chdir(parentroot)
 
-file = "savedata_order8_2d.txt"
+file = "reverse_grid_1.0.txt"
+print(file)
 # file2 = "savedata.txt"
 colnames = ["id","alpha","freelength","err","time","space"]
 colnames2 = ["alpha","freelength","err","time","evatime"]
@@ -28,11 +29,11 @@ plt.scatter(df["alpha"], df["freelength"], c = df["err"], cmap = "jet", norm=col
 cbar = plt.colorbar(label='error')
 # cbar.ax.set_yscale('log')
 # cbar.ax.set_ylabel('Absolute Error Ratio (log scale)')
-# cbar.mappable.set_clim(vmin=pow(10,-12), vmax=pow(10,-1))
+# cbar.mappable.set_clim(vmin=pow(10,-14), vmax=pow(10,-3))
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-8-2d-error.jpeg", dpi=100)
+fig.savefig(f"{file[4:-4]}-error.jpeg", dpi=100)
 plt.clf()
 
 # figure 2
@@ -40,11 +41,11 @@ fig, ax = plt.subplots()
 plt.scatter(df["alpha"], df["freelength"], c = df["time"], cmap = "jet", norm=colors.LogNorm())
 cbar = plt.colorbar(label='error')
 cbar.ax.set_ylabel('Build Time (log scale)')
-# cbar.mappable.set_clim(vmin=pow(10,-4), vmax=pow(10,1))
+# cbar.mappable.set_clim(vmin=pow(10,-3), vmax=pow(10,1))
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-8-2d-build-time.jpeg", dpi=100)
+fig.savefig(f"{file[4:-4]}-build-time.jpeg", dpi=100)
 plt.clf()
 
 # figure 3
@@ -52,9 +53,9 @@ fig, ax = plt.subplots()
 plt.scatter(df["alpha"], df["freelength"], c = df["evatime"], cmap = "jet", norm=colors.LogNorm())
 cbar = plt.colorbar(label='error')
 cbar.ax.set_ylabel('Evaluation Time per Sample (log scale)')
-# cbar.mappable.set_clim(vmin=pow(10,-4), vmax=pow(10,1))
+# cbar.mappable.set_clim(vmin= pow(10,-5), vmax= pow(10,-4))
 ax.set_xlabel("alpha (mu m^(-2))")
 ax.set_ylabel("freelength (mu m)")
 
-fig.savefig("data-order-8-2d-eva-time.jpeg", dpi=100)
+fig.savefig(f"{file[4:-4]}-eva-time.jpeg", dpi=100)
 plt.clf()

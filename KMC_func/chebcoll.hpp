@@ -319,7 +319,6 @@ class Chebcoll {
                 ubound = lbound + 1e-10; 
                 ""
                 */
-               ubound = lbound + 1e-10; 
 
                 double gg = 1; // range [1,2], inversely proportional to running time
                 double gridSize = gg * otherGrid; 
@@ -333,7 +332,6 @@ class Chebcoll {
             // How many Baobzi Object in current Chebcoll 
             bbcount = iterVec.size(); 
             speak("Baobzi Objects need to be created", bbcount); 
-
 
             // temporary variables
             std::vector<Cheb> theallCheb(bbcount); 
@@ -358,10 +356,6 @@ class Chebcoll {
                 otherGrid = oneFixCenter; 
                 ""
                 */
-
-                thisCenter = oneFixCenter;
-                otherGrid = oneFixCenter; 
-
                 double hl[2] = {otherGrid, oneFixCenter};
                 double center[2] = {thisCenter, oneFixCenter}; 
                 // only happens in reverse lookup where the small integral value is clamped to 0
@@ -436,7 +430,7 @@ class Chebcoll {
 
             /* if want to normalize r⊥, change ifsearch = 0 */
             // we know which Baobzi object to use (since only 1) so no need to search for
-            int ifsearch = 0; 
+            int ifsearch = 1; 
 
             if (ifsearch == 1){
                 // binary search O(log n)
@@ -545,7 +539,7 @@ class Chebcoll {
                 double iterGrid = std::max(grid_size_magnitude_, 0.1); 
                 // for calculation on global domain for energy dependent first-order CDF/PDF
                 /* if want to normalize r⊥, * length_scale_ for low bound, up bound, and grid size in for loop declaration */
-                for (double i = iterGrid * length_scale_; i < (the_upper_bound_ - iterGrid) * length_scale_; i += iterGrid * length_scale_) {
+                for (double i = iterGrid; i < (the_upper_bound_ - iterGrid); i += iterGrid) {
                     // speak("curr", i); 
                     std::vector<double> gridResultSaver; 
                     for (double j = 0; j < (the_upper_bound_ - iterGrid) * length_scale_; j += iterGrid * length_scale_ * prefactor){
@@ -563,7 +557,7 @@ class Chebcoll {
 
                         gridResultSaver.push_back(intres); 
                         /* if want to normalize r⊥, / length_scale_ after i */
-                        double realres = length_scale_ * integral(i / length_scale_, 0, j / length_scale_, exp_fact_, rest_length_);
+                        double realres = length_scale_ * integral(i, 0, j / length_scale_, exp_fact_, rest_length_);
 
                         // calculate relative or abselute error
                         double relerr; 
@@ -573,7 +567,7 @@ class Chebcoll {
                         if (recorddata == 1){ 
                             // [vertical distance] << [scan length] << [lookup table result]
                             /* if want to normalize r⊥, / length_scale_ after i */
-                            myfile << i / length_scale_ << "," << j / length_scale_ << "," << intres; 
+                            myfile << i << "," << j / length_scale_ << "," << intres; 
                         }
                         errorTrueSaver.push_back(relerr); 
                         if (recorderror == 1) {

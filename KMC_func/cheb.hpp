@@ -165,7 +165,7 @@ class Cheb {
 
                     auto integrand = [&](double s) {
                         /* if want to normalize r⊥, /D after each *x[0] */
-                        const double exponent = sqrt(s * s + x[0] / D * x[0] / D) - ell0;
+                        const double exponent = sqrt(s * s + x[0] * x[0]) - ell0;
                         return exp(-M * exponent * exponent);
                     };
 
