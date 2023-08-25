@@ -48,10 +48,13 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
     // omp_set_num_threads(num_threads);
 
     std::ofstream myfile;
-    myfile.open("./reverse_grid_1.0.txt");
+    myfile.open("./reverse_grid_0.1.txt");
 
-    std::vector<double> alphalist = linspace(0.1,10,100);
-    std::vector<double> freelengthlist = linspace(0.05,0.5,100);
+    std::vector<double> alphalist = linspace(0.1,10,50);
+    std::vector<double> freelengthlist = linspace(0.05,0.5,50);
+
+    omp_set_dynamic(0);
+    omp_set_num_threads(32);
 
     #pragma omp parallel for
     for(int i = 0; i < alphalist.size(); i++){
@@ -129,7 +132,7 @@ TEST_CASE("REVERSE Lookup table test (all kind) spring ", "[REVERSE lookup]") {
         Chebcoll bbcoll2(0, alpha, freelength, D, 3, 1e-1, 1e-3, integralMinMax);
         // approximate functions
         // unpack parameters
-        auto loader1 = bbcoll2.createBaobziFamily(1, tempkk); 
+        auto loader1 = bbcoll2.createBaobziFamily(0.1, tempkk); 
         double space = loader1.first; 
         double buildtime = loader1.second; 
 
